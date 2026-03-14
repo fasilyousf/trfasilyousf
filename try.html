@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ucchandwara Institute | Summary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: #0f3b5e;
+            color: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: #f5b041;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1.8rem;
+        }
+
+        .nav-menu a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .nav-menu a:hover {
+            color: #f5b041;
+            border-bottom: 2px solid #f5b041;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background: #ecf0f1;
+            margin: 4px 0;
+            transition: 0.3s;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0f3b5e, #1b5777);
+            color: white;
+            padding: 5rem 5%;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            opacity: 0.95;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #f5b041;
+            color: #0f3b5e;
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Section Headings */
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #0f3b5e;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: #f5b041;
+            margin: 0.5rem auto;
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.8rem 1rem;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f5b041;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        /* Courses Grid */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            text-align: center;
+            border: 1px solid #eef2f6;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: #f5b041;
+        }
+
+        .course-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .course-card h3 {
+            font-size: 1.5rem;
+            color: #0f3b5e;
+            margin-bottom: 0.8rem;
+        }
+
+        .course-card p {
+            color: #555;
+        }
+
+        /* Facilities Grid */
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .facility-item {
+            background: white;
+            padding: 2rem 1rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            transition: 0.3s;
+            border: 1px solid #eef2f6;
+        }
+
+        .facility-item:hover {
+            background: #0f3b5e;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .facility-item:hover p {
+            color: white;
+        }
+
+        .facility-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .facility-item p {
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Contact Section */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-icon {
+            background: #f5b041;
+            color: #0f3b5e;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .map-placeholder {
+            background: #e1e8ed;
+            height: 200px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 1.2rem;
+            border: 2px dashed #aaa;
+            grid-column: 1 / -1;
+        }
+
+        /* Footer */
+        footer {
+            background: #0f3b5e;
+            color: #bdc3c7;
+            text-align: center;
+            padding: 2rem 5%;
+            margin-top: 3rem;
+        }
+
+        .footer-content p {
+            margin: 0.5rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: #0f3b5e;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                padding: 1.5rem;
+                text-align: center;
+                gap: 1rem;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Ucchandwara<span> Institute</span></div>
+        <nav>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#courses">Courses</a></li>
+                <li><a href="#facilities">Facilities</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <h1>Ucchandwara Institute of Excellence</h1>
+            <p>Empowering rural education with modern skills — computer training, vocational courses, and holistic development since 2005.</p>
+            <a href="#contact" class="btn">Enquire Now</a>
+        </section>
+
+        <!-- About Summary -->
+        <section id="about" class="container">
+            <h2 class="section-title">Institute at a Glance</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Located in the heart of Ucchandwara, our institute has been a beacon of quality education for over 15 years. We offer job-oriented computer courses, vocational training, and academic support to students from rural and semi-urban areas.</p>
+                    <p>With a mission to bridge the digital divide, we provide hands-on training, experienced faculty, and a supportive learning environment. Our alumni work in top IT firms and government sectors.</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">2000+</div>
+                        <div class="stat-label">Students Trained</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15+</div>
+                        <div class="stat-label">Years of Excellence</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Expert Faculty</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">90%</div>
+                        <div class="stat-label">Placement Rate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Courses -->
+        <section id="courses" class="container">
+            <h2 class="section-title">Our Courses</h2>
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-icon">💻</div>
+                    <h3>Basic Computer</h3>
+                    <p>Fundamentals, MS Office, internet, and typing skills for beginners.</p>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon">📊</div>
+                    <h3>Advanced Excel</h3>
+                    <p>Formulas, macros, dashboards, and data analysis techniques.</p>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon">🌐</div>
+                    <h3>Web Development</h3>
+                    <p>HTML, CSS, JavaScript – build responsive websites from scratch.</p>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon">🧾</div>
+                    <h3>Tally with GST</h3>
+                    <p>Accounting, inventory, and GST return filing.</p>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon">🎨</div>
+                    <h3>Graphic Design</h3>
+                    <p>Photoshop, Illustrator, and Canva for creative projects.</p>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon">🤖</div>
+                    <h3>Programming (C/Python)</h3>
+                    <p>Basics of coding, logic building, and problem solving.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Facilities -->
+        <section id="facilities" class="container">
+            <h2 class="section-title">Our Facilities</h2>
+            <div class="facilities-grid">
+                <div class="facility-item">
+                    <div class="facility-icon">🖥️</div>
+                    <p>Modern Computer Lab</p>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">📶</div>
+                    <p>High-Speed WiFi</p>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">📚</div>
+                    <p>Digital Library</p>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">🏆</div>
+                    <p>Placement Assistance</p>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">☕</div>
+                    <p>Cafeteria & Lounge</p>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">🚍</div>
+                    <p>Transport Facility</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" class="container">
+            <h2 class="section-title">Get in Touch</h2>
+            <div class="contact-info">
+                <div class="contact-detail">
+                    <div class="contact-icon">📍</div>
+                    <div>Ucchandwara Main Road, Near Bus Stand, District – 123456</div>
+                </div>
+                <div class="contact-detail">
+                    <div class="contact-icon">📞</div>
+                    <div>+91 98765 43210</div>
+                </div>
+                <div class="contact-detail">
+                    <div class="contact-icon">✉️</div>
+                    <div>info@ucchandwarainstitute.edu</div>
+                </div>
+                <div class="contact-detail">
+                    <div class="contact-icon">⏰</div>
+                    <div>Mon-Sat: 9:00 AM – 7:00 PM</div>
+                </div>
+                <div class="map-placeholder">
+                    🗺️ Google Map Location (Placeholder)
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Ucchandwara Institute. All rights reserved.</p>
+            <p>Empowering rural youth through quality education.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                });
+            }
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                        // Close mobile menu after clicking
+                        if (navMenu.classList.contains('active')) {
+                            navMenu.classList.remove('active');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
