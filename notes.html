@@ -1,4 +1,3 @@
-<!-- notes.html -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,429 +5,186 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Download Notes | Tr Fasil Yousf | UCC Handwara</title>
-    <!-- Font Awesome for icons -->
+    <link rel="shortcut icon" href="./images/icon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-   <link rel="shortcut icon" href="./images/icon.png" type="image/x-icon">
-   <style>
-        /* Same base CSS as before, plus specific styles for notes and enhanced footer */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        body {
-            line-height: 1.6;
-            color: #333;
-        }
-
-        header {
-            background: #2c3e50;
-            color: #fff;
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        .logo span {
-            color: #f1c40f;
-        }
-
-        nav {
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-        }
-
-        .nav-menu a {
-            color: #ecf0f1;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            padding: 0.5rem 0;
-        }
-
-        .nav-menu a:hover,
-        .nav-menu a.active {
-            color: #f1c40f;
-            border-bottom: 2px solid #f1c40f;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: #ecf0f1;
-            margin: 3px 0;
-            transition: 0.3s;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 5%;
-        }
-
-        .btn {
-            display: inline-block;
-            background: #f1c40f;
-            color: #2c3e50;
-            padding: 0.8rem 1.8rem;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-download {
-            background: #27ae60;
-            color: white;
-        }
-
-        .btn-preview {
-            background: #3498db;
-            color: white;
-        }
-
-        .note-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .page-header {
-            background: #34495e;
-            color: white;
-            text-align: center;
-            padding: 3rem 5%;
-        }
-
-        .notes-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .note-item {
-            background: #f9f9f9;
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-left: 5px solid #3498db;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .note-item h3 {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-
-        .note-item p {
-            margin-bottom: 1rem;
-            color: #555;
-        }
-
-        /* ===== ENHANCED FOOTER STYLES ===== */
-        .site-footer {
-            background: #1e2b38;
-            color: #bdc3c7;
-            padding: 3rem 6% 1rem;
-            margin-top: 40px;
-            border-top: 4px solid #f1c40f;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-col h4 {
-            color: #f1c40f;
-            font-size: 1.3rem;
-            margin-bottom: 1.2rem;
-            position: relative;
-            padding-bottom: 0.5rem;
-        }
-
-        .footer-col h4::after {
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .footer-h4-underline::after {
             content: '';
             position: absolute;
             left: 0;
             bottom: 0;
             width: 50px;
             height: 2px;
-            background: #f1c40f;
+            background-color: #f1c40f;
         }
-
-        .footer-col p {
-            line-height: 1.6;
-            margin-bottom: 1.2rem;
-            font-size: 0.95rem;
-        }
-
-        .footer-col ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-col ul li {
-            margin-bottom: 0.7rem;
-        }
-
-        .footer-col ul li a {
-            color: #bdc3c7;
-            text-decoration: none;
-            transition: color 0.3s, padding-left 0.3s;
-            display: inline-block;
-        }
-
-        .footer-col ul li a:hover {
-            color: #f1c40f;
-            padding-left: 5px;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 0.8rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .social-links a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            background: #2c3e50;
-            color: #ecf0f1;
-            border-radius: 50%;
-            transition: all 0.3s;
-            text-decoration: none;
-            font-size: 1.1rem;
-        }
-
-        .social-links a:hover {
-            background: #f1c40f;
-            color: #2c3e50;
-            transform: translateY(-3px);
-        }
-
-        .contact-info li {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .contact-info i {
-            color: #f1c40f;
-            width: 20px;
-            font-size: 1.1rem;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #34495e;
-            font-size: 0.9rem;
-        }
-
-        .footer-bottom i {
-            color: #e74c3c;
-            vertical-align: middle;
-        }
-
-        @media (max-width:768px) {
-            .nav-menu {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                background: #2c3e50;
-                position: absolute;
-                top: 70px;
-                left: 0;
-                padding: 1rem;
-                text-align: center;
-                gap: 0.5rem;
-            }
-
-            .nav-menu.active {
-                display: flex;
-            }
-
-            .hamburger {
-                display: flex;
-            }
-
-            /* Footer responsive */
-            .footer-row {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .footer-col h4::after {
-                left: 50%;
-                transform: translateX(-50%);
-            }
-            .social-links {
-                justify-content: center;
-            }
-            .contact-info li {
-                justify-content: center;
-            }
+        .nav-menu.active { display: flex !important; }
+        
+        /* Interactive Card Glow */
+        .note-card:hover {
+            border-left-color: #f1c40f;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 
-<body>
-    <header>
-        <div class="logo">Tr<span> Fasil Yousf</span></div>
-        <nav>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="courses.html">Courses</a></li>
-                <li><a href="notes.html" class="active">Notes</a></li>
-                <li><a href="gallery.html">Gallery</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="hamburger" id="hamburger">
-                <span></span><span></span><span></span>
-            </div>
-        </nav>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <header class="bg-[#2c3e50] text-white sticky top-0 z-50 px-[6%] py-4 shadow-lg">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="logo text-2xl font-bold">Tr <span class="text-[#f1c40f]">Fasil Yousf</span></div>
+            <nav>
+                <ul class="nav-menu hidden md:flex md:flex-row items-center gap-8 absolute md:static top-[65px] left-0 w-full md:w-auto bg-[#2c3e50] p-6 md:p-0 flex-col text-center" id="nav-menu">
+                    <li><a href="index.html" class="hover:text-[#f1c40f] transition duration-300">Home</a></li>
+                    <li><a href="courses.html" class="hover:text-[#f1c40f] transition duration-300">Courses</a></li>
+                    <li><a href="notes.html" class="text-[#f1c40f] border-b-2 border-[#f1c40f] pb-1">Notes</a></li>
+                    <li><a href="gallery.html" class="hover:text-[#f1c40f] transition duration-300">Gallery</a></li>
+                    <li><a href="about.html" class="hover:text-[#f1c40f] transition duration-300">About</a></li>
+                    <li><a href="contact.html" class="hover:text-[#f1c40f] transition duration-300">Contact</a></li>
+                </ul>
+                <button class="md:hidden flex flex-col gap-1" id="hamburger">
+                    <span class="w-6 h-0.5 bg-white"></span>
+                    <span class="w-6 h-0.5 bg-white"></span>
+                    <span class="w-6 h-0.5 bg-white"></span>
+                </button>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        <section class="page-header">
-            <h1>Study Materials & Notes</h1>
-            <p>Download PDFs and resources for self-paced learning.</p>
-        </section>
+    <section class="bg-[#34495e] py-12 px-[6%] text-center text-white">
+        <h1 class="text-4xl font-extrabold mb-4">Study Materials & Notes</h1>
+        <p class="text-gray-300 max-w-xl mx-auto mb-8">Premium resources curated by Tr Fasil Yousf to help you master digital skills.</p>
+        
+        <div class="max-w-md mx-auto relative">
+            <input type="text" id="noteSearch" placeholder="Search for notes (e.g. Word, Paint)..." 
+                class="w-full px-5 py-3 rounded-full text-gray-900 focus:outline-none focus:ring-4 focus:ring-yellow-400/50 transition-all">
+            <i class="fas fa-search absolute right-5 top-4 text-gray-400"></i>
+        </div>
+    </section>
 
-        <section class="notes-list container">
-            <div class="note-item">
-                <h3>Ms-Paint Notes</h3>
-                <p>Learn the basics of Microsoft Paint, a simple graphic editing program included with Windows. These
-                    notes cover the interface, drawing tools, shapes, color selection, text tool, image editing, and
-                    saving files. Students will learn how to create drawings, edit images, and perform basic graphic
-                    design tasks using MS Paint. This guide is ideal for beginners starting their journey in computer
-                    graphics and digital creativity.</p>
-                <div class="note-actions">
-                    <a href="./notes/MS-Paint(fasilyousf).pdf" class="btn btn-download" download>📥 Download (PDF)</a>
-                    <a href="./notes/MS-Paint(fasilyousf).pdf" class="btn btn-preview" target="_blank">👁️ Preview</a>
-                </div>
-            </div>
-            <div class="note-item">
-                <h3>Hand Written Notes Computers Basics (Theory)</h3>
-                <p>These handwritten notes provide a strong foundation in computer fundamentals. The material explains important concepts such as computer hardware, software, operating systems, input and output devices, memory, and basic computer operations. The notes are written in simple language to help beginners understand how computers work and build their basic digital knowledge.</p>
-                <div class="note-actions">
-                    <a href="./notes/Hand Written Notes Computers Basics Fasil Yousf.pdf" class="btn btn-download"
-                        download>📥 Download (PDF)</a>
-                    <a href="./notes/Hand Written Notes Computers Basics Fasil Yousf.pdf" class="btn btn-preview"
-                        target="_blank">👁️ Preview</a>
-                </div>
-            </div>
-            <div class="note-item">
-                <h3>Ms Word Hand-written Notes</h3>
-                <p>These notes provide a complete introduction to Microsoft Word, one of the most widely used word-processing programs. Topics include document creation, formatting text, inserting tables and images, page layout, headers and footers, printing documents, and basic editing tools. The notes help students learn how to create professional documents, reports, and assignments efficiently.</p>
-                <div class="note-actions">
-                    <a href="./notes/Ms Word Hand written notes.pdf" class="btn btn-download" download>📥 Download
-                        (PDF)</a>
-                    <a href="./notes/Ms Word Hand written notes.pdf" class="btn btn-preview" target="_blank">👁️
-                        Preview</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- ENHANCED FOOTER -->
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-row">
-                <!-- About Column -->
-                <div class="footer-col">
-                    <h4>Tr Fasil Yousf</h4>
-                    <p>Empowering students with modern computer skills since 2020. Quality education for a digital future.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+    <main class="py-12 px-[6%] max-w-5xl mx-auto min-h-[50vh]">
+        <div class="space-y-6" id="notes-container">
+            
+            <div class="note-card bg-white p-6 rounded-xl border-l-8 border-blue-500 shadow-sm transition-all duration-300 group">
+                <div class="md:flex justify-between items-start gap-6">
+                    <div class="flex-1">
+                        <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">Software Guide</span>
+                        <h3 class="text-2xl font-bold text-[#2c3e50] mt-1 mb-3">Ms-Paint Notes</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                            Learn the basics of Microsoft Paint, a simple graphic editing program. These notes cover drawing tools, shapes, color selection, image editing, and saving files. Ideal for beginners starting in digital creativity.
+                        </p>
+                    </div>
+                    <div class="flex flex-row md:flex-col gap-3 shrink-0">
+                        <a href="./notes/MS-Paint(fasilyousf).pdf" download class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-95">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="./notes/MS-Paint(fasilyousf).pdf" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all">
+                            <i class="fas fa-eye"></i> Preview
+                        </a>
                     </div>
                 </div>
-                <!-- Quick Links Column -->
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="courses.html">Courses</a></li>
-                        <li><a href="notes.html">Notes</a></li>
-                        <li><a href="gallery.html">Gallery</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </div>
-                <!-- Contact Column -->
-                <div class="footer-col">
-                    <h4>Get in Touch</h4>
-                    <ul class="contact-info">
-                        <li><i class="fas fa-map-marker-alt"></i> 121 Handwara, Kupwara, 193221</li>
-                        <li><i class="fas fa-phone"></i> +91-7006960788</li>
-                        <li><i class="fas fa-envelope"></i> trfasilyousf@gmail.com</li>
-                        <li><i class="fas fa-clock"></i> 10:00 AM - 04:00 PM</li>
-                    </ul>
+            </div>
+
+            <div class="note-card bg-white p-6 rounded-xl border-l-8 border-orange-500 shadow-sm transition-all duration-300 group">
+                <div class="md:flex justify-between items-start gap-6">
+                    <div class="flex-1">
+                        <span class="text-xs font-bold text-orange-600 uppercase tracking-widest">Fundamentals</span>
+                        <h3 class="text-2xl font-bold text-[#2c3e50] mt-1 mb-3">Computer Basics (Theory)</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                            Strong foundation in hardware, software, OS, input/output devices, and memory concepts. Handwritten in simple language to help beginners understand how computers work.
+                        </p>
+                    </div>
+                    <div class="flex flex-row md:flex-col gap-3 shrink-0">
+                        <a href="./notes/Hand Written Notes Computers Basics Fasil Yousf.pdf" download class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-95">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="./notes/Hand Written Notes Computers Basics Fasil Yousf.pdf" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all">
+                            <i class="fas fa-eye"></i> Preview
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>© 2025 Fasilyousf Institute | tr.fasilyousf.online | Designed with <i class="fas fa-heart" style="color: #f1c40f;"></i> for students</p>
+
+            <div class="note-card bg-white p-6 rounded-xl border-l-8 border-indigo-500 shadow-sm transition-all duration-300 group">
+                <div class="md:flex justify-between items-start gap-6">
+                    <div class="flex-1">
+                        <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Office Suite</span>
+                        <h3 class="text-2xl font-bold text-[#2c3e50] mt-1 mb-3">Ms Word Hand-written Notes</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                            Complete introduction to document creation, formatting, tables, images, and page layouts. Essential for creating professional reports and office assignments.
+                        </p>
+                    </div>
+                    <div class="flex flex-row md:flex-col gap-3 shrink-0">
+                        <a href="./notes/Ms Word Hand written notes.pdf" download class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-95">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="./notes/Ms Word Hand written notes.pdf" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all">
+                            <i class="fas fa-eye"></i> Preview
+                        </a>
+                    </div>
+                </div>
             </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-[#1e2b38] text-gray-400 py-12 px-[6%] border-t-4 border-[#f1c40f]">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div>
+                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 relative pb-2 footer-h4-underline">Tr Fasil Yousf</h4>
+                <p class="text-sm leading-relaxed mb-4">Empowering students with modern computer skills since 2020. Quality education for a digital future.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 bg-[#2c3e50] rounded-full flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 bg-[#2c3e50] rounded-full flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 bg-[#2c3e50] rounded-full flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 relative pb-2 footer-h4-underline">Quick Links</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+                    <li><a href="courses.html" class="hover:text-white transition-colors">Courses</a></li>
+                    <li><a href="gallery.html" class="hover:text-white transition-colors">Gallery</a></li>
+                    <li><a href="contact.html" class="hover:text-white transition-colors">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 relative pb-2 footer-h4-underline">Get in Touch</h4>
+                <ul class="space-y-3 text-sm">
+                    <li class="flex items-center gap-3"><i class="fas fa-phone text-[#f1c40f]"></i> +91-7006960788</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-envelope text-[#f1c40f]"></i> trfasilyousf@gmail.com</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-clock text-[#f1c40f]"></i> 10:00 AM - 04:00 PM</li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center mt-12 pt-8 border-t border-gray-700 text-xs tracking-widest">
+            <p>© 2026 FASILYOUSF INSTITUTE | DESIGNED FOR STUDENTS</p>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const hamburger = document.getElementById('hamburger');
-            const navMenu = document.getElementById('nav-menu');
-            if (hamburger && navMenu) {
-                hamburger.addEventListener('click', function () {
-                    navMenu.classList.toggle('active');
-                });
-            }
+        // Mobile Toggle Menu
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Search Functionality
+        const searchInput = document.getElementById('noteSearch');
+        const notes = document.querySelectorAll('.note-card');
+
+        searchInput.addEventListener('keyup', (e) => {
+            const term = e.target.value.toLowerCase();
+            notes.forEach(note => {
+                const title = note.querySelector('h3').textContent.toLowerCase();
+                const text = note.querySelector('p').textContent.toLowerCase();
+                if(title.includes(term) || text.includes(term)) {
+                    note.style.display = 'block';
+                } else {
+                    note.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>

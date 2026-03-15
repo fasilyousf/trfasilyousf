@@ -1,340 +1,233 @@
-<!-- contact.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us | Tr Fasil Yousf | UCC Handwara</title>
     <link rel="shortcut icon" href="./images/icon.png" type="image/x-icon">
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
-        body { line-height:1.6; color:#333; }
-        header { background:#2c3e50; color:#fff; padding:1rem 5%; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; position:sticky; top:0; z-index:100; }
-        .logo { font-size:1.8rem; font-weight:700; }
-        .logo span { color:#f1c40f; }
-        nav { display:flex; align-items:center; }
-        .nav-menu { display:flex; list-style:none; gap:1.5rem; }
-        .nav-menu a { color:#ecf0f1; text-decoration:none; font-weight:500; transition:color 0.3s; padding:0.5rem 0; }
-        .nav-menu a:hover, .nav-menu a.active { color:#f1c40f; border-bottom:2px solid #f1c40f; }
-        .hamburger { display:none; flex-direction:column; cursor:pointer; }
-        .hamburger span { width:25px; height:3px; background:#ecf0f1; margin:3px 0; transition:0.3s; }
-        .container { max-width:1200px; margin:0 auto; padding:2rem 5%; }
-        .btn { display:inline-block; background:#f1c40f; color:#2c3e50; padding:0.8rem 1.8rem; text-decoration:none; border-radius:5px; font-weight:600; transition:transform 0.3s, box-shadow 0.3s; border:none; cursor:pointer; }
-        .btn:hover { transform:translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.2); }
-        .page-header { background:#34495e; color:white; text-align:center; padding:3rem 5%; }
-        .contact-container { display:grid; grid-template-columns:1fr 1fr; gap:2rem; background:#f9f9f9; border-radius:8px; overflow:hidden; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
-        .contact-info { background:#2c3e50; color:white; padding:2rem; }
-        .contact-info h3 { color:#f1c40f; margin-bottom:1.5rem; }
-        .contact-info p { margin-bottom:1rem; }
-        .contact-form { padding:2rem; }
-        .form-group { margin-bottom:1.5rem; }
-        .form-group label { display:block; margin-bottom:0.5rem; font-weight:600; }
-        .form-group input, .form-group textarea { width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:5px; font-size:1rem; }
-        .form-group textarea { height:120px; resize:vertical; }
-        .error { color:#e74c3c; font-size:0.9rem; margin-top:0.3rem; }
-
-        /* ===== ENHANCED FOOTER STYLES ===== */
-        .site-footer {
-            background: #1e2b38;
-            color: #bdc3c7;
-            padding: 3rem 6% 1rem;
-            margin-top: 40px;
-            border-top: 4px solid #f1c40f;
+        .nav-menu.active { display: flex !important; }
+        
+        .contact-card {
+            transition: all 0.3s ease;
+        }
+        
+        .form-input {
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #f1c40f;
+            box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.2);
         }
 
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-col h4 {
-            color: #f1c40f;
-            font-size: 1.3rem;
-            margin-bottom: 1.2rem;
-            position: relative;
-            padding-bottom: 0.5rem;
-        }
-
-        .footer-col h4::after {
+        .footer-h4-underline::after {
             content: '';
             position: absolute;
             left: 0;
             bottom: 0;
             width: 50px;
             height: 2px;
-            background: #f1c40f;
-        }
-
-        .footer-col p {
-            line-height: 1.6;
-            margin-bottom: 1.2rem;
-            font-size: 0.95rem;
-        }
-
-        .footer-col ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-col ul li {
-            margin-bottom: 0.7rem;
-        }
-
-        .footer-col ul li a {
-            color: #bdc3c7;
-            text-decoration: none;
-            transition: color 0.3s, padding-left 0.3s;
-            display: inline-block;
-        }
-
-        .footer-col ul li a:hover {
-            color: #f1c40f;
-            padding-left: 5px;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 0.8rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .social-links a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            background: #2c3e50;
-            color: #ecf0f1;
-            border-radius: 50%;
-            transition: all 0.3s;
-            text-decoration: none;
-            font-size: 1.1rem;
-        }
-
-        .social-links a:hover {
-            background: #f1c40f;
-            color: #2c3e50;
-            transform: translateY(-3px);
-        }
-
-        .contact-info li {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .contact-info-1 i {
-            color: #f1c40f;
-            width: 20px;
-            font-size: 1.1rem;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #34495e;
-            font-size: 0.9rem;
-        }
-
-        .footer-bottom i {
-            color: #e74c3c;
-            vertical-align: middle;
-        }
-
-        @media (max-width:768px) {
-            .nav-menu { display:none; flex-direction:column; width:100%; background:#2c3e50; position:absolute; top:70px; left:0; padding:1rem; text-align:center; gap:0.5rem; }
-            .nav-menu.active { display:flex; }
-            .hamburger { display:flex; }
-            .contact-container { grid-template-columns:1fr; }
-
-            /* Footer responsive */
-            .footer-row {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .footer-col h4::after {
-                left: 50%;
-                transform: translateX(-50%);
-            }
-            .social-links {
-                justify-content: center;
-            }
-            .contact-info li {
-                justify-content: center;
-            }
+            background-color: #f1c40f;
         }
     </style>
 </head>
-<body>
-    <header>
-          <div class="logo">Tr<span> Fasil Yousf</span></div>
-        <nav>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="courses.html">Courses</a></li>
-                <li><a href="notes.html">Notes</a></li>
-                <li><a href="gallery.html">Gallery</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html" class="active">Contact</a></li>
-            </ul>
-            <div class="hamburger" id="hamburger">
-                <span></span><span></span><span></span>
-            </div>
-        </nav>
+
+<body class="bg-gray-50 text-gray-800 antialiased font-sans">
+
+    <header class="bg-[#2c3e50] text-white sticky top-0 z-50 px-[6%] py-4 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="logo text-2xl font-bold">Tr <span class="text-[#f1c40f]">Fasil Yousf</span></div>
+            <nav>
+                <ul class="nav-menu hidden md:flex md:flex-row items-center gap-8 absolute md:static top-[65px] left-0 w-full md:w-auto bg-[#2c3e50] p-6 md:p-0 flex-col text-center shadow-lg md:shadow-none" id="nav-menu">
+                    <li><a href="index.html" class="hover:text-[#f1c40f] transition duration-300">Home</a></li>
+                    <li><a href="courses.html" class="hover:text-[#f1c40f] transition duration-300">Courses</a></li>
+                    <li><a href="notes.html" class="hover:text-[#f1c40f] transition duration-300">Notes</a></li>
+                    <li><a href="gallery.html" class="hover:text-[#f1c40f] transition duration-300">Gallery</a></li>
+                    <li><a href="about.html" class="hover:text-[#f1c40f] transition duration-300">About</a></li>
+                    <li><a href="contact.html" class="text-[#f1c40f] border-b-2 border-[#f1c40f] pb-1">Contact</a></li>
+                </ul>
+                <button class="md:hidden flex flex-col gap-1.5" id="hamburger">
+                    <span class="w-6 h-0.5 bg-white"></span>
+                    <span class="w-6 h-0.5 bg-white"></span>
+                    <span class="w-6 h-0.5 bg-white"></span>
+                </button>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        <section class="page-header">
-            <h1>Get In Touch</h1>
-            <p>We'd love to hear from you</p>
-        </section>
+    <section class="bg-[#34495e] py-16 px-[6%] text-center text-white">
+        <h1 class="text-4xl font-extrabold mb-2 uppercase tracking-wide">Get In Touch</h1>
+        <p class="text-gray-300">Have questions? We're here to help you on your digital journey.</p>
+    </section>
 
-        <section class="contact-container container">
-            <div class="contact-info">
-                <h3>📞 Contact Information (Tutor)</h3>
-                <p><strong>Address:</strong> 121 Handwara, Kupwara, 193221</p>
-                <p><strong>Phone:</strong> +91-7006960788</p>
-                <p><strong>Email:</strong> trfasilyousf@gmail.com</p>
-                <p><strong>Office Hours:</strong> Mon-sat 10:00 AM -to 04:00</p>
-            </div>
+    <main class="max-w-7xl mx-auto py-16 px-[6%]">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
             
-            <div class="contact-form">
-                <form id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Full Name *</label>
-                        <input type="text" id="name" name="name">
-                        <div class="error" id="nameError"></div>
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-[#f1c40f] contact-card">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-yellow-100 p-3 rounded-lg text-[#f1c40f]">
+                            <i class="fas fa-map-marker-alt text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-[#2c3e50]">Our Location</h3>
+                            <p class="text-gray-600 text-sm mt-1">121 Handwara, Kupwara,<br>Jammu & Kashmir, 193221</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email Address *</label>
-                        <input type="email" id="email" name="email">
-                        <div class="error" id="emailError"></div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-blue-500 contact-card">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-blue-100 p-3 rounded-lg text-blue-500">
+                            <i class="fas fa-phone-alt text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-[#2c3e50]">Call Us</h3>
+                            <p class="text-gray-600 text-sm mt-1">+91 7006960788</p>
+                            <p class="text-gray-400 text-xs italic">Available 10 AM - 4 PM</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="message">Message *</label>
-                        <textarea id="message" name="message"></textarea>
-                        <div class="error" id="messageError"></div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-green-500 contact-card">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-green-100 p-3 rounded-lg text-green-500">
+                            <i class="fas fa-envelope text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-[#2c3e50]">Email Address</h3>
+                            <p class="text-gray-600 text-sm mt-1">trfasilyousf@gmail.com</p>
+                        </div>
                     </div>
-                    <button type="submit" class="btn">Send Message</button>
-                </form>
+                </div>
             </div>
-        </section>
+
+            <div class="lg:col-span-2 bg-white rounded-3xl shadow-xl overflow-hidden">
+                <div class="p-8 md:p-12">
+                    <h2 class="text-2xl font-bold text-[#2c3e50] mb-8">Send us a Message</h2>
+                    <form id="contactForm" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                                <input type="text" id="name" placeholder="John Doe" class="form-input w-full p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                                <p class="text-red-500 text-xs mt-1" id="nameError"></p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                                <input type="email" id="email" placeholder="john@example.com" class="form-input w-full p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                                <p class="text-red-500 text-xs mt-1" id="emailError"></p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Message Subject</label>
+                            <select class="form-input w-full p-4 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer">
+                                <option>General Inquiry</option>
+                                <option>Admission Question</option>
+                                <option>Course Details</option>
+                                <option>Technical Support</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Your Message</label>
+                            <textarea id="message" rows="5" placeholder="How can we help you?" class="form-input w-full p-4 bg-gray-50 border border-gray-200 rounded-xl resize-none"></textarea>
+                            <p class="text-red-500 text-xs mt-1" id="messageError"></p>
+                        </div>
+                        <button type="submit" class="w-full md:w-auto px-10 py-4 bg-[#f1c40f] text-[#2c3e50] font-bold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                            Send Message <i class="fas fa-paper-plane ml-2"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-16 rounded-3xl overflow-hidden shadow-lg h-96 bg-gray-200">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13165.419106096538!2d74.27641245!3d34.41774885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38e1042735422839%3A0xe5435948f2b7b51e!2sHandwara!5e0!3m2!1sen!2sin!4v1700000000000" 
+                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
     </main>
 
-    <!-- ENHANCED FOOTER -->
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-row">
-                <!-- About Column -->
-                <div class="footer-col">
-                    <h4>Tr Fasil Yousf</h4>
-                    <p>Empowering students with modern computer skills since 2020. Quality education for a digital future.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-                <!-- Quick Links Column -->
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="courses.html">Courses</a></li>
-                        <li><a href="notes.html">Notes</a></li>
-                        <li><a href="gallery.html">Gallery</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </div>
-                <!-- Contact Column -->
-                <div class="footer-col">
-                    <h4>Get in Touch</h4>
-                    <ul class="contact-info-1">
-                        <li><i class="fas fa-map-marker-alt"></i> 121 Handwara, Kupwara, 193221</li>
-                        <li><i class="fas fa-phone"></i> +91-7006960788</li>
-                        <li><i class="fas fa-envelope"></i> trfasilyousf@gmail.com</li>
-                        <li><i class="fas fa-clock"></i> 10:00 AM - 04:00 PM</li>
-                    </ul>
+    <footer class="bg-[#1e2b38] text-gray-400 py-12 px-[6%] border-t-4 border-[#f1c40f]">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div>
+                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 relative pb-2 footer-h4-underline">Tr Fasil Yousf</h4>
+                <p class="text-sm leading-relaxed mb-4">Empowering students with modern computer skills since 2020. Quality education for a digital future.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 bg-[#2c3e50] rounded-full flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 bg-[#2c3e50] rounded-full flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 bg-[#2c3e50] rounded-full flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>© 2025 Fasilyousf Institute | tr.fasilyousf.online | Designed with <i class="fas fa-heart" style="color: #f1c40f;"></i> for students</p>
+            <div>
+                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 relative pb-2 footer-h4-underline">Quick Links</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+                    <li><a href="courses.html" class="hover:text-white transition-colors">Courses</a></li>
+                    <li><a href="notes.html" class="hover:text-white transition-colors">Notes</a></li>
+                    <li><a href="about.html" class="hover:text-white transition-colors">About</a></li>
+                </ul>
             </div>
+            <div>
+                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 relative pb-2 footer-h4-underline">Working Hours</h4>
+                <ul class="space-y-3 text-sm">
+                    <li class="flex items-center gap-3"><i class="fas fa-clock text-[#f1c40f]"></i> Mon - Sat: 10:00 AM - 04:00 PM</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-calendar-day text-[#f1c40f]"></i> Sunday: Closed</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-bolt text-[#f1c40f]"></i> Online Support: 24/7</li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center mt-12 pt-8 border-t border-gray-700 text-xs tracking-widest uppercase">
+            <p>© 2026 FASILYOUSF INSTITUTE | TR.FASILYOUSF.ONLINE</p>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu
-            const hamburger = document.getElementById('hamburger');
-            const navMenu = document.getElementById('nav-menu');
-            if (hamburger && navMenu) {
-                hamburger.addEventListener('click', function() {
-                    navMenu.classList.toggle('active');
-                });
+        // Mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+        if (hamburger && navMenu) {
+            hamburger.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+        }
+
+        // Form Validation logic
+        const form = document.getElementById('contactForm');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            let isValid = true;
+
+            const name = document.getElementById('name');
+            const email = document.getElementById('email');
+            const message = document.getElementById('message');
+
+            // Reset errors
+            document.querySelectorAll('.text-red-500').forEach(el => el.textContent = '');
+
+            if (name.value.trim() === '') {
+                document.getElementById('nameError').textContent = 'Please enter your full name';
+                isValid = false;
+            }
+            if (!email.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email address';
+                isValid = false;
+            }
+            if (message.value.trim() === '') {
+                document.getElementById('messageError').textContent = 'Message cannot be empty';
+                isValid = false;
             }
 
-            // Form validation
-            const form = document.getElementById('contactForm');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    let isValid = true;
-                    
-                    // Name validation
-                    const name = document.getElementById('name');
-                    const nameError = document.getElementById('nameError');
-                    if (name.value.trim() === '') {
-                        nameError.textContent = 'Name is required';
-                        isValid = false;
-                    } else {
-                        nameError.textContent = '';
-                    }
-                    
-                    // Email validation
-                    const email = document.getElementById('email');
-                    const emailError = document.getElementById('emailError');
-                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailPattern.test(email.value.trim())) {
-                        emailError.textContent = 'Valid email is required';
-                        isValid = false;
-                    } else {
-                        emailError.textContent = '';
-                    }
-                    
-                    // Message validation
-                    const message = document.getElementById('message');
-                    const messageError = document.getElementById('messageError');
-                    if (message.value.trim() === '') {
-                        messageError.textContent = 'Message cannot be empty';
-                        isValid = false;
-                    } else {
-                        messageError.textContent = '';
-                    }
-                    
-                    if (isValid) {
-                        alert('Form submitted successfully! (Demo)');
-                        form.reset();
-                    }
-                });
+            if (isValid) {
+                alert('Thank you! Your message has been sent successfully.');
+                form.reset();
             }
         });
     </script>
 </body>
+
 </html>

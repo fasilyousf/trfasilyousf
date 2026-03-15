@@ -1,557 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Tr Fasil Yousf | UCC Handwara</title>
-
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="shortcut icon" href="./images/icon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* RESET */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        body {
-            background: #f4f6f9;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        /* HEADER */
-
-        header {
-            background: #2c3e50;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 6%;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 22px;
-            font-weight: 700;
-        }
-
-        .logo span {
-            color: #f1c40f;
-        }
-
-        nav {
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: white;
-            font-weight: 500;
-        }
-
-        .nav-menu a:hover {
-            color: #f1c40f;
-        }
-
-        /* Hamburger menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: #ecf0f1;
-            margin: 3px 0;
-            transition: 0.3s;
-        }
-
-        /* HERO */
-
-        .hero {
-            background: linear-gradient(135deg, #3498db, #2c3e50);
-            color: white;
-            padding: 80px 6%;
-        }
-
-        .hero-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 40px;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .hero-text {
-            flex: 1;
-        }
-
-        .hero-text h1 {
-            font-size: 42px;
-            margin-bottom: 15px;
-        }
-
-        .hero-text p {
-            margin-bottom: 25px;
-            font-size: 18px;
-            max-width: 500px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .btn-primary {
-            background: #f1c40f;
-            color: #2c3e50;
-        }
-
-        .btn-secondary {
-            border: 2px solid #f1c40f;
-            color: #f1c40f;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-        }
-
-        /* HERO IMAGE */
-
-        .hero-img {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-        }
-
-        .hero-img img {
-            width: 560px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        /* ABOUT */
-
-        .about {
-            padding: 60px 6%;
-            text-align: center;
-            background: white;
-        }
-
-        .about h2 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-
-        /* COURSES */
-
-        .courses {
-            padding: 60px 6%;
-        }
-
-        .courses h2 {
-            text-align: center;
-            margin-bottom: 40px;
-            color: #2c3e50;
-        }
-
-        .course-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            max-width: 1100px;
-            margin: auto;
-        }
-
-        .course-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            transition: 0.3s;
-        }
-
-        .course-card:hover {
-            transform: translateY(-6px);
-        }
-
-        .course-card h3 {
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-
-        /* FEATURES */
-
-        .features {
-            padding: 60px 6%;
-            background: white;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-            max-width: 1100px;
-            margin: auto;
-        }
-
-        .feature {
-            background: #f4f6f9;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        /* ===== ENHANCED FOOTER ===== */
-        .site-footer {
-            background: #1e2b38;  /* slightly darker than header for contrast */
-            color: #bdc3c7;
-            padding: 3rem 6% 1rem;
-            margin-top: 40px;
-            border-top: 4px solid #f1c40f;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-col h4 {
-            color: #f1c40f;
-            font-size: 1.3rem;
-            margin-bottom: 1.2rem;
-            position: relative;
-            padding-bottom: 0.5rem;
-        }
-
-        .footer-col h4::after {
+        .footer-h4-underline::after {
             content: '';
             position: absolute;
             left: 0;
             bottom: 0;
             width: 50px;
             height: 2px;
-            background: #f1c40f;
+            background-color: #f1c40f;
         }
-
-        .footer-col p {
-            line-height: 1.6;
-            margin-bottom: 1.2rem;
-            font-size: 0.95rem;
-        }
-
-        .footer-col ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-col ul li {
-            margin-bottom: 0.7rem;
-        }
-
-        .footer-col ul li a {
-            color: #bdc3c7;
-            text-decoration: none;
-            transition: color 0.3s, padding-left 0.3s;
-            display: inline-block;
-        }
-
-        .footer-col ul li a:hover {
-            color: #f1c40f;
-            padding-left: 5px;
-        }
-
-        /* Social Icons */
-        .social-links {
-            display: flex;
-            gap: 0.8rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .social-links a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            background: #2c3e50;
-            color: #ecf0f1;
-            border-radius: 50%;
-            transition: all 0.3s;
-            text-decoration: none;
-            font-size: 1.1rem;
-        }
-
-        .social-links a:hover {
-            background: #f1c40f;
-            color: #2c3e50;
-            transform: translateY(-3px);
-        }
-
-        /* Contact info with icons */
-        .contact-info li {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .contact-info i {
-            color: #f1c40f;
-            width: 20px;
-            font-size: 1.1rem;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #34495e;
-            font-size: 0.9rem;
-        }
-
-        .footer-bottom i {
-            color: #e74c3c;
-            vertical-align: middle;
-        }
-
-        /* MOBILE */
-        @media(max-width:768px) {
-
-            .hero-text h1 {
-                font-size: 30px;
-            }
-
-            nav ul {
-                gap: 12px;
-            }
-
-            /* Hamburger visible */
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-menu {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                background: #2c3e50;
-                position: absolute;
-                top: 70px;
-                left: 0;
-                padding: 1rem;
-                text-align: center;
-                gap: 0.5rem;
-            }
-
-            .nav-menu.active {
-                display: flex;
-            }
-
-            /* Footer responsive */
-            .footer-row {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .footer-col h4::after {
-                left: 50%;
-                transform: translateX(-50%);
-            }
-
-            .social-links {
-                justify-content: center;
-            }
-
-            .contact-info li {
-                justify-content: center;
-            }
-        }
+        .nav-menu.active { display: flex !important; }
+        #nav-menu { transition: all 0.3s ease-in-out; }
     </style>
 </head>
+<body class="bg-[#f4f6f9] text-[#333] font-sans antialiased">
 
-<body>
-
-    <header>
-        <div class="logo">Tr <span>Fasil Yousf</span></div>
-        <nav>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="courses.html">Courses</a></li>
-                <li><a href="notes.html">Notes</a></li>
-                <li><a href="gallery.html">Gallery</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+    <header class="bg-[#2c3e50] text-white sticky top-0 z-50 px-[6%] py-4 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="logo text-xl md:text-2xl font-bold">
+                Tr <span class="text-[#f1c40f]">Fasil Yousf</span>
             </div>
-        </nav>
+            <nav>
+                <ul class="nav-menu hidden md:flex md:flex-row md:items-center md:gap-8 flex-col absolute md:static top-[60px] left-0 w-full md:w-auto bg-[#2c3e50] md:bg-transparent p-6 md:p-0 shadow-lg md:shadow-none text-center gap-4" id="nav-menu">
+                    <li><a href="index.html" class="text-[#f1c40f] font-medium">Home</a></li>
+                    <li><a href="courses.html" class="hover:text-[#f1c40f] transition">Courses</a></li>
+                    <li><a href="notes.html" class="hover:text-[#f1c40f] transition">Notes</a></li>
+                    <li><a href="gallery.html" class="hover:text-[#f1c40f] transition">Gallery</a></li>
+                    <li><a href="about.html" class="hover:text-[#f1c40f] transition">About</a></li>
+                    <li><a href="contact.html" class="hover:text-[#f1c40f] transition">Contact</a></li>
+                </ul>
+                <button class="flex flex-col gap-1.5 cursor-pointer md:hidden" id="hamburger">
+                    <span class="w-6 h-0.5 bg-gray-200"></span>
+                    <span class="w-6 h-0.5 bg-gray-200"></span>
+                    <span class="w-6 h-0.5 bg-gray-200"></span>
+                </button>
+            </nav>
+        </div>
     </header>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-text">
-                <h1>Learn Computer Skills for the Digital Future</h1>
-                <p>Download notes, explore professional courses and build strong computer skills with Fasilyousf Institute.</p>
-                <div class="hero-buttons">
-                    <a href="notes.html" class="btn btn-primary">Download Notes</a>
-                    <a href="mailto:trfasilyousf@gmail.com" class="btn btn-secondary">Mail Me</a>
+    <section class="bg-gradient-to-br from-[#3498db] to-[#2c3e50] text-white py-12 md:py-24 px-[6%]">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="text-center md:text-left order-2 md:order-1">
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
+                    Bridging Tradition with <span class="text-[#f1c40f]">Digital Excellence</span>
+                </h1>
+                <p class="text-base sm:text-lg mb-8 text-gray-100 max-w-xl mx-auto md:mx-0">
+                    Empowering the youth of Handwara at United Community College. From modern IT skills to professional trades, we build livelihoods.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <a href="notes.html" class="bg-[#f1c40f] text-[#2c3e50] px-8 py-3 rounded-full font-bold hover:scale-105 transition shadow-lg text-center">Download Notes</a>
+                    <a href="about.html" class="border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#2c3e50] transition text-center">About UCC</a>
                 </div>
             </div>
-            <div class="hero-img">
-                <img src="./images/hero fasil.jpeg" alt="Instructor Photo">
+            <div class="order-1 md:order-2 flex justify-center">
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-[#f1c40f] rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                    <img src="./images/hero fasil.jpeg" alt="Fasil Yousf" class="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-2xl shadow-2xl object-cover border-4 border-white/10">
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ABOUT -->
-    <section class="about">
-        <h2>About UNITED COMMUNITY COLLEGE HANDWARA</h2>
-        <p>We provide practical computer education including MS Office, Web Development and digital skills to help students succeed in modern careers.</p>
-    </section>
-
-    <!-- COURSES -->
-    <section class="courses">
-        <h2>Popular Courses</h2>
-        <div class="course-grid">
-            <div class="course-card">
-                <h3>Basic Computer</h3>
-                <p>Computer fundamentals and typing skills.</p>
-            </div>
-            <div class="course-card">
-                <h3>MS Excel</h3>
-                <p>Formulas, data analysis and professional spreadsheets.</p>
-            </div>
-            <div class="course-card">
-                <h3>Web Development</h3>
-                <p>HTML, CSS and JavaScript website development.</p>
-            </div>
-            <div class="course-card">
-                <h3>PowerPoint</h3>
-                <p>Create professional presentations easily.</p>
-            </div>
-        </div>
-    </section>
-    <!-- FEATURES -->
-    <section class="features">
-        <div class="feature-grid">
-            <div class="feature">
-                <h3>Download Notes</h3>
-                <p>Students can download course materials easily.</p>
-            </div>
-            <div class="feature">
-                <h3>Practical Learning</h3>
-                <p>Hands-on training and assignments.</p>
-            </div>
-            <div class="feature">
-                <h3>Career Skills</h3>
-                <p>Learn modern digital skills for jobs.</p>
-            </div>
-            <div class="feature">
-                <h3>Expert Guidance</h3>
-                <p>Learn from experienced computer instructors.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ENHANCED FOOTER -->
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-row">
-                <!-- About Column -->
-                <div class="footer-col">
-                    <h4>Tr Fasil Yousf</h4>
-                    <p>Empowering students with modern computer skills since 2020. Quality education for a digital future.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+    <section class="py-16 px-[6%] bg-white border-b border-gray-100">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <span class="text-[#3498db] font-bold tracking-widest uppercase text-sm">About the Institution</span>
+                <h2 class="text-3xl font-bold text-[#2c3e50] mt-2 mb-6">United Community College Handwara</h2>
+                <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-6">
+                    UCC Handwara is a premier skill development center dedicated to transforming lives in Jammu & Kashmir. We bridge the gap between <strong>Tradition, Technology, and Opportunity</strong> by offering a curriculum that blends modern industry needs with local heritage.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                    <div class="flex items-center gap-3 bg-[#f4f6f9] p-4 rounded-lg">
+                        <i class="fas fa-hand-holding-heart text-[#f1c40f]"></i>
+                        <span class="text-sm font-semibold">Social Upliftment Programs</span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-[#f4f6f9] p-4 rounded-lg">
+                        <i class="fas fa-leaf text-green-600"></i>
+                        <span class="text-sm font-semibold">Green Tech Focus</span>
                     </div>
                 </div>
-                <!-- Quick Links Column -->
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="courses.html">Courses</a></li>
-                        <li><a href="notes.html">Notes</a></li>
-                        <li><a href="gallery.html">Gallery</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
+                <p class="text-gray-500 italic border-l-4 border-[#f1c40f] pl-4">
+                    "We are committed to providing free training and support to underprivileged and disabled learners in our community, fostering dignity and resilience."
+                </p>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-[#2c3e50] text-white p-8 rounded-2xl flex flex-col items-center justify-center text-center shadow-lg">
+                    <h4 class="text-2xl font-bold text-[#f1c40f]">Mission</h4>
+                    <p class="text-xs mt-2 text-gray-300">Equipping learners with practical skills for livelihood.</p>
                 </div>
-                <!-- Contact Column -->
-                <div class="footer-col">
-                    <h4>Get in Touch</h4>
-                    <ul class="contact-info">
-                        <li><i class="fas fa-map-marker-alt"></i>121 Handwara, Kupwara, 193221 </li>
-                        <li><i class="fas fa-phone"></i>+91-7006960788</li>
-                        <li><i class="fas fa-envelope"></i>trfasilyousf@gmail.com</li>
-                        <li><i class="fas fa-clock"></i>10:00 AM -to- 04:00 PM</li>
-                    </ul>
+                <div class="bg-[#f1c40f] text-[#2c3e50] p-8 rounded-2xl flex flex-col items-center justify-center text-center shadow-lg">
+                    <h4 class="text-2xl font-bold">Vision</h4>
+                    <p class="text-xs mt-2 font-medium">A community where tradition and technology coexist.</p>
+                </div>
+                <div class="col-span-2 bg-gray-100 rounded-2xl p-6 flex items-center justify-between border border-gray-200">
+                    <div class="text-left">
+                        <p class="text-sm font-bold text-[#2c3e50]">Zargar Mohalla, Handwara</p>
+                        <p class="text-xs text-gray-500 italic">Central Location for Accessible Learning</p>
+                    </div>
+                    <i class="fas fa-university text-3xl text-[#2c3e50] opacity-20"></i>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>© 2025 Fasilyousf Institute | tr.fasilyousf.online | Designed with <i class="fas fa-heart" style="color: #f1c40f;"></i> for students</p>
+        </div>
+    </section>
+
+    <section class="py-16 px-[6%] bg-[#f4f6f9]">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-[#2c3e50]">Diverse Trade Programs</h2>
+                <p class="text-gray-500 mt-2">Comprehensive training in modern and traditional vocations</p>
             </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all border-b-4 border-blue-500">
+                    <div class="text-blue-500 text-3xl mb-4"><i class="fas fa-laptop-code"></i></div>
+                    <h3 class="text-xl font-bold text-[#2c3e50] mb-2">IT & Digital Skills</h3>
+                    <p class="text-gray-500 text-sm">MS Office, Web Development, and Graphic Design fundamentals.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all border-b-4 border-orange-500">
+                    <div class="text-orange-500 text-3xl mb-4"><i class="fas fa-palette"></i></div>
+                    <h3 class="text-xl font-bold text-[#2c3e50] mb-2">Traditional Arts</h3>
+                    <p class="text-gray-500 text-sm">Preserving heritage through Sozni and hand embroidery training.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all border-b-4 border-green-600">
+                    <div class="text-green-600 text-3xl mb-4"><i class="fas fa-tools"></i></div>
+                    <h3 class="text-xl font-bold text-[#2c3e50] mb-2">Technical Trades</h3>
+                    <p class="text-gray-500 text-sm">Professional plumbing and electrical maintenance courses.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all border-b-4 border-yellow-500">
+                    <div class="text-yellow-500 text-3xl mb-4"><i class="fas fa-solar-panel"></i></div>
+                    <h3 class="text-xl font-bold text-[#2c3e50] mb-2">Green Energy</h3>
+                    <p class="text-gray-500 text-sm">Solar Technician programs for a sustainable future economy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#1e2b38] text-gray-300 py-16 px-[6%] border-t-4 border-[#f1c40f]">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+            <div>
+                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 pb-2 relative footer-h4-underline">Tr Fasil Yousf</h4>
+                <p class="text-sm leading-relaxed mb-6">Leading IT Instructor at UCC Handwara. Empowering the next generation through quality education and practical training since 2020.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-[#f1c40f] transition text-xl"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-[#f1c40f] transition text-xl"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-[#f1c40f] transition text-xl"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 pb-2 relative footer-h4-underline">UCC Links</h4>
+                <ul class="grid grid-cols-2 gap-3 text-sm">
+                    <li><a href="index.html" class="hover:text-white transition">Home</a></li>
+                    <li><a href="courses.html" class="hover:text-white transition">Courses</a></li>
+                    <li><a href="notes.html" class="hover:text-white transition">Notes</a></li>
+                    <li><a href="gallery.html" class="hover:text-white transition">Gallery</a></li>
+                    <li><a href="contact.html" class="hover:text-white transition">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 pb-2 relative footer-h4-underline">Contact UCC</h4>
+                <ul class="space-y-4 text-sm">
+                    <li class="flex items-start gap-3"><i class="fas fa-map-marker-alt text-[#f1c40f] mt-1"></i> Zargar Mohalla, Handwara, 193221</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-phone text-[#f1c40f]"></i> +91-7006960788</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-envelope text-[#f1c40f]"></i> trfasilyousf@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-gray-700 text-center text-xs text-gray-500">
+            <p>© 2026 United Community College Handwara. Designed for the students of Kupwara.</p>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const hamburger = document.getElementById('hamburger');
-            const navMenu = document.getElementById('nav-menu');
-            if (hamburger && navMenu) {
-                hamburger.addEventListener('click', function() {
-                    navMenu.classList.toggle('active');
-                });
-            }
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
         });
     </script>
-
 </body>
-
 </html>
