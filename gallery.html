@@ -20,51 +20,60 @@
         }
         .nav-menu.active { display: flex !important; }
 
-        /* Gallery Image Zoom & Overlay */
         .gallery-card {
             overflow: hidden;
             position: relative;
-            cursor: pointer;
-            height: 250px;
+            height: 500px; /* Increased height for 2-image layout */
+            border: 8px solid #fff;
+            border-radius: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        
+        .gallery-card:hover {
+            border-color: #f1c40f;
+            transform: scale(1.02);
+        }
+
         .gallery-card img {
-            transition: transform 0.5s ease;
+            transition: transform 0.8s ease;
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        .gallery-card:hover img {
-            transform: scale(1.1);
-        }
+
         .gallery-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(44, 62, 80, 0.9), transparent);
+            background: rgba(44, 62, 80, 0.4);
             opacity: 0;
             transition: opacity 0.3s ease;
             display: flex;
-            align-items: flex-end;
-            padding: 1.5rem;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
         }
+
         .gallery-card:hover .gallery-overlay {
             opacity: 1;
         }
 
-        /* Lightbox Modal */
         #lightbox {
             display: none;
             position: fixed;
             z-index: 1000;
             inset: 0;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             justify-content: center;
             align-items: center;
             padding: 2rem;
+            backdrop-filter: blur(10px);
         }
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800 antialiased">
+<body class="bg-gray-50 text-gray-800 antialiased font-sans">
 
     <header class="bg-[#2c3e50] text-white sticky top-0 z-50 px-[6%] py-4 shadow-lg">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
@@ -87,116 +96,79 @@
         </div>
     </header>
 
-    <section class="bg-[#34495e] py-16 px-[6%] text-center text-white">
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Campus & Classroom Moments</h1>
-        <div class="w-20 h-1 bg-[#f1c40f] mx-auto mb-6"></div>
-        <p class="text-gray-300 max-w-2xl mx-auto">Explore our vibrant learning environment, modern computer labs, and successful student workshops.</p>
+    <section class="bg-[#34495e] py-16 px-[6%] text-center text-white relative">
+        <div class="absolute inset-0 bg-black opacity-30"></div> 
+        <div class="relative z-10">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 uppercase tracking-widest">Featured Moments</h1>
+            <div class="w-20 h-1 bg-[#f1c40f] mx-auto mb-6"></div>
+        </div>
     </section>
 
     <main class="py-16 px-[6%] max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
             
-            <div class="gallery-card rounded-xl shadow-md" onclick="openLightbox('./images/gallery1.jpg', 'Our Modern Computer Lab')">
-                <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800" alt="Lab">
+            <div class="gallery-card group">
+                <img src="./images/Gallery/boys.jpeg" alt="Boys Lab Session">
                 <div class="gallery-overlay">
-                    <p class="text-white font-medium"><i class="fas fa-search-plus mr-2"></i> High-End PC Lab</p>
+                    <h3 class="text-white text-2xl font-bold">Computer Lab (Boys)</h3>
+                    <button onclick="openLightbox('./images/Gallery/boys.jpeg', 'Our Modern Computer Lab - Boys Section')" 
+                            class="bg-[#f1c40f] text-[#2c3e50] px-8 py-3 rounded-full font-bold uppercase tracking-wide hover:bg-white transition-all shadow-xl">
+                        <i class="fas fa-expand-alt mr-2"></i> View Full Image
+                    </button>
                 </div>
             </div>
 
-            <div class="gallery-card rounded-xl shadow-md" onclick="openLightbox('./images/gallery2.jpg', 'Coding Workshop 2024')">
-                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800" alt="Workshop">
+            <div class="gallery-card group">
+                <img src="./images/Gallery/girls.jpeg" alt="Girls Learning">
                 <div class="gallery-overlay">
-                    <p class="text-white font-medium"><i class="fas fa-search-plus mr-2"></i> Coding Workshop</p>
+                    <h3 class="text-white text-2xl font-bold">Skill Development (Girls)</h3>
+                    <button onclick="openLightbox('./images/Gallery/girls.jpeg', 'Coding & Skill Workshop - Girls Section')" 
+                            class="bg-[#f1c40f] text-[#2c3e50] px-8 py-3 rounded-full font-bold uppercase tracking-wide hover:bg-white transition-all shadow-xl">
+                        <i class="fas fa-expand-alt mr-2"></i> View Full Image
+                    </button>
                 </div>
-            </div>
-
-            <div class="gallery-card rounded-xl shadow-md" onclick="openLightbox('./images/gallery3.jpg', 'One-on-One Student Mentoring')">
-                <img src="https://images.unsplash.com/photo-1524178232363-1fb28f74b581?q=80&w=800" alt="Mentoring">
-                <div class="gallery-overlay">
-                    <p class="text-white font-medium"><i class="fas fa-search-plus mr-2"></i> Mentoring Session</p>
-                </div>
-            </div>
-
-            <div class="gallery-card rounded-xl shadow-md" onclick="openLightbox('./images/gallery4.jpg', 'Successful Certification Ceremony')">
-                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=800" alt="Ceremony">
-                <div class="gallery-overlay">
-                    <p class="text-white font-medium"><i class="fas fa-search-plus mr-2"></i> Certification Day</p>
-                </div>
-            </div>
-
-            <div class="gallery-card rounded-xl shadow-md bg-gray-200 flex items-center justify-center border-2 border-dashed border-gray-400">
-                <p class="text-gray-500 font-semibold italic text-center px-4">New Memories<br>Coming Soon...</p>
             </div>
             
+        </div>
+
+        <div class="mt-20 text-center">
+            <p class="text-gray-400 italic">More highlights coming soon to our digital gallery.</p>
         </div>
     </main>
 
     <div id="lightbox" onclick="closeLightbox()">
-        <button class="absolute top-10 right-10 text-white text-4xl hover:text-[#f1c40f]">&times;</button>
-        <div class="max-w-4xl w-full text-center">
-            <img id="lightbox-img" src="" class="max-h-[80vh] mx-auto rounded-lg shadow-2xl border-4 border-white/10">
-            <p id="lightbox-caption" class="text-white text-xl mt-6 font-semibold"></p>
+        <button class="absolute top-10 right-10 text-white text-5xl hover:text-[#f1c40f] transition-transform hover:scale-110">&times;</button>
+        <div class="max-w-5xl w-full text-center p-4" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" class="max-h-[80vh] mx-auto rounded-2xl shadow-2xl border-4 border-white/10">
+            <p id="lightbox-caption" class="text-white text-2xl mt-8 font-bold tracking-tight"></p>
         </div>
     </div>
 
     <footer class="bg-[#1e2b38] text-gray-400 py-12 px-[6%] border-t-4 border-[#f1c40f]">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div>
-                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 relative pb-2 footer-h4-underline">Tr Fasil Yousf</h4>
-                <p class="text-sm leading-relaxed mb-4">Empowering students with modern computer skills since 2020. Quality education for a digital future.</p>
-                <div class="flex gap-4">
-                    <a href="#" class="w-10 h-10 bg-[#2c3e50] rounded-full flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="w-10 h-10 bg-[#2c3e50] rounded-full flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="w-10 h-10 bg-[#2c3e50] rounded-full flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-            <div>
-                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 relative pb-2 footer-h4-underline">Quick Links</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
-                    <li><a href="courses.html" class="hover:text-white transition-colors">Courses</a></li>
-                    <li><a href="notes.html" class="hover:text-white transition-colors">Notes</a></li>
-                    <li><a href="contact.html" class="hover:text-white transition-colors">Contact</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 relative pb-2 footer-h4-underline">Get in Touch</h4>
-                <ul class="space-y-3 text-sm">
-                    <li class="flex items-center gap-3"><i class="fas fa-map-marker-alt text-[#f1c40f]"></i> 121 Handwara, Kupwara, 193221</li>
-                    <li class="flex items-center gap-3"><i class="fas fa-phone text-[#f1c40f]"></i> +91-7006960788</li>
-                    <li class="flex items-center gap-3"><i class="fas fa-envelope text-[#f1c40f]"></i> trfasilyousf@gmail.com</li>
-                </ul>
-            </div>
-        </div>
-        <div class="text-center mt-12 pt-8 border-t border-gray-700 text-xs tracking-widest">
+        <div class="text-center mt-12 pt-8 border-t border-gray-700 text-xs tracking-widest uppercase">
             <p>© 2026 FASILYOUSF INSTITUTE | TR.FASILYOUSF.ONLINE</p>
         </div>
     </footer>
 
     <script>
-        // Hamburger Menu
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('nav-menu');
         hamburger.addEventListener('click', () => navMenu.classList.toggle('active'));
 
-        // Lightbox Functions
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const lightboxCaption = document.getElementById('lightbox-caption');
 
         function openLightbox(src, caption) {
-            // Check if it's a real image (for placeholder support)
-            if (src.includes('gallery')) {
-                lightboxImg.src = src;
-                lightboxCaption.innerText = caption;
-                lightbox.style.display = 'flex';
-                document.body.style.overflow = 'hidden'; // Stop scrolling
-            }
+            lightboxImg.src = src;
+            lightboxCaption.innerText = caption;
+            lightbox.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
 
         function closeLightbox() {
             lightbox.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Re-enable scrolling
+            document.body.style.overflow = 'auto';
         }
     </script>
 </body>
