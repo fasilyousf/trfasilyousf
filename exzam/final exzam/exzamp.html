@@ -193,16 +193,282 @@
         (function(){ emailjs.init("BZ2E5BMbDJgulIhEo"); })();
 
         const accessRegistry = { "TRYING": "PASSWORD", "EXAMCELL": "ucc2026", "DIRECTOR": "handwara123" };
-        const studentRegistry = {
+                const studentRegistry = {
             "UCC/HD/26/BCC100": { name: "Fasil Yousf", parent: "Mohammad Yousf Dar" },
-            "UCC/HD/26/BCC101": { name: "Insha Gul", parent: "Gh Mohd Wani" }
+            "UCC/HD/26/BCC101": { name: "Insha Gul", parent: "Gh Mohd Wani" },
+            "UCC/HD/26/BCC102": { name: "Iqra Maqbool", parent: "Mohd Maqbool" },
+            "UCC/HD/26/BCC103": { name: "Noor Ul Saba", parent: "Fayaz Ahmad Pir" },
+            "UCC/HD/26/BCC104": { name: "Tabasum Jan", parent: "Mohd Yousuf Mir" },
+            "UCC/HD/26/BCC105": { name: "Aadiya Ahad", parent: "Ab Ahad" },
+            "UCC/HD/26/BCC106": { name: "Mehak Qasim", parent: "Mohd Qasim Shah" },
+            "UCC/HD/26/BCC107": { name: "Sheikh Suraiya Yousuf", parent: "Mohd Yousuf Sheikh" },
+            "UCC/HD/26/BCC108": { name: "Zainab Jan", parent: "Javid Ahmad Bhat" },
+            "UCC/HD/26/BCC109": { name: "Shabnum Bano", parent: "Ab Razak Lone" },
+            "UCC/HD/26/BCC110": { name: "Ronak Jan", parent: "Rayaz Ahmad Dar" },
+            "UCC/HD/26/BCC111": { name: "Iqra Rayees", parent: "Rayees Ahmad Bat" },
+            "UCC/HD/26/BCC112": { name: "Sadiya Nazir", parent: "Nazir Ahmad Chopan" },
+            "UCC/HD/26/BCC113": { name: "Khusbhoo Habib", parent: "Habibullah Ganie" },
+            "UCC/HD/26/BCC114": { name: "Ishrat Irshad", parent: "Irshad Ahmad Banday" },
+            "UCC/HD/26/BCC115": { name: "Muskaan Majeed", parent: "Ab Majeed Dar" },
+            "UCC/HD/26/BCC116": { name: "Rifat Yousuf", parent: "Mohd Yousuf Dar" },
+            "UCC/HD/26/BCC117": { name: "Nadiya Aslam", parent: "Mohd Aslam Bhat" },
+            "UCC/HD/26/BCC118": { name: "Arzoo Rehman", parent: "Ab Rehman Mir" },
+            "UCC/HD/26/BCC119": { name: "Muskaan Akhter", parent: "Moh Addullah Ganie" },
+            "UCC/HD/26/BCC120": { name: "Misba Imtiyaz", parent: "Imtiyaz Ahmad Sheikh" },
+            "UCC/HD/26/BCC121": { name: "Suraiya Shabir", parent: "Shabir Ahmad Mir" },
+            "UCC/HD/26/BCC122": { name: "Neelofar Nazir", parent: "Nazir Ahmad Malik" },
+            "UCC/HD/26/BCC123": { name: "Uznain Nazir", parent: "Nazir Ahmad Bhat" },
+            "UCC/HD/26/BCC124": { name: "Rehana Nabi", parent: "Gh Nabi Ahanger" },
+            "UCC/HD/26/BCC125": { name: "Rehana Rashid", parent: "Ab Rashid Khuja" },
+            "UCC/HD/26/BCC126": { name: "Anjum Ara", parent: "Mushtaq Ahmad Tantary" },
+            "UCC/HD/26/BCC127": { name: "Nahida Majeed", parent: "Ab Majeed Mir" },
+            "UCC/HD/26/BCC128": { name: "Mahak Rashid", parent: "Ab Rashid Sofi" },
+            "UCC/HD/26/BCC129": { name: "Suraiya", parent: "Ab Rashid Sofi" },
+            "UCC/HD/26/BCC130": { name: "Zaniab Farooz", parent: "Farooz Ahmad Bhat" },
+            "UCC/HD/26/BCC131": { name: "Afreen Sultan", parent: "Moh Sultan Lone" },
+            "UCC/HD/26/BCC132": { name: "Najma Hilal", parent: "Hilal Ahmad Lone" },
+            "UCC/HD/26/BCC133": { name: "Khushboo Nissar", parent: "Nissar Ahmad Wani" },
+            "UCC/HD/26/BCC134": { name: "Khalida Hassan", parent: "Gh Hassan Sheikh" },
+            "UCC/HD/26/BCC135": { name: "Mursaleen Amin", parent: "Mohd Amin Bhat" },
+            "UCC/HD/26/BCC136": { name: "Aiman Nabi Mir", parent: "Gh Nbai Mir" },
+            "UCC/HD/26/BCC137": { name: "Iqra Jamal Wani", parent: "Mohd Jamal Wani" },
+            "UCC/HD/26/BCC138": { name: "Afshana Nabi", parent: "Gn Nabi Rather" },
+            "UCC/HD/26/BCC139": { name: "Ishrat Hassan", parent: "Gn Hassan Bhat" },
+            "UCC/HD/26/BCC140": { name: "Saima Shafi", parent: "Moh Shafi Bhat" },
+            "UCC/HD/26/BCC141": { name: "Seerat Fayaz", parent: "Fayaz Ahmad Lone" },
+            "UCC/HD/26/BCC142": { name: "Neelofar Rashid", parent: "Ab Rashid Khan" },
+            "UCC/HD/26/BCC143": { name: "Kareena Nabi", parent: "GH Nabi Dar" },
+            "UCC/HD/26/BCC144": { name: "Tabasum Jan", parent: "Ab Gani Rashi" },
+            "UCC/HD/26/BCC145": { name: "Sabreena Akhter", parent: "Jamal Din Khatana" },
+            "UCC/HD/26/BCC146": { name: "Nahida Nazir", parent: "Nazir Ahmad Rashi" },
+            "UCC/HD/26/BCC147": { name: "Rubeena Bashir", parent: "Bashir Ahmad Tantray" },
+            "UCC/HD/26/BCC148": { name: "Sadiya Bashir", parent: "Bashir Ahmad Dar" },
+            "UCC/HD/26/BCC149": { name: "Zainab Mushtaq", parent: "Mushtaq Ahmad Rather" },
+            "UCC/HD/26/BCC150": { name: "Sumaiya Majeed", parent: "Ab Majeed Sheikh" },
+            "UCC/HD/26/BCC151": { name: "Safiya Bashir", parent: "Bashir Ahmad Wani" },
+            "UCC/HD/26/BCC152": { name: "Shahid Ali Mir", parent: "Ali Moha Mir" },
+            "UCC/HD/26/BCC153": { name: "Irfan Ahmad Bhat", parent: "Ab Rasheed Bhat" },
+            "UCC/HD/26/BCC154": { name: "Kaisar Majeed War", parent: "Ab Majeed War" },
+            "UCC/HD/26/BCC155": { name: "Imtiyaz Ahmad Sheikh", parent: "Ab Rashid Sheikh" },
+            "UCC/HD/26/BCC156": { name: "Aarif Hussan Lone", parent: "Saif Ud Din Lone" },
+            "UCC/HD/26/BCC157": { name: "Talib Farooq", parent: "Farooq Ahmad Dar" },
+            "UCC/HD/26/BCC158": { name: "Irfan Ahmad Meloo", parent: "Mahir Din Maloo" },
+            "UCC/HD/26/BCC159": { name: "Saqib Bashir", parent: "Bashir Ahmad War" },
+            "UCC/HD/26/BCC160": { name: "Wahid Nabi Ahanger", parent: "Gh Nabi Ahanger" }
         };
+        
         const masterBank = [
             { q: "What is a computer?", a: ["Electronic machine", "Mechanical tool", "Calculator only", "Storage device"], c: "Electronic machine" },
             { q: "Which is not a type of computer?", a: ["Desktop", "Laptop", "Tablet", "Scanner"], c: "Scanner" },
             { q: "Which device is used to display output?", a: ["Keyboard", "Mouse", "Monitor", "Scanner"], c: "Monitor" },
             { q: "Which is an input device?", a: ["Printer", "Speaker", "Keyboard", "Monitor"], c: "Keyboard" },
             { q: "CPU is known as?", a: ["Brain of computer", "Memory unit", "Input unit", "Output unit"], c: "Brain of computer" },
+
+            { q: "Which memory is temporary?", a: ["ROM", "RAM", "Hard Disk", "CD"], c: "RAM" },
+            { q: "Which memory is permanent?", a: ["RAM", "Cache", "ROM", "Register"], c: "ROM" },
+            { q: "Which device is used for printing?", a: ["Monitor", "Printer", "Scanner", "Keyboard"], c: "Printer" },
+            { q: "UPS is used for?", a: ["Storage", "Power backup", "Printing", "Typing"], c: "Power backup" },
+            { q: "Hard disk is?", a: ["Primary memory", "Secondary storage", "Input device", "Output device"], c: "Secondary storage" },
+
+            { q: "Operating system is?", a: ["Hardware", "Software", "Device", "Program only"], c: "Software" },
+            { q: "Example of OS?", a: ["MS Word", "Windows", "Excel", "Paint"], c: "Windows" },
+            { q: "Desktop is?", a: ["File", "Main screen", "Folder", "Program"], c: "Main screen" },
+            { q: "Taskbar is located at?", a: ["Top", "Bottom", "Left", "Right"], c: "Bottom" },
+            { q: "Recycle bin stores?", a: ["New files", "Deleted files", "Programs", "Images"], c: "Deleted files" },
+
+            { q: "File is?", a: ["Collection of data", "Device", "Program", "Folder"], c: "Collection of data" },
+            { q: "Folder is used to?", a: ["Delete files", "Store files", "Run programs", "Print files"], c: "Store files" },
+            { q: "Shortcut to copy?", a: ["Ctrl+V", "Ctrl+C", "Ctrl+X", "Ctrl+Z"], c: "Ctrl+C" },
+            { q: "Shortcut to paste?", a: ["Ctrl+C", "Ctrl+V", "Ctrl+Z", "Ctrl+X"], c: "Ctrl+V" },
+            { q: "Shortcut to cut?", a: ["Ctrl+X", "Ctrl+C", "Ctrl+V", "Ctrl+A"], c: "Ctrl+X" },
+
+            { q: "Internet is?", a: ["Device", "Network", "Software", "Program"], c: "Network" },
+            { q: "WWW stands for?", a: ["World Wide Web", "Wide Web World", "Web World Wide", "World Web Wide"], c: "World Wide Web" },
+            { q: "Which is a browser?", a: ["Chrome", "Excel", "Word", "Paint"], c: "Chrome" },
+            { q: "Email is used for?", a: ["Typing", "Messaging", "Drawing", "Calculations"], c: "Messaging" },
+            { q: "Google is?", a: ["Browser", "Search engine", "OS", "Software"], c: "Search engine" },
+
+            { q: "Virus is?", a: ["Hardware", "Program", "Malicious software", "Device"], c: "Malicious software" },
+            { q: "Antivirus is used for?", a: ["Typing", "Protection", "Drawing", "Storage"], c: "Protection" },
+            { q: "Strong password should include?", a: ["Only letters", "Only numbers", "Mix of characters", "Only symbols"], c: "Mix of characters" },
+            { q: "Safe internet use means?", a: ["Sharing password", "Clicking unknown links", "Using antivirus", "Ignoring security"], c: "Using antivirus" },
+
+            { q: "MS Word is used for?", a: ["Spreadsheet", "Presentation", "Typing documents", "Coding"], c: "Typing documents" },
+            { q: "Ctrl+S is used for?", a: ["Save", "Search", "Select", "Size"], c: "Save" },
+            { q: "Bold shortcut?", a: ["Ctrl+B", "Ctrl+I", "Ctrl+U", "Ctrl+P"], c: "Ctrl+B" },
+            { q: "Italic shortcut?", a: ["Ctrl+B", "Ctrl+I", "Ctrl+U", "Ctrl+S"], c: "Ctrl+I" },
+            { q: "Underline shortcut?", a: ["Ctrl+U", "Ctrl+B", "Ctrl+I", "Ctrl+P"], c: "Ctrl+U" },
+
+            { q: "Font size changes?", a: ["Text size", "Page size", "Image size", "File size"], c: "Text size" },
+            { q: "Paragraph alignment includes?", a: ["Left, Center, Right", "Top, Bottom", "Bold, Italic", "None"], c: "Left, Center, Right" },
+            { q: "Table is used for?", a: ["Images", "Data in rows/columns", "Typing", "Printing"], c: "Data in rows/columns" },
+
+            { q: "MS Excel is used for?", a: ["Typing", "Spreadsheet", "Drawing", "Email"], c: "Spreadsheet" },
+            { q: "Excel file extension?", a: [".docx", ".pptx", ".xlsx", ".txt"], c: ".xlsx" },
+            { q: "Formula starts with?", a: ["=", "#", "@", "$"], c: "=" },
+            { q: "SUM function is used for?", a: ["Multiply", "Add", "Divide", "Subtract"], c: "Add" },
+            { q: "AVERAGE function?", a: ["Sum", "Mean", "Max", "Min"], c: "Mean" },
+
+            { q: "Row is?", a: ["Vertical", "Horizontal", "Diagonal", "None"], c: "Horizontal" },
+            { q: "Column is?", a: ["Vertical", "Horizontal", "Diagonal", "None"], c: "Vertical" },
+
+            { q: "PowerPoint is used for?", a: ["Typing", "Spreadsheet", "Presentation", "Coding"], c: "Presentation" },
+            { q: "Slide is?", a: ["Page in PPT", "File", "Folder", "Image"], c: "Page in PPT" },
+            { q: "Animation is?", a: ["Text effect", "Sound", "Image", "File"], c: "Text effect" },
+            { q: "Slide show is?", a: ["Editing", "Presentation view", "Typing", "Saving"], c: "Presentation view" },
+            { q: "Which is input + output device?", a: ["Monitor", "Touchscreen", "Printer", "Speaker"], c: "Touchscreen" },
+            { q: "Which is secondary storage?", a: ["RAM", "ROM", "Hard Disk", "Register"], c: "Hard Disk" },
+            { q: "Booting means?", a: ["Shutdown", "Restart", "Start computer", "Sleep"], c: "Start computer" },
+
+            { q: "Cold boot is?", a: ["Restart", "First start", "Shutdown", "Sleep"], c: "First start" },
+            { q: "Warm boot is?", a: ["Restart", "Shutdown", "Sleep", "Power off"], c: "Restart" },
+
+            { q: "Desktop icons represent?", a: ["Programs/files", "CPU", "Memory", "Keyboard"], c: "Programs/files" },
+            { q: "Double click means?", a: ["Open file", "Delete", "Copy", "Paste"], c: "Open file" },
+            { q: "Right click shows?", a: ["Menu", "Delete", "Copy", "Paste"], c: "Menu" },
+
+            { q: "Task manager is used for?", a: ["Typing", "Managing programs", "Drawing", "Printing"], c: "Managing programs" },
+
+            { q: "LAN stands for?", a: ["Local Area Network", "Large Area Network", "Light Area Network", "Line Area Network"], c: "Local Area Network" },
+            { q: "Internet connection types?", a: ["WiFi", "LAN", "Mobile data", "All"], c: "All" },
+
+            { q: "Email subject is?", a: ["Title", "Message", "File", "Attachment"], c: "Title" },
+            { q: "Spam mail is?", a: ["Important", "Unwanted", "Saved", "Draft"], c: "Unwanted" },
+
+            { q: "Firewall is?", a: ["Security system", "Hardware", "Software", "Device"], c: "Security system" },
+
+            { q: "Word wrap is?", a: ["Auto line break", "Delete text", "Copy", "Paste"], c: "Auto line break" },
+            { q: "Bullet list is?", a: ["Points list", "Paragraph", "Table", "Image"], c: "Points list" },
+
+            { q: "Excel sorting is?", a: ["Arrange data", "Delete", "Copy", "Paste"], c: "Arrange data" },
+            { q: "Filter is used for?", a: ["Show specific data", "Delete", "Print", "Save"], c: "Show specific data" },
+
+            { q: "Cell reference example?", a: ["A1", "1A", "AA", "11"], c: "A1" },
+            { q: "Workbook is?", a: ["Excel file", "Sheet", "Cell", "Row"], c: "Excel file" },
+
+            { q: "PPT slide show shortcut?", a: ["F5", "F2", "F10", "F1"], c: "F5" },
+
+            { q: "Animation pane is used for?", a: ["Manage animations", "Typing", "Printing", "Saving"], c: "Manage animations" },
+
+            { q: "PDF means?", a: ["Portable Document Format", "Print Document File", "Portable Data File", "Print Data Format"], c: "Portable Document Format" },
+
+            { q: "Scanner converts?", a: ["Hard to soft copy", "Soft to hard", "Audio", "Video"], c: "Hard to soft copy" },
+
+            { q: "Printer converts?", a: ["Soft to hard copy", "Hard to soft", "Audio", "Video"], c: "Soft to hard copy" },
+
+            { q: "Typing accuracy means?", a: ["Speed", "Correct typing", "Mistakes", "Random typing"], c: "Correct typing" },
+
+            { q: "Internet safety includes?", a: ["Sharing passwords", "Using strong passwords", "Clicking unknown links", "Ignoring warnings"], c: "Using strong passwords" },
+
+            { q: "Cloud storage example?", a: ["Google Drive", "RAM", "ROM", "CPU"], c: "Google Drive" },
+
+            { q: "Download means?", a: ["Upload", "Receive data", "Delete", "Print"], c: "Receive data" },
+            { q: "Upload means?", a: ["Send data", "Receive", "Delete", "Print"], c: "Send data" },
+
+            { q: "Zoom is used for?", a: ["Video meeting", "Typing", "Drawing", "Printing"], c: "Video meeting" },
+
+            { q: "Shortcut for new file?", a: ["Ctrl+N", "Ctrl+S", "Ctrl+P", "Ctrl+O"], c: "Ctrl+N" },
+            { q: "Shortcut for open file?", a: ["Ctrl+O", "Ctrl+N", "Ctrl+S", "Ctrl+P"], c: "Ctrl+O" },
+
+            { q: "Basic control panel used for?", a: ["Settings", "Typing", "Drawing", "Printing"], c: "Settings" },
+
+            { q: "File rename shortcut?", a: ["F2", "F5", "F10", "F12"], c: "F2" },
+
+            { q: "Delete file moves to?", a: ["Recycle bin", "Folder", "Desktop", "Drive"], c: "Recycle bin" },
+
+            { q: "Permanent delete shortcut?", a: ["Shift+Delete", "Ctrl+Delete", "Alt+Delete", "Delete"], c: "Shift+Delete" },
+
+            { q: "Which device is used to hear sound?", a: ["Monitor", "Speaker", "Keyboard", "Mouse"], c: "Speaker" },
+            { q: "Which device is used to capture images?", a: ["Printer", "Scanner", "Camera", "Speaker"], c: "Camera" },
+            { q: "Which is an example of output device?", a: ["Mouse", "Keyboard", "Printer", "Scanner"], c: "Printer" },
+
+            { q: "RAM is also called?", a: ["Primary memory", "Secondary memory", "External memory", "Permanent memory"], c: "Primary memory" },
+            { q: "ROM is also called?", a: ["Temporary memory", "Permanent memory", "Cache memory", "Register"], c: "Permanent memory" },
+
+            { q: "Which is fastest storage?", a: ["Hard disk", "RAM", "Cache", "CD"], c: "Cache" },
+
+            { q: "Operating system manages?", a: ["Hardware & software", "Only hardware", "Only software", "None"], c: "Hardware & software" },
+
+            { q: "Which is not OS?", a: ["Windows", "Linux", "Android", "MS Word"], c: "MS Word" },
+
+            { q: "Desktop background is called?", a: ["Theme", "Wallpaper", "Icon", "Screen"], c: "Wallpaper" },
+
+            { q: "Minimize button does?", a: ["Close app", "Hide window", "Maximize", "Delete"], c: "Hide window" },
+            { q: "Maximize button does?", a: ["Close", "Full screen", "Hide", "Delete"], c: "Full screen" },
+            { q: "Close button does?", a: ["Hide", "Close app", "Maximize", "Open"], c: "Close app" },
+
+            { q: "Drag and drop is used for?", a: ["Move files", "Delete", "Print", "Save"], c: "Move files" },
+
+            { q: "Which is example of file?", a: ["Document", "Folder", "Drive", "Desktop"], c: "Document" },
+
+            { q: "Which drive is main storage?", a: ["C Drive", "D Drive", "E Drive", "F Drive"], c: "C Drive" },
+
+            { q: "Internet speed is measured in?", a: ["KB", "MB", "Mbps", "GB"], c: "Mbps" },
+
+            { q: "Website address is called?", a: ["URL", "IP", "DNS", "WWW"], c: "URL" },
+
+            { q: "Online form is used for?", a: ["Data entry", "Printing", "Drawing", "Typing"], c: "Data entry" },
+
+            { q: "Google Chrome is?", a: ["Search engine", "Browser", "OS", "Software"], c: "Browser" },
+
+            { q: "Incognito mode is used for?", a: ["Private browsing", "Download", "Upload", "Print"], c: "Private browsing" },
+
+            { q: "Email CC means?", a: ["Copy", "Carbon copy", "Close copy", "Code copy"], c: "Carbon copy" },
+            { q: "Email BCC means?", a: ["Blind Carbon Copy", "Basic Copy", "Big Copy", "Binary Copy"], c: "Blind Carbon Copy" },
+
+            { q: "Attachment limit depends on?", a: ["Email service", "Computer", "Internet", "Keyboard"], c: "Email service" },
+
+            { q: "Strong password length should be?", a: ["4", "6", "8+", "2"], c: "8+" },
+
+            { q: "Virus spreads through?", a: ["USB", "Internet", "Files", "All"], c: "All" },
+
+            { q: "Antivirus updates are needed for?", a: ["Security", "Speed", "Storage", "Typing"], c: "Security" },
+
+            { q: "MS Word alignment option?", a: ["Justify", "Merge", "Split", "Sort"], c: "Justify" },
+
+            { q: "Page number is inserted in?", a: ["Header/Footer", "Body", "Image", "Table"], c: "Header/Footer" },
+
+            { q: "Spell check shortcut?", a: ["F7", "F5", "F2", "F10"], c: "F7" },
+
+            { q: "Zoom in Word is used for?", a: ["View size", "Typing", "Saving", "Printing"], c: "View size" },
+
+            { q: "Excel auto fill is used for?", a: ["Fill data automatically", "Delete", "Print", "Save"], c: "Fill data automatically" },
+
+            { q: "Excel cell address example?", a: ["B2", "22", "BB", "2B"], c: "B2" },
+
+            { q: "Excel formula example?", a: ["=A1+B1", "A1+B1", "#A1", "@A1"], c: "=A1+B1" },
+
+            { q: "Excel sheet tab is?", a: ["Worksheet name", "File", "Row", "Column"], c: "Worksheet name" },
+
+            { q: "Excel sorting order?", a: ["A-Z", "Z-A", "Both", "None"], c: "Both" },
+
+            { q: "PowerPoint slide master is?", a: ["Design template", "File", "Animation", "Text"], c: "Design template" },
+
+            { q: "Slide transition applies to?", a: ["Between slides", "Text", "Image", "Table"], c: "Between slides" },
+
+            { q: "Animation applies to?", a: ["Objects", "Slides", "Files", "Folders"], c: "Objects" },
+
+            { q: "Slide duplication shortcut?", a: ["Ctrl+D", "Ctrl+C", "Ctrl+V", "Ctrl+X"], c: "Ctrl+D" },
+
+            { q: "Presentation view is called?", a: ["Slide show", "Edit mode", "Normal view", "Print view"], c: "Slide show" },
+
+            { q: "Typing practice improves?", a: ["Speed & accuracy", "Only speed", "Only accuracy", "Nothing"], c: "Speed & accuracy" },
+
+            { q: "File extension for text file?", a: [".txt", ".docx", ".pptx", ".xlsx"], c: ".txt" },
+
+            { q: "PDF files are?", a: ["Editable", "Fixed format", "Executable", "Temporary"], c: "Fixed format" },
+
+            { q: "Print preview shows?", a: ["Before printing", "After printing", "Delete", "Save"], c: "Before printing" },
+
+            { q: "Scanner resolution measured in?", a: ["DPI", "KB", "MB", "GB"], c: "DPI" },
+
+            { q: "Internet usage includes?", a: ["Browsing", "Email", "Download", "All"], c: "All" },
+
+            { q: "File backup means?", a: ["Copy data", "Delete", "Move", "Rename"], c: "Copy data" },
+
+            { q: "Cloud storage advantage?", a: ["Access anywhere", "Slow", "Limited", "Offline only"], c: "Access anywhere" },
+
+            { q: "Computer works on?", a: ["Electricity", "Water", "Air", "Fuel"], c: "Electricity" }
         ];
 
         let selectedQuestions = [], currentIdx = 0, answers = {}, currentStudent = null, timerInterval;
