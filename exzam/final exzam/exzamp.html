@@ -9,81 +9,24 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    
+
     <style>
-        :root {
-            --primary: #1e3a8a;
-            --secondary: #3b82f6;
-            --accent: #f1c40f;
-        }
-        html, body { 
-            height: 100%; 
-            margin: 0; 
-            overflow: hidden; 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at top left, #e0e7ff, #f1f5f9, #dee2ff);
-        }
-
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-        }
-
-        .option-card {
-            transition: all 0.2s ease;
-            border: 2px solid transparent;
-            background: white;
-            display: flex;
-            align-items: center;
-        }
-        
-        .option-card:hover {
-            border-color: var(--secondary);
-            background: #f8fafc;
-        }
-        
-        .option-card.selected {
-            border-color: var(--primary);
-            background: #eff6ff;
-            box-shadow: inset 0 0 0 1px var(--primary);
-        }
-
-        .progress-bar-fill {
-            transition: width 0.5s ease-in-out;
-            background: linear-gradient(90deg, #1e3a8a, #3b82f6);
-        }
-
-        /* FIX: Use dvh (dynamic viewport height) for mobile browsers */
-        .exam-container { 
-            height: 100vh; 
-            height: 100dvh; 
-            display: flex; 
-            flex-direction: column; 
-        }
-
-        .scrollable-content { 
-            flex: 1; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column;
-            padding-bottom: 20px;
-        }
-
+        :root { --primary: #1e3a8a; --secondary: #3b82f6; --accent: #f1c40f; }
+        html, body { height: 100%; margin: 0; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif; background: radial-gradient(circle at top left, #e0e7ff, #f1f5f9, #dee2ff); }
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.4); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07); }
+        .option-card { transition: all 0.2s ease; border: 2px solid transparent; background: white; display: flex; align-items: center; }
+        .option-card:hover { border-color: var(--secondary); background: #f8fafc; }
+        .option-card.selected { border-color: var(--primary); background: #eff6ff; box-shadow: inset 0 0 0 1px var(--primary); }
+        .progress-bar-fill { transition: width 0.5s ease-in-out; background: linear-gradient(90deg, #1e3a8a, #3b82f6); }
+        .exam-container { height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
+        .scrollable-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 20px; }
         .btn-disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
-        
-        @media (max-height: 700px) {
-            .question-text { font-size: 1.1rem !important; margin-bottom: 1rem !important; }
-            .option-card { padding: 0.75rem !important; }
-        }
+        @media (max-height: 700px) { .question-text { font-size: 1.1rem !important; margin-bottom: 1rem !important; } .option-card { padding: 0.75rem !important; } }
     </style>
 </head>
 
 <body class="text-slate-900">
-
     <div id="app" class="exam-container">
-
         <header class="glass-panel border-b p-3 flex items-center justify-between shrink-0 z-50">
             <div class="flex items-center space-x-3">
                 <div class="w-8 h-8 md:w-10 md:h-10 bg-blue-900 rounded-lg flex items-center justify-center text-white shadow-lg overflow-hidden">
@@ -120,9 +63,7 @@
 
         <div id="login-screen" class="hidden flex-grow flex items-center justify-center p-4 overflow-y-auto">
             <div class="glass-panel p-8 rounded-[2rem] w-full max-w-md animate__animated animate__zoomIn text-center">
-                <div id="verification-msg" class="hidden mb-4 p-2 bg-green-100 text-green-700 rounded-lg text-[10px] font-black uppercase">
-                    Details Verified Successfully
-                </div>
+                <div id="verification-msg" class="hidden mb-4 p-2 bg-green-100 text-green-700 rounded-lg text-[10px] font-black uppercase">Details Verified Successfully</div>
                 <div class="mb-6">
                     <h2 class="text-2xl font-extrabold text-blue-900 uppercase">Verification</h2>
                     <p class="text-slate-500 text-[10px] font-bold">Enter Enrollment ID</p>
@@ -163,11 +104,9 @@
                     <span class="text-[7px] font-bold uppercase opacity-70">Progress</span>
                 </div>
             </div>
-            
             <div class="scrollable-content px-4 py-4">
                 <div id="question-area" class="max-w-2xl mx-auto w-full"></div>
             </div>
-
             <div class="glass-panel p-3 md:p-4 border-t flex justify-between items-center gap-3 shrink-0 mb-safe">
                 <button id="prevBtn" onclick="navigate(-1)" class="flex-1 py-3 bg-slate-100 border border-slate-200 rounded-xl font-bold uppercase text-[10px] tracking-widest active:bg-slate-200">Previous</button>
                 <div id="submit-container" class="hidden flex-[1.5]">
@@ -180,7 +119,7 @@
         <div id="result-screen" class="hidden flex-grow flex items-center justify-center p-4">
             <div class="glass-panel p-10 rounded-[2.5rem] shadow-2xl max-w-sm w-full text-center border-b-8 border-green-500">
                 <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
                 </div>
                 <h2 class="text-xl font-extrabold text-slate-900 uppercase">Submitted</h2>
                 <p class="text-slate-500 text-xs mt-1 mb-6 font-semibold" id="res-student-info"></p>
@@ -190,20 +129,15 @@
     </div>
 
     <script>
-        (function(){ emailjs.init("BZ2E5BMbDJgulIhEo"); })();
+        (function () { emailjs.init("BZ2E5BMbDJgulIhEo"); })();
 
-        const accessRegistry = { 
-        "FASILSIR": "PASSword@687",
-        "ADMINUCC": "UNITED@123",
-        "EXZAMBOYS": "handwara123" };
-                const studentRegistry = {
-                    // FOR TRY
-
+        const accessRegistry = { "FASILSIR": "PASSword@687", "ADMINUCC": "UNITED@123", "EXZAMBOYS": "handwara123" };
+        const studentRegistry = {
             "UCC/HD/26/BCC001": { name: "Fasil Yousf", parent: "Mohammad Yousf Dar" },
             "UCC/HD/26/BCC002": { name: "Nazakat Yousf", parent: "Mohammad Yousf Dar" },
             "UCC/HD/26/BCC003": { name: "Talib Yousf", parent: "Mohammad Yousf Dar" },
-
-            // REAL STUDENTS
+            // real students
+                        "UCC/HD/26/BCC100": { name: "Fasil Yousf", parent: "Mohammad Yousf Dar" },
             "UCC/HD/26/BCC101": { name: "Insha Gul", parent: "Gh Mohd Wani" },
             "UCC/HD/26/BCC102": { name: "Iqra Maqbool", parent: "Mohd Maqbool" },
             "UCC/HD/26/BCC103": { name: "Noor Ul Saba", parent: "Fayaz Ahmad Pir" },
@@ -264,8 +198,9 @@
             "UCC/HD/26/BCC158": { name: "Irfan Ahmad Meloo", parent: "Mahir Din Maloo" },
             "UCC/HD/26/BCC159": { name: "Saqib Bashir", parent: "Bashir Ahmad War" },
             "UCC/HD/26/BCC160": { name: "Wahid Nabi Ahanger", parent: "Gh Nabi Ahanger" }
+
         };
-        
+
         const masterBank = [
             { q: "What is a computer?", a: ["Electronic machine", "Mechanical tool", "Calculator only", "Storage device"], c: "Electronic machine" },
             { q: "Which is not a type of computer?", a: ["Desktop", "Laptop", "Tablet", "Scanner"], c: "Scanner" },
@@ -485,7 +420,7 @@
         function updateProgressBar() {
             const progress = ((currentIdx + 1) / selectedQuestions.length) * 100;
             const fill = document.getElementById('progress-fill');
-            if(fill) fill.style.width = `${progress}%`;
+            if (fill) fill.style.width = `${progress}%`;
         }
 
         function handleExamAccess() {
@@ -503,10 +438,9 @@
             let raw = document.getElementById('stuRoll').value.trim();
             let clean = raw.replace(/[\s/]+/g, '').toUpperCase();
             let key = Object.keys(studentRegistry).find(k => k.replace(/[\s/]+/g, '').toUpperCase() === clean);
-            
             if (key) {
                 document.getElementById('verification-msg').classList.remove('hidden');
-                currentStudent = studentRegistry[key]; 
+                currentStudent = studentRegistry[key];
                 currentStudent.roll = key;
                 document.getElementById('user-display').innerText = currentStudent.name;
                 document.getElementById('parent-display').innerText = currentStudent.parent;
@@ -530,15 +464,12 @@
             const total = selectedQuestions.length;
             document.getElementById('progress-text').innerText = `${currentIdx + 1}/${total}`;
             updateProgressBar();
-
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
             const submitContainer = document.getElementById('submit-container');
-
             if (currentIdx === 0) prevBtn.classList.add('btn-disabled'); else prevBtn.classList.remove('btn-disabled');
-            if (currentIdx === total - 1) { nextBtn.classList.add('hidden'); submitContainer.classList.remove('hidden'); } 
+            if (currentIdx === total - 1) { nextBtn.classList.add('hidden'); submitContainer.classList.remove('hidden'); }
             else { nextBtn.classList.remove('hidden'); submitContainer.classList.add('hidden'); }
-
             document.getElementById('question-area').innerHTML = `
                 <div class="animate__animated animate__fadeIn">
                     <h3 class="question-text text-base md:text-xl font-extrabold mb-4 text-slate-800 leading-tight">
@@ -547,13 +478,8 @@
                     <div class="grid grid-cols-1 gap-3">
                         ${q.a.map((opt, i) => `
                             <label class="option-card p-4 border-2 rounded-xl cursor-pointer ${answers[currentIdx] === opt ? 'selected' : ''}">
-                                <div class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center font-bold text-[10px] text-slate-500 mr-3 shrink-0">
-                                    ${String.fromCharCode(65 + i)}
-                                </div>
-                                <input type="radio" name="q${currentIdx}" value="${opt}" 
-                                    ${answers[currentIdx] === opt ? 'checked' : ''} 
-                                    onchange="saveAnswer(${currentIdx}, '${opt}')" 
-                                    class="hidden">
+                                <div class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center font-bold text-[10px] text-slate-500 mr-3 shrink-0">${String.fromCharCode(65 + i)}</div>
+                                <input type="radio" name="q${currentIdx}" value="${opt}" ${answers[currentIdx] === opt ? 'checked' : ''} onchange="saveAnswer(${currentIdx}, '${opt}')" class="hidden">
                                 <span class="font-bold text-xs md:text-sm text-slate-700 leading-tight">${opt}</span>
                             </label>
                         `).join('')}
@@ -561,38 +487,40 @@
                 </div>`;
         }
 
-        function saveAnswer(idx, val) { 
-            answers[idx] = val; 
-            renderCurrentQuestion(); 
-        }
-
-        function navigate(step) { 
-            currentIdx += step; 
-            renderCurrentQuestion(); 
-            document.querySelector('.scrollable-content').scrollTop = 0;
-        }
-
-        function startTimer(mins) { 
-            let t = mins * 60; 
-            timerInterval = setInterval(() => { 
-                let m = Math.floor(t / 60), s = t % 60; 
-                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`; 
+        function saveAnswer(idx, val) { answers[idx] = val; renderCurrentQuestion(); }
+        function navigate(step) { currentIdx += step; renderCurrentQuestion(); document.querySelector('.scrollable-content').scrollTop = 0; }
+        function startTimer(mins) {
+            let t = mins * 60;
+            timerInterval = setInterval(() => {
+                let m = Math.floor(t / 60), s = t % 60;
+                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
                 if (t <= 60) document.getElementById('timer').classList.replace('text-accent', 'text-red-500');
-                if (t-- <= 0) { clearInterval(timerInterval); finalSubmit(true); } 
-            }, 1000); 
+                if (t-- <= 0) { clearInterval(timerInterval); finalSubmit(true); }
+            }, 1000);
         }
 
         function finalSubmit(auto = false) {
             if (!auto && !confirm("Submit Exam?")) return;
             clearInterval(timerInterval);
             let marks = 0;
-            let report = "";
-            selectedQuestions.forEach((q, i) => { if(answers[i] === q.c) marks += 2; report += `Q${i+1}: ${answers[i] || 'SKIPPED'}\n`; });
-            
-            emailjs.send("service_1i3n6qe", "template_5jfki4n", { 
-                student_name: currentStudent.name, 
-                student_id: currentStudent.roll, 
-                obtained_marks: marks, 
+            let report = ""; 
+
+            selectedQuestions.forEach((q, i) => {
+                const studentAns = answers[i] || 'SKIPPED';
+                const isCorrect = studentAns === q.c;
+                if (isCorrect) marks += 2;
+
+                report += `Q${i + 1}: ${q.q}\n`;
+                report += `Student Choice: ${studentAns}\n`;
+                report += `Correct Answer: ${q.c}\n`;
+                report += `Result: ${isCorrect ? '✅' : '❌'}\n`;
+                report += `--------------------------\n`;
+            });
+
+            emailjs.send("service_1i3n6qe", "template_5jfki4n", {
+                student_name: currentStudent.name,
+                student_id: currentStudent.roll,
+                obtained_marks: marks,
                 text_report: report 
             });
 
