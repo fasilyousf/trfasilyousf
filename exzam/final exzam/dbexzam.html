@@ -21,6 +21,8 @@
         .exam-container { height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
         .scrollable-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 20px; }
         .btn-disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+        .loader { border-top-color: #1e3a8a; animation: spinner 1.5s linear infinite; }
+        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 
@@ -28,7 +30,7 @@
     <div id="app" class="exam-container">
         <header class="glass-panel border-b p-3 flex items-center justify-between shrink-0 z-50">
             <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 md:w-10 md:h-10 bg-blue-900 rounded-lg flex items-center justify-center text-white shadow-lg overflow-hidden">
+                <div class="w-8 h-8 bg-blue-900 rounded-lg flex items-center justify-center text-white shadow-lg overflow-hidden">
                     <img src="./logo.jpeg" alt="UCC" onerror="this.parentElement.innerHTML='UCC'">
                 </div>
                 <div>
@@ -52,7 +54,9 @@
                     <h2 class="text-xl font-extrabold text-slate-900 uppercase tracking-tight">Portal Access</h2>
                     <input type="text" id="accessUser" placeholder="ADMIN USER ID" class="w-full mt-4 p-3.5 bg-white border border-slate-200 rounded-xl outline-none font-bold text-sm focus:ring-2 ring-blue-500">
                     <input type="password" id="accessPass" placeholder="PASSWORD" class="w-full mt-3 p-3.5 bg-white border border-slate-200 rounded-xl outline-none font-bold text-sm focus:ring-2 ring-blue-500">
-                    <button onclick="handleExamAccess()" class="w-full mt-4 bg-blue-900 text-white py-3.5 rounded-xl font-bold uppercase text-xs tracking-widest shadow-lg hover:bg-blue-800 transition-all">Unlock System</button>
+                    <button id="unlockBtn" onclick="handleExamAccess()" class="w-full mt-4 bg-blue-900 text-white py-3.5 rounded-xl font-bold uppercase text-xs tracking-widest shadow-lg hover:bg-blue-800 transition-all flex justify-center items-center">
+                        <span id="unlockText">Unlock System</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -61,7 +65,9 @@
             <div class="glass-panel p-8 rounded-[2rem] w-full max-w-md text-center">
                 <h2 class="text-2xl font-extrabold text-blue-900 uppercase mb-6">Verification</h2>
                 <input type="text" id="stuRoll" value="UCC / HD / 26 / BCC" class="w-full p-4 bg-white border-2 border-blue-50 rounded-xl text-center text-lg font-extrabold text-blue-900 uppercase outline-none">
-                <button onclick="handleLogin()" class="w-full mt-4 bg-blue-900 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest shadow-xl hover:bg-blue-800">Verify & Proceed</button>
+                <button id="loginBtn" onclick="handleLogin()" class="w-full mt-4 bg-blue-900 text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest shadow-xl hover:bg-blue-800 flex justify-center items-center">
+                    <span id="loginText">Verify & Proceed</span>
+                </button>
             </div>
         </div>
 
@@ -72,14 +78,14 @@
                 <div class="mt-8 grid grid-cols-2 gap-3 text-left">
                     <div class="p-3 bg-white/50 rounded-xl border border-slate-100">
                         <p class="text-[8px] font-bold text-slate-400 uppercase">Questions</p>
-                        <p class="text-base font-extrabold text-blue-900">25 MCQs</p>
+                        <p id="q-count" class="text-base font-extrabold text-blue-900">Loading...</p>
                     </div>
                     <div class="p-3 bg-white/50 rounded-xl border border-slate-100">
                         <p class="text-[8px] font-bold text-slate-400 uppercase">Duration</p>
                         <p class="text-base font-extrabold text-blue-900">20 Mins</p>
                     </div>
                 </div>
-                <button onclick="startExam()" class="w-full bg-blue-900 text-white py-4 rounded-xl font-extrabold text-lg mt-8 uppercase shadow-xl hover:bg-blue-800 transition-all">Start Exam</button>
+                <button id="startBtn" onclick="startExam()" class="w-full bg-blue-900 text-white py-4 rounded-xl font-extrabold text-lg mt-8 uppercase shadow-xl hover:bg-blue-800 transition-all btn-disabled">Start Exam</button>
             </div>
         </div>
 
@@ -118,23 +124,51 @@
     <script>
         (function () { emailjs.init("BZ2E5BMbDJgulIhEo"); })();
 
-        const accessRegistry = { "FASIL": "PASSWORD", "ADMINUCC": "UNITED@123", "EXZAMBOYS": "handwara123" };
-        const studentRegistry = {
-            "UCC/HD/26/BCC001": { name: "Fasil Yousf", parent: "Mohammad Yousf Dar" },
-            "UCC/HD/26/BCC002": { name: "Nazakat Yousf", parent: "Mohammad Yousf Dar" },
-            "UCC/HD/26/BCC003": { name: "Talib Yousf", parent: "Mohammad Yousf Dar" },
-            "UCC/HD/26/BCC100": { name: "Fasil Yousf", parent: "Mohammad Yousf Dar" },
-        };
+        const DB_URL = "https://script.google.com/macros/s/AKfycbw4Ze8QaLv1sN80zJ5Og34FielGvLMMruFSYE1sbO6nzcnpqI8KQZMpioshL4ASsMAP/exec";
+        
+        let masterBank = [], selectedQuestions = [], currentIdx = 0, answers = {}, currentStudent = null, timerInterval;
 
-        const masterBank = [
-            { q: "Which is an input device?", a: ["Printer", "Speaker", "Keyboard", "Monitor"], c: "Keyboard" },
-            { q: "Which is not a type of computer?", a: ["Desktop", "Laptop", "Tablet", "Scanner"], c: "Scanner" },
-            { q: "Which memory is temporary?", a: ["RAM", "ROM", "Hard Disk", "Pen Drive"], c: "RAM" },
-            { q: "What is a computer?", a: ["Electronic machine", "Mechanical tool", "Calculator only", "Storage device"], c: "Electronic machine" },
-            { q: "CPU is known as?", a: ["Brain of computer", "Memory unit", "Input unit", "Output unit"], c: "Brain of computer" }
-        ];
+        async function handleExamAccess() {
+            const user = document.getElementById('accessUser').value.trim();
+            const pass = document.getElementById('accessPass').value.trim();
+            const btn = document.getElementById('unlockBtn');
+            
+            btn.innerHTML = '<div class="loader w-5 h-5 border-2 rounded-full"></div>';
+            
+            try {
+                const res = await fetch(DB_URL, { method: 'POST', body: JSON.stringify({ action: 'adminLogin', user, pass })});
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('exam-access-screen').classList.add('hidden');
+                    document.getElementById('login-screen').classList.remove('hidden');
+                    document.getElementById('portal-status').innerText = "System Unlocked";
+                } else { alert("Access Denied."); btn.innerText = "Unlock System"; }
+            } catch (e) { alert("Server Error"); btn.innerText = "Unlock System"; }
+        }
 
-        let selectedQuestions = [], currentIdx = 0, answers = {}, currentStudent = null, timerInterval;
+        async function handleLogin() {
+            let roll = document.getElementById('stuRoll').value.trim();
+            const btn = document.getElementById('loginBtn');
+            btn.innerHTML = '<div class="loader w-5 h-5 border-2 rounded-full"></div>';
+            
+            try {
+                const res = await fetch(DB_URL, { method: 'POST', body: JSON.stringify({ action: 'studentLogin', roll })});
+                const data = await res.json();
+                if (data.success) {
+                    currentStudent = { name: data.name, parent: data.parent, roll: data.roll };
+                    document.getElementById('user-display').innerText = data.name;
+                    document.getElementById('parent-display').innerText = data.parent;
+                    document.getElementById('login-screen').classList.add('hidden');
+                    document.getElementById('dashboard-screen').classList.remove('hidden');
+                    
+                    // Fetch Questions from Sheet
+                    const qRes = await fetch(DB_URL, { method: 'POST', body: JSON.stringify({ action: 'getQuestions' })});
+                    masterBank = await qRes.json();
+                    document.getElementById('q-count').innerText = `${masterBank.length} MCQs`;
+                    document.getElementById('startBtn').classList.remove('btn-disabled');
+                } else { alert("Student not found."); btn.innerText = "Verify & Proceed"; }
+            } catch (e) { alert("Database Connection Error"); btn.innerText = "Verify & Proceed"; }
+        }
 
         function updateProgressBar() {
             const progress = ((currentIdx + 1) / selectedQuestions.length) * 100;
@@ -142,32 +176,8 @@
             if (fill) fill.style.width = `${progress}%`;
         }
 
-        function handleExamAccess() {
-            const user = document.getElementById('accessUser').value.trim();
-            const pass = document.getElementById('accessPass').value.trim();
-            if (accessRegistry[user] === pass) {
-                document.getElementById('exam-access-screen').classList.add('hidden');
-                document.getElementById('login-screen').classList.remove('hidden');
-                document.getElementById('portal-status').innerText = "System Unlocked";
-            } else { alert("Access Denied."); }
-        }
-
-        function handleLogin() {
-            let raw = document.getElementById('stuRoll').value.trim();
-            let clean = raw.replace(/[\s/]+/g, '').toUpperCase();
-            let key = Object.keys(studentRegistry).find(k => k.replace(/[\s/]+/g, '').toUpperCase() === clean);
-            if (key) {
-                currentStudent = studentRegistry[key];
-                currentStudent.roll = key;
-                document.getElementById('user-display').innerText = currentStudent.name;
-                document.getElementById('parent-display').innerText = currentStudent.parent;
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('dashboard-screen').classList.remove('hidden');
-            } else { alert("Invalid ID."); }
-        }
-
         function startExam() {
-            selectedQuestions = [...masterBank].sort(() => 0.5 - Math.random()).slice(0, 25);
+            selectedQuestions = masterBank.sort(() => 0.5 - Math.random()).slice(0, 25);
             document.getElementById('dashboard-screen').classList.add('hidden');
             document.getElementById('progress-container').classList.remove('hidden');
             document.getElementById('exam-screen').classList.remove('hidden');
@@ -179,12 +189,12 @@
             const total = selectedQuestions.length;
             document.getElementById('progress-text').innerText = `${currentIdx + 1}/${total}`;
             updateProgressBar();
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const submitContainer = document.getElementById('submit-container');
+            const prevBtn = document.getElementById('prevBtn'), nextBtn = document.getElementById('nextBtn'), submitContainer = document.getElementById('submit-container');
+            
             if (currentIdx === 0) prevBtn.classList.add('btn-disabled'); else prevBtn.classList.remove('btn-disabled');
             if (currentIdx === total - 1) { nextBtn.classList.add('hidden'); submitContainer.classList.remove('hidden'); }
             else { nextBtn.classList.remove('hidden'); submitContainer.classList.add('hidden'); }
+            
             document.getElementById('question-area').innerHTML = `
                 <div class="animate__animated animate__fadeIn">
                     <h3 class="text-base md:text-xl font-extrabold mb-4 text-slate-800">Q${currentIdx + 1}. ${q.q}</h3>
@@ -215,36 +225,26 @@
         function finalSubmit(auto = false) {
             if (!auto && !confirm("Submit Exam?")) return;
             clearInterval(timerInterval);
-            
-            let correctCount = 0;
-            let detailReport = "";
-            const marksPerCorrect = 2; // 2 Marks for correct option
+            let correctCount = 0, detailReport = "";
+            const marksPerCorrect = 2;
 
             selectedQuestions.forEach((q, i) => {
-                const choice = answers[i] || 'SKIPPED';
-                const isCorrect = choice === q.c;
+                const choice = answers[i] || 'SKIPPED', isCorrect = choice === q.c;
                 if (isCorrect) correctCount++;
-
-                detailReport += `Q${i + 1}: ${q.q}\n`;
-                detailReport += `Student Choice: ${choice}\n`;
-                detailReport += `Correct Answer: ${q.c}\n`;
-                detailReport += `Result: ${isCorrect ? '✅' : '❌'}\n`;
-                detailReport += `------------------------------------------\n`;
+                detailReport += `Q${i + 1}: ${q.q}\nStudent Choice: ${choice}\nCorrect Answer: ${q.c}\nResult: ${isCorrect ? '✅' : '❌'}\n------------------------------------------\n`;
             });
 
             const finalMarks = correctCount * marksPerCorrect;
             const status = (finalMarks >= 20) ? "PASSED" : "FAILED";
 
-            const templateParams = {
+            emailjs.send("service_1i3n6qe", "template_5jfki4n", {
                 student_name: currentStudent.name,
                 student_id: currentStudent.roll,
                 email: "Not Provided",
-                obtained_marks: finalMarks, // Will be 10 if 5 are correct
+                obtained_marks: finalMarks,
                 status: status,
                 text_report: detailReport
-            };
-
-            emailjs.send("service_1i3n6qe", "template_5jfki4n", templateParams);
+            });
 
             document.getElementById('res-student-info').innerText = `${currentStudent.name} | ${currentStudent.roll}`;
             document.getElementById('exam-screen').classList.add('hidden');
