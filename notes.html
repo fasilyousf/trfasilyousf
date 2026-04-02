@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+
         .footer-h4-underline::after {
             content: '';
             position: absolute;
@@ -20,195 +23,207 @@
         }
         .nav-menu.active { display: flex !important; }
         
-        /* Interactive Card Glow */
+        /* Smooth Grid Hover Effects */
+        .note-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
         .note-card:hover {
-            border-left-color: #f1c40f;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+<body class="bg-slate-50 text-slate-800 antialiased">
 
-    <header class="bg-[#2c3e50] text-white sticky top-0 z-50 px-[6%] py-4 shadow-lg">
+    <header class="bg-[#2c3e50] text-white sticky top-0 z-50 px-[6%] py-4 shadow-lg border-b border-white/5">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="logo text-2xl font-bold">Tr <span class="text-[#f1c40f]">Fasil Yousf</span></div>
+            <div class="logo text-2xl font-black tracking-tight">Tr <span class="text-[#f1c40f]">Fasil Yousf</span></div>
             <nav>
-                <ul class="nav-menu hidden md:flex md:flex-row items-center gap-8 absolute md:static top-[65px] left-0 w-full md:w-auto bg-[#2c3e50] p-6 md:p-0 flex-col text-center" id="nav-menu">
-                    <li><a href="index.html" class="hover:text-[#f1c40f] transition duration-300">Home</a></li>
-                    <li><a href="courses.html" class="hover:text-[#f1c40f] transition duration-300">Courses</a></li>
-                    <li><a href="notes.html" class="text-[#f1c40f] border-b-2 border-[#f1c40f] pb-1">Notes</a></li>
-                    <li><a href="gallery.html" class="hover:text-[#f1c40f] transition duration-300">Gallery</a></li>
-                    <li><a href="about.html" class="hover:text-[#f1c40f] transition duration-300">About</a></li>
-                    <li><a href="contact.html" class="hover:text-[#f1c40f] transition duration-300">Contact</a></li>
+                <ul class="nav-menu hidden md:flex items-center gap-8 font-semibold text-sm uppercase tracking-wider" id="nav-menu">
+                    <li><a href="index.html" class="hover:text-[#f1c40f] transition">Home</a></li>
+                    <li><a href="courses.html" class="hover:text-[#f1c40f] transition">Courses</a></li>
+                    <li><a href="notes.html" class="text-[#f1c40f]">Notes</a></li>
+                    <li><a href="gallery.html" class="hover:text-[#f1c40f] transition">Gallery</a></li>
+                    <li><a href="about.html" class="hover:text-[#f1c40f] transition">About</a></li>
+                    <li><a href="contact.html" class="hover:text-[#f1c40f] transition">Contact</a></li>
                 </ul>
-                <button class="md:hidden flex flex-col gap-1" id="hamburger">
+                <button class="md:hidden flex flex-col gap-1.5" id="hamburger">
+                    <span class="w-6 h-0.5 bg-[#f1c40f]"></span>
                     <span class="w-6 h-0.5 bg-white"></span>
-                    <span class="w-6 h-0.5 bg-white"></span>
-                    <span class="w-6 h-0.5 bg-white"></span>
+                    <span class="w-6 h-0.5 bg-[#f1c40f]"></span>
                 </button>
             </nav>
         </div>
     </header>
 
-    <section class="bg-[#34495e] py-12 px-[6%] text-center text-white">
-        <h1 class="text-4xl font-extrabold mb-4">Study Materials & Notes</h1>
-        <p class="text-gray-300 max-w-xl mx-auto mb-8">Premium resources curated by Tr Fasil Yousf to help you master digital skills.</p>
-        
-        <div class="max-w-md mx-auto relative">
-            <input type="text" id="noteSearch" placeholder="Search for notes (e.g. Word, Paint)..." 
-                class="w-full px-5 py-3 rounded-full text-gray-900 focus:outline-none focus:ring-4 focus:ring-yellow-400/50 transition-all">
-            <i class="fas fa-search absolute right-5 top-4 text-gray-400"></i>
+    <section class="bg-[#34495e] py-20 px-[6%] text-center text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <i class="fas fa-file-pdf text-[20rem] absolute -bottom-20 -right-20 rotate-12"></i>
+        </div>
+        <div class="relative z-10 max-w-3xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-black mb-4 leading-tight">Digital Library & Notes</h1>
+            <p class="text-slate-300 text-lg mb-10">High-quality, simplified study materials curated for UCC Handwara students.</p>
+            
+            <div class="relative group">
+                <input type="text" id="noteSearch" placeholder="Search topics (Excel, Word, Paint)..." 
+                    class="w-full px-8 py-5 rounded-2xl text-slate-900 bg-white shadow-2xl focus:outline-none focus:ring-4 focus:ring-[#f1c40f]/50 transition-all text-lg">
+                <div class="absolute right-6 top-5 text-slate-400 group-focus-within:text-[#f1c40f] transition">
+                    <i class="fas fa-search text-xl"></i>
+                </div>
+            </div>
         </div>
     </section>
 
-    <main class="py-12 px-[6%] max-w-5xl mx-auto min-h-[50vh]">
-        <div class="space-y-6" id="notes-container">
+    <main class="py-20 px-[6%] max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="notes-container">
             
-            <div class="note-card bg-white p-6 rounded-xl border-l-8 border-blue-500 shadow-sm transition-all duration-300 group">
-                <div class="md:flex justify-between items-start gap-6">
-                    <div class="flex-1">
-                        <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">Software Guide</span>
-                        <h3 class="text-2xl font-bold text-[#2c3e50] mt-1 mb-3">Ms-Paint Notes</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
-                            Learn the basics of Microsoft Paint, a simple graphic editing program. These notes cover drawing tools, shapes, color selection, image editing, and saving files. Ideal for beginners starting in digital creativity.
-                        </p>
+            <div class="note-card bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 bg-blue-50 text-blue-600 flex items-center justify-center rounded-2xl mb-6 shadow-sm">
+                        <i class="fas fa-palette text-2xl"></i>
                     </div>
-                    <div class="flex flex-row md:flex-col gap-3 shrink-0">
-                        <a href="./notes/MS-Paint(fasilyousf).pdf" download class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-95">
-                            <i class="fas fa-download"></i> Download
-                        </a>
-                        <a href="./notes/MS-Paint(fasilyousf).pdf" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all">
-                            <i class="fas fa-eye"></i> Preview
-                        </a>
-                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 bg-blue-50 px-3 py-1 rounded-full">Creative Suite</span>
+                    <h3 class="text-2xl font-extrabold text-slate-800 mt-4 mb-3">Ms-Paint Notes</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                        Complete guide for digital beginners. Covers drawing tools, custom colors, shapes, and image resizing techniques.
+                    </p>
+                </div>
+                <div class="flex gap-3 mt-auto">
+                    <a href="./notes/MS-Paint(fasilyousf).pdf" download class="flex-1 bg-[#2c3e50] hover:bg-[#1a252f] text-white py-3 rounded-xl text-xs font-bold text-center transition">
+                        <i class="fas fa-download mr-1"></i> PDF
+                    </a>
+                    <a href="./notes/MS-Paint(fasilyousf).pdf" target="_blank" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl text-xs font-bold text-center transition">
+                        <i class="fas fa-eye mr-1"></i> PREVIEW
+                    </a>
                 </div>
             </div>
 
-            <div class="note-card bg-white p-6 rounded-xl border-l-8 border-orange-500 shadow-sm transition-all duration-300 group">
-                <div class="md:flex justify-between items-start gap-6">
-                    <div class="flex-1">
-                        <span class="text-xs font-bold text-orange-600 uppercase tracking-widest">Fundamentals</span>
-                        <h3 class="text-2xl font-bold text-[#2c3e50] mt-1 mb-3">Computer Basics (Theory)</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
-                            Strong foundation in hardware, software, OS, input/output devices, and memory concepts. Handwritten in simple language to help beginners understand how computers work.
-                        </p>
+            <div class="note-card bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 bg-orange-50 text-orange-600 flex items-center justify-center rounded-2xl mb-6 shadow-sm">
+                        <i class="fas fa-desktop text-2xl"></i>
                     </div>
-                    <div class="flex flex-row md:flex-col gap-3 shrink-0">
-                        <a href="./notes/Hand Written Notes Computers Basics Fasil Yousf.pdf" download class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-95">
-                            <i class="fas fa-download"></i> Download
-                        </a>
-                        <a href="./notes/Hand Written Notes Computers Basics Fasil Yousf.pdf" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all">
-                            <i class="fas fa-eye"></i> Preview
-                        </a>
-                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500 bg-orange-50 px-3 py-1 rounded-full">Core Theory</span>
+                    <h3 class="text-2xl font-extrabold text-slate-800 mt-4 mb-3">Computer Basics</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                        Handwritten notes on hardware, OS, and Input/Output devices. The perfect foundation for any IT career.
+                    </p>
                 </div>
-                
+                <div class="flex gap-3 mt-auto">
+                    <a href="./notes/Hand Written Notes Computers Basics Fasil Yousf.pdf" download class="flex-1 bg-[#2c3e50] hover:bg-[#1a252f] text-white py-3 rounded-xl text-xs font-bold text-center transition">
+                        <i class="fas fa-download mr-1"></i> PDF
+                    </a>
+                    <a href="./notes/Hand Written Notes Computers Basics Fasil Yousf.pdf" target="_blank" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl text-xs font-bold text-center transition">
+                        <i class="fas fa-eye mr-1"></i> PREVIEW
+                    </a>
+                </div>
             </div>
 
-            <div class="note-card bg-white p-6 rounded-xl border-l-8 border-indigo-500 shadow-sm transition-all duration-300 group">
-                <div class="md:flex justify-between items-start gap-6">
-                    <div class="flex-1">
-                        <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Office Suite</span>
-                        <h3 class="text-2xl font-bold text-[#2c3e50] mt-1 mb-3">Ms Word Hand-written Notes</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
-                            Complete introduction to document creation, formatting, tables, images, and page layouts. Essential for creating professional reports and office assignments.
-                        </p>
+            <div class="note-card bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 bg-indigo-50 text-indigo-600 flex items-center justify-center rounded-2xl mb-6 shadow-sm">
+                        <i class="fas fa-file-word text-2xl"></i>
                     </div>
-                    <div class="flex flex-row md:flex-col gap-3 shrink-0">
-                        <a href="./notes/Ms Word Hand written notes.pdf" download class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-95">
-                            <i class="fas fa-download"></i> Download
-                        </a>
-                        <a href="./notes/Ms Word Hand written notes.pdf" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all">
-                            <i class="fas fa-eye"></i> Preview
-                        </a>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full">Office Productivity</span>
+                    <h3 class="text-2xl font-extrabold text-slate-800 mt-4 mb-3">Ms-Word</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                        Step-by-step document formatting, tables, and page layout shortcuts. Essential for office and admin work.
+                    </p>
+                </div>
+                <div class="flex gap-3 mt-auto">
+                    <a href="./notes/Ms Word Hand written notes.pdf" download class="flex-1 bg-[#2c3e50] hover:bg-[#1a252f] text-white py-3 rounded-xl text-xs font-bold text-center transition">
+                        <i class="fas fa-download mr-1"></i> PDF
+                    </a>
+                    <a href="./notes/Ms Word Hand written notes.pdf" target="_blank" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl text-xs font-bold text-center transition">
+                        <i class="fas fa-eye mr-1"></i> PREVIEW
+                    </a>
+                </div>
+            </div>
+
+            <div class="note-card bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 bg-emerald-50 text-emerald-600 flex items-center justify-center rounded-2xl mb-6 shadow-sm">
+                        <i class="fas fa-table text-2xl"></i>
                     </div>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full">Data Analysis</span>
+                    <h3 class="text-2xl font-extrabold text-slate-800 mt-4 mb-3">Ms-Excel</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                        Covers 50+ formulas, sorting/filtering, and VLOOKUP. Great for learning data management and billing.
+                    </p>
+                </div>
+                <div class="flex gap-3 mt-auto">
+                    <a href="./notes/Excel Notes Handwritten By Fasil Yousf.pdf" download class="flex-1 bg-[#2c3e50] hover:bg-[#1a252f] text-white py-3 rounded-xl text-xs font-bold text-center transition">
+                        <i class="fas fa-download mr-1"></i> PDF
+                    </a>
+                    <a href="./notes/Excel Notes Handwritten By Fasil Yousf.pdf" target="_blank" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl text-xs font-bold text-center transition">
+                        <i class="fas fa-eye mr-1"></i> PREVIEW
+                    </a>
                 </div>
             </div>
 
         </div>
-        <div class="note-card bg-white p-6 rounded-xl border-l-8 border-emerald-600 shadow-sm transition-all duration-300 group">
-                <div class="md:flex justify-between items-start gap-6">
-                    <div class="flex-1">
-                        <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Data Management</span>
-                        <h3 class="text-2xl font-bold text-[#2c3e50] mt-1 mb-3">Ms Excel (Basics Formulas & Functions)</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
-                            These notes introduce Microsoft Excel, explaining the basics of cells, rows, and columns.
-They cover important tabs like Home, Insert, Formulas, Data, and View with their key features.
-The content includes 50+ Excel functions such as SUM, AVERAGE, IF, VLOOKUP, and PMT.
-It also explains data sorting, filtering, and managing information efficiently.
-                    </div>
-                    <div class="flex flex-row md:flex-col gap-3 shrink-0">
-                        <a href="./notes/Excel Notes Handwritten By Fasil Yousf.pdf" download class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-95">
-                            <i class="fas fa-download"></i> Download
-                        </a>
-                        <a href="./notes/Excel Notes Handwritten By Fasil Yousf.pdf" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all">
-                            <i class="fas fa-eye"></i> Preview
-                        </a>
-                    </div>
-                </div>
-            </div>
     </main>
 
-    <footer class="bg-[#1e2b38] text-gray-400 py-12 px-[6%] border-t-4 border-[#f1c40f]">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+    <footer class="bg-[#1e2b38] text-slate-400 py-16 px-[6%] border-t-8 border-[#f1c40f]">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16">
             <div>
-                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 relative pb-2 footer-h4-underline">Tr Fasil Yousf</h4>
-                <p class="text-sm leading-relaxed mb-4">Empowering students with modern computer skills since 2020. Quality education for a digital future.</p>
+                <h4 class="text-[#f1c40f] text-2xl font-black mb-8 relative pb-2 footer-h4-underline uppercase tracking-wider">Tr Fasil Yousf</h4>
+                <p class="text-sm leading-relaxed mb-8">Empowering Kupwara with digital literacy through simplified technology education since 2020.</p>
                 <div class="flex gap-4">
-                    <a href="#" class="w-10 h-10 bg-[#2c3e50] rounded-full flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="w-10 h-10 bg-[#2c3e50] rounded-full flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="w-10 h-10 bg-[#2c3e50] rounded-full flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="w-11 h-11 bg-white/5 rounded-xl flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-11 h-11 bg-white/5 rounded-xl flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-11 h-11 bg-white/5 rounded-xl flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
             <div>
-                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 relative pb-2 footer-h4-underline">Quick Links</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
-                    <li><a href="courses.html" class="hover:text-white transition-colors">Courses</a></li>
-                    <li><a href="gallery.html" class="hover:text-white transition-colors">Gallery</a></li>
-                    <li><a href="contact.html" class="hover:text-white transition-colors">Contact</a></li>
+                <h4 class="text-white text-xl font-bold mb-8">Navigation</h4>
+                <ul class="space-y-4 text-sm font-semibold">
+                    <li><a href="index.html" class="hover:text-[#f1c40f] transition">Home Page</a></li>
+                    <li><a href="courses.html" class="hover:text-[#f1c40f] transition">All Courses</a></li>
+                    <li><a href="gallery.html" class="hover:text-[#f1c40f] transition">Photo Gallery</a></li>
+                    <li><a href="contact.html" class="hover:text-[#f1c40f] transition">Get in Touch</a></li>
                 </ul>
             </div>
             <div>
-                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 relative pb-2 footer-h4-underline">Get in Touch</h4>
-                <ul class="space-y-3 text-sm">
-                    <li class="flex items-center gap-3"><i class="fas fa-phone text-[#f1c40f]"></i> +91-7006960788</li>
-                    <li class="flex items-center gap-3"><i class="fas fa-envelope text-[#f1c40f]"></i> trfasilyousf@gmail.com</li>
-                    <li class="flex items-center gap-3"><i class="fas fa-clock text-[#f1c40f]"></i> 10:00 AM - 04:00 PM</li>
+                <h4 class="text-white text-xl font-bold mb-8">Contact Info</h4>
+                <ul class="space-y-4 text-sm">
+                    <li class="flex items-center gap-4"><i class="fas fa-phone text-[#f1c40f]"></i> +91-7006960788</li>
+                    <li class="flex items-center gap-4"><i class="fas fa-envelope text-[#f1c40f]"></i> trfasilyousf@gmail.com</li>
+                    <li class="flex items-center gap-4"><i class="fas fa-map-marker-alt text-[#f1c40f]"></i> UCC, Zargar Mohalla, Handwara</li>
                 </ul>
             </div>
         </div>
-        <div class="text-center mt-12 pt-8 border-t border-gray-700 text-xs tracking-widest">
-            <p>© 2026 FASILYOUSF INSTITUTE | DESIGNED FOR STUDENTS</p>
+        <div class="text-center mt-20 pt-8 border-t border-white/5 text-[10px] font-black tracking-[0.3em] uppercase opacity-40">
+            © 2026 TR FASILYOUSF | UCC HANDWARA OFFICIAL
         </div>
     </footer>
 
     <script>
-        // Mobile Toggle Menu
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('nav-menu');
         hamburger.addEventListener('click', () => {
             navMenu.classList.toggle('active');
         });
 
-        // Search Functionality
+        // Live Grid Filter
         const searchInput = document.getElementById('noteSearch');
         const notes = document.querySelectorAll('.note-card');
 
-        searchInput.addEventListener('keyup', (e) => {
+        searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             notes.forEach(note => {
                 const title = note.querySelector('h3').textContent.toLowerCase();
                 const text = note.querySelector('p').textContent.toLowerCase();
                 if(title.includes(term) || text.includes(term)) {
-                    note.style.display = 'block';
+                    note.style.display = 'flex';
+                    note.style.opacity = '1';
                 } else {
                     note.style.display = 'none';
+                    note.style.opacity = '0';
                 }
             });
         });
     </script>
 </body>
-
 </html>

@@ -9,122 +9,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #1e40af;
-            border-radius: 10px;
-        }
-
-        .glass {
-            background: white;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        body {
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .option-card:hover {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
-        }
-
-        .exam-content-area {
-            height: calc(100vh - 220px);
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #1e40af; border-radius: 10px; }
+        .glass { background: white; border: 1px solid #e2e8f0; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        body { height: 100vh; overflow: hidden; }
+        .option-card:hover { border-color: #3b82f6; background-color: #eff6ff; }
+        .exam-content-area { height: calc(100vh - 220px); }
 
         /* PDF EXPORT STYLING (A4) */
-        #pdf-export-container {
-            display: none;
-            width: 210mm;
-            padding: 20mm;
-            font-family: 'Helvetica', sans-serif;
-            color: #000;
-            background: white;
-        }
-
-        .pdf-logo-square {
-            width: 50px;
-            height: 50px;
-            margin: 0 auto 10px;
-            border: 1px solid #000;
-            display: block;
-            object-fit: contain;
-        }
-
-        .pdf-header-box {
-            text-align: center;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .status-badge {
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 8px;
-            border: 1px solid #2e7d32;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 1px;
-        }
-
-        .candidate-box {
-            border: 1px solid #000;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .pdf-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .pdf-table th {
-            background-color: #f2f2f2;
-            color: #000;
-            border: 1px solid #000;
-            padding: 8px;
-            font-size: 11px;
-            text-align: left;
-        }
-
-        .pdf-table td {
-            border: 1px solid #000;
-            padding: 6px 8px;
-            font-size: 10px;
-            vertical-align: top;
-        }
-
-        .text-right-ans {
-            color: #1b5e20;
-            font-weight: bold;
-        }
-
-        .text-wrong-ans {
-            color: #b71c1c;
-            font-weight: bold;
-        }
-
-        .score-box {
-            border: 2px solid #000;
-            padding: 10px;
-            text-align: center;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
+        #pdf-export-container { display: none; width: 210mm; padding: 20mm; font-family: 'Helvetica', sans-serif; color: #000; background: white; position: relative; }
+        .certificate-border { border: 10px double #1e40af; padding: 20px; height: 250mm; }
+        .pdf-logo-square { width: 60px; height: 60px; margin: 0 auto 10px; display: block; object-fit: contain; }
+        .pdf-header-box { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+        .status-badge { background: #e8f5e9; color: #2e7d32; padding: 8px; border: 1px solid #2e7d32; font-weight: bold; text-align: center; margin-bottom: 15px; text-transform: uppercase; font-size: 14px; }
+        .candidate-box { border: 1px solid #000; padding: 15px; margin-bottom: 20px; }
+        .pdf-table { width: 100%; border-collapse: collapse; }
+        .pdf-table th { background-color: #f2f2f2; border: 1px solid #000; padding: 8px; font-size: 11px; text-align: left; }
+        .pdf-table td { border: 1px solid #000; padding: 6px 8px; font-size: 10px; vertical-align: top; }
+        .text-right-ans { color: #1b5e20; font-weight: bold; }
+        .text-wrong-ans { color: #b71c1c; font-weight: bold; }
+        .score-box { border: 2px solid #000; padding: 10px; text-align: center; margin-bottom: 15px; font-weight: bold; }
+        
+        /* Certificate Specific */
+        .cert-title { font-size: 28pt; font-weight: 900; color: #1e40af; margin: 20px 0; text-transform: uppercase; }
+        .cert-text { font-size: 14pt; margin: 10px 0; line-height: 1.6; }
     </style>
 </head>
 
@@ -134,71 +43,39 @@
 
         <header class="bg-white border-b border-slate-200 p-4 flex items-center justify-between shrink-0 shadow-sm">
             <div class="flex items-center space-x-4">
-                <div
-                    class="w-12 h-12 bg-slate-50 border border-blue-800 rounded flex items-center justify-center overflow-hidden">
+                <div class="w-12 h-12 bg-slate-50 border border-blue-800 rounded flex items-center justify-center overflow-hidden">
                     <img src="./logo.jpeg" alt="UCC" onerror="this.parentElement.innerHTML='UCC'">
                 </div>
                 <div>
-                    <h1 class="text-lg md:text-xl font-black text-blue-900 leading-none uppercase">United Community
-                        College</h1>
+                    <h1 class="text-lg md:text-xl font-black text-blue-900 leading-none uppercase">United Community College</h1>
                     <p class="text-[10px] font-bold text-blue-600 uppercase tracking-[0.2em] mt-1">Handwara</p>
                 </div>
             </div>
             <div class="hidden sm:block text-right">
-                <span id="portal-status"
-                    class="px-3 py-1 bg-red-100 text-red-800 text-[10px] font-black rounded uppercase">Portal
-                    Locked</span>
+                <span class="px-3 py-1 bg-green-100 text-green-800 text-[10px] font-black rounded uppercase tracking-widest">Portal Active</span>
             </div>
         </header>
 
-        <div id="exam-access-screen" class="flex-grow flex items-center justify-center p-4 bg-slate-50">
-            <div
-                class="glass p-8 md:p-12 rounded-3xl w-full max-w-md animate__animated animate__fadeInDown border-t-8 border-blue-900 shadow-2xl">
-                <div class="text-center mb-6">
-                    <img src="./logo.jpeg" class="w-16 h-16 mx-auto mb-4 rounded border border-slate-200 p-1"
-                        alt="Logo">
-                    <h2 class="text-xl font-black text-slate-800 uppercase tracking-widest">Exam Access</h2>
-                    <p class="text-slate-400 text-[9px] font-bold uppercase mt-1 tracking-widest">Admin Authorization
-                        Required</p>
-                </div>
-                <div class="space-y-4">
-                    <input type="text" id="accessUser" placeholder="ADMIN USER ID"
-                        class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none font-bold uppercase text-xs tracking-widest">
-                    <input type="password" id="accessPass" placeholder="PASSWORD"
-                        class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none font-bold text-xs tracking-widest">
-                    <button onclick="handleExamAccess()"
-                        class="w-full bg-blue-900 text-white py-4 rounded-xl font-black shadow-xl hover:bg-black transition transform active:scale-95 uppercase tracking-widest text-xs">Unlock
-                        System</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="login-screen" class="hidden flex-grow flex items-center justify-center p-4">
-            <div
-                class="glass p-8 md:p-12 rounded-2xl w-full max-w-md animate__animated animate__fadeIn border-t-4 border-blue-800 shadow-xl">
+        <div id="login-screen" class="flex-grow flex items-center justify-center p-4">
+            <div class="glass p-8 md:p-12 rounded-2xl w-full max-w-md animate__animated animate__fadeIn border-t-4 border-blue-800 shadow-xl">
                 <div class="text-center mb-8">
                     <h2 class="text-2xl font-bold text-slate-800 uppercase tracking-tight">Student Login</h2>
-                    <p class="text-green-600 text-[10px] font-bold uppercase tracking-widest mt-1 italic">✓ Secure
-                        Session Active</p>
+                    <p class="text-blue-600 text-[10px] font-bold uppercase tracking-widest mt-1 italic">Enter Registration ID to begin</p>
                 </div>
                 <div class="space-y-6">
                     <div>
                         <label class="text-[10px] font-bold text-blue-800 uppercase block mb-1">Registration ID</label>
-                        <input type="text" id="stuRoll" value="UCC / HD / 26 / BCC"
+                        <input type="text" id="stuRoll" placeholder="UCC / HD / 26 / BCC"
                             class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none text-center text-lg font-bold uppercase tracking-widest">
                     </div>
                     <button onclick="handleLogin()"
-                        class="w-full bg-blue-800 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-900 transition active:scale-95 uppercase tracking-widest text-sm">Verify
-                        & Access Paper</button>
-                    <button onclick="location.reload()"
-                        class="w-full text-[10px] text-slate-400 font-bold uppercase underline">Portal Lock</button>
+                        class="w-full bg-blue-800 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-900 transition active:scale-95 uppercase tracking-widest text-sm">Verify & Access Paper</button>
                 </div>
             </div>
         </div>
 
         <div id="dashboard-screen" class="hidden flex-grow flex items-center justify-center p-4">
-            <div
-                class="glass p-10 rounded-2xl w-full max-w-2xl text-center border-t-4 border-blue-800 animate__animated animate__zoomIn">
+            <div class="glass p-10 rounded-2xl w-full max-w-2xl text-center border-t-4 border-blue-800 animate__animated animate__zoomIn">
                 <div class="mb-10">
                     <p class="text-blue-600 font-bold uppercase tracking-widest text-[10px] mb-2">Verified Candidate</p>
                     <h2 class="text-3xl font-black text-slate-800 uppercase" id="user-display"></h2>
@@ -206,8 +83,7 @@
                     <p class="text-slate-400 font-mono text-sm mt-1" id="roll-display"></p>
                 </div>
                 <button onclick="startExam()"
-                    class="w-full bg-blue-800 text-white py-5 rounded-xl font-black text-xl hover:bg-blue-900 shadow-xl transition-all uppercase tracking-tighter">START
-                    FINAL EXAMINATION</button>
+                    class="w-full bg-blue-800 text-white py-5 rounded-xl font-black text-xl hover:bg-blue-900 shadow-xl transition-all uppercase tracking-tighter">START FINAL EXAMINATION</button>
             </div>
         </div>
 
@@ -215,11 +91,11 @@
             <div class="bg-blue-900 px-6 py-4 flex justify-between items-center shrink-0 shadow-lg">
                 <div class="text-white">
                     <p class="text-[10px] uppercase opacity-50 font-bold">Remaining</p>
-                    <p id="timer" class="text-2xl font-mono font-bold">20:00</p>
+                    <p id="timer" class="text-2xl font-mono font-bold">40:00</p>
                 </div>
                 <div class="text-right text-white">
                     <p class="text-[10px] uppercase opacity-50 font-bold">Progress</p>
-                    <p id="progress-text" class="text-lg font-bold font-mono">1 / 25</p>
+                    <p id="progress-text" class="text-lg font-bold font-mono">1 / 50</p>
                 </div>
             </div>
             <div class="flex-grow overflow-y-auto bg-white p-6 md:p-12 exam-content-area shadow-inner">
@@ -227,89 +103,72 @@
             </div>
             <div class="bg-slate-50 p-6 border-t shrink-0 flex justify-between items-center shadow-inner">
                 <button id="prevBtn" onclick="navigate(-1)"
-                    class="px-8 py-3 bg-white border border-slate-300 rounded-lg font-bold hover:bg-slate-100 transition-all">←
-                    Previous</button>
+                    class="px-8 py-3 bg-white border border-slate-300 rounded-lg font-bold hover:bg-slate-100 transition-all">← Previous</button>
                 <div id="submit-container" class="hidden"><button onclick="finalSubmit()"
-                        class="px-10 py-3 bg-rose-600 text-white rounded-lg font-black shadow-lg animate__animated animate__pulse animate__infinite uppercase tracking-widest text-sm">Submit
-                        Paper</button></div>
+                        class="px-10 py-3 bg-rose-600 text-white rounded-lg font-black shadow-lg animate__animated animate__pulse animate__infinite uppercase tracking-widest text-sm">Submit Paper</button></div>
                 <button id="nextBtn" onclick="navigate(1)"
-                    class="px-8 py-3 bg-blue-800 text-white rounded-lg font-bold hover:bg-blue-900 shadow-lg tracking-widest text-sm">Next
-                    Question →</button>
+                    class="px-8 py-3 bg-blue-800 text-white rounded-lg font-bold hover:bg-blue-900 shadow-lg tracking-widest text-sm">Next Question →</button>
             </div>
         </div>
 
         <div id="result-screen" class="hidden flex-grow flex items-center justify-center p-4 text-center">
             <div class="glass p-12 rounded-3xl shadow-2xl max-w-md w-full animate__animated animate__bounceIn">
-                <div class="text-6xl mb-6">✅</div>
-                <h2 class="text-2xl font-black text-slate-800 uppercase leading-none">Paper Submitted</h2>
+                <div class="text-6xl mb-6">🏆</div>
+                <h2 class="text-2xl font-black text-slate-800 uppercase leading-none">Exam Completed</h2>
                 <p class="text-slate-500 mt-2 mb-10 font-bold" id="res-student-info"></p>
                 <div class="space-y-4">
-                    <button onclick="downloadPDF('receipt')"
-                        class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 shadow-md uppercase text-[10px] tracking-[0.2em]">📥
-                        Download Receipt</button>
+                    <button onclick="downloadPDF('certificate')"
+                        class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 shadow-md uppercase text-[10px] tracking-[0.2em]">🎓 Download Certificate</button>
                     <button onclick="downloadPDF('answersheet')"
-                        class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-black uppercase text-[10px] tracking-[0.2em]">📜
-                        Download Answersheet</button>
+                        class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-black uppercase text-[10px] tracking-[0.2em]">📜 Download Answersheet</button>
                     <button onclick="location.reload()"
-                        class="block w-full text-blue-800 font-bold hover:underline uppercase text-[10px] mt-6 tracking-widest">Logout
-                        Portal</button>
+                        class="block w-full text-blue-800 font-bold hover:underline uppercase text-[10px] mt-6 tracking-widest">Logout Portal</button>
                 </div>
             </div>
         </div>
 
         <div id="pdf-export-container">
-            <div class="pdf-header-box">
-                <img src="./logo.jpeg" class="pdf-logo-square" alt="Logo">
-                <h1 style="margin:0; font-size: 20pt; letter-spacing: 1px;">UNITED COMMUNITY COLLEGE</h1>
-                <p style="margin:2px 0; font-weight:bold; color: #1e40af; font-size: 12pt;">HANDWARA, KASHMIR</p>
-                <p id="pdf-doc-type"
-                    style="margin:10px 0; font-size: 10pt; text-decoration: underline; font-weight: bold;"></p>
-            </div>
-            <div class="status-badge">Exam Successfully Submitted</div>
-            <div class="candidate-box">
-                <table style="width: 100%; font-size: 11pt;">
-                    <tr>
-                        <td width="35%"><strong>Candidate Name:</strong></td>
-                        <td id="pdf-name"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Parentage (S/O):</strong></td>
-                        <td id="pdf-parent"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Enrollment ID:</strong></td>
-                        <td id="pdf-roll" style="font-weight:bold;"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Submission Time:</strong></td>
-                        <td id="pdf-date"></td>
-                    </tr>
-                </table>
-            </div>
-            <div id="pdf-score-area" class="score-box">
-                Marks Obtained: <span id="pdf-marks" style="font-size: 16pt;">00 / 50</span>
-            </div>
-            <div id="pdf-table-area">
-                <table class="pdf-table">
-                    <thead>
-                        <tr>
-                            <th width="7%">S.No</th>
-                            <th width="48%">Question</th>
-                            <th width="22.5%">Your Choice</th>
-                            <th width="22.5%">Correct Answer</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pdf-table-body"></tbody>
-                </table>
-            </div>
-            <div style="margin-top: 50px; display: flex; justify-content: space-between;">
-                <div style="text-align: center;">
-                    <p style="border-bottom: 1px solid #000; width: 150px;"></p>
-                    <p style="font-size: 9px; margin-top: 5px;">Candidate Signature</p>
+            <div class="certificate-border" id="cert-wrap">
+                <div class="pdf-header-box">
+                    <img src="./logo.jpeg" class="pdf-logo-square" alt="Logo">
+                    <h1 style="margin:0; font-size: 22pt; letter-spacing: 1px;">UNITED COMMUNITY COLLEGE</h1>
+                    <p style="margin:2px 0; font-weight:bold; color: #1e40af; font-size: 14pt;">HANDWARA, KASHMIR</p>
                 </div>
-                <div style="text-align: center;">
-                    <p style="border-bottom: 1px solid #000; width: 150px;"></p>
-                    <p style="font-size: 9px; margin-top: 5px;">Controller Exams (UCC)</p>
+
+                <div id="certificate-content" style="text-align: center; display: none;">
+                    <h2 class="cert-title">Certificate of Achievement</h2>
+                    <p class="cert-text">This is to certify that</p>
+                    <h3 style="font-size: 24pt; font-family: serif; margin: 10px 0;" id="cert-student-name"></h3>
+                    <p class="cert-text">Son/Daughter of <strong><span id="cert-parent-name"></span></strong></p>
+                    <p class="cert-text">bearing Enrollment ID <strong><span id="cert-roll"></span></strong></p>
+                    <p class="cert-text">has successfully completed the <strong>Basic Computer Course (BCC)</strong> Final Examination held on <span id="cert-date"></span> with a score of:</p>
+                    <div style="font-size: 30pt; font-weight: 900; color: #1e40af; margin: 20px 0;" id="cert-final-marks"></div>
+                </div>
+
+                <div id="answersheet-content">
+                    <div class="status-badge">Official Theory Answersheet</div>
+                    <div class="candidate-box">
+                        <table style="width: 100%; font-size: 11pt;">
+                            <tr><td width="35%"><strong>Candidate Name:</strong></td><td id="pdf-name"></td></tr>
+                            <tr><td><strong>Parentage (S/O):</strong></td><td id="pdf-parent"></td></tr>
+                            <tr><td><strong>Enrollment ID:</strong></td><td id="pdf-roll" style="font-weight:bold;"></td></tr>
+                            <tr><td><strong>Submission Time:</strong></td><td id="pdf-date"></td></tr>
+                        </table>
+                    </div>
+                    <div id="pdf-score-area" class="score-box">Marks Obtained: <span id="pdf-marks" style="font-size: 16pt;">00 / 100</span></div>
+                    <div id="pdf-table-area">
+                        <table class="pdf-table">
+                            <thead>
+                                <tr><th width="7%">S.No</th><th width="48%">Question</th><th width="22.5%">Your Choice</th><th width="22.5%">Correct Answer</th></tr>
+                            </thead>
+                            <tbody id="pdf-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div style="margin-top: 80px; display: flex; justify-content: space-between;">
+                    <div style="text-align: center;"><p style="border-bottom: 1px solid #000; width: 150px;"></p><p style="font-size: 9px; margin-top: 5px;">Candidate Signature</p></div>
+                    <div style="text-align: center;"><p style="border-bottom: 1px solid #000; width: 150px;"></p><p style="font-size: 9px; margin-top: 5px;">Controller Exams (UCC)</p></div>
                 </div>
             </div>
         </div>
@@ -317,304 +176,65 @@
     </div>
 
     <script>
-        // --- 3 ADMIN USERS ---
-        const accessRegistry = {
-            "ADMIN": "fasil",
-            "UCC_ADMIN_02": "ucc@02",
-            "UCC_ADMIN_03": "ucc@03"
-        };
-
-        // --- STUDENT REGISTRY (SYNTAX MAINTAINED) ---
         const studentRegistry = {
             "UCC/HD/26/BCC100": { name: "Fasil Yousf", parent: "Mohammad Yousf Dar" },
-            "UCC/HD/26/BCC101": { name: "Insha Gul", parent: "Gh Mohd Wani" },
-            "UCC/HD/26/BCC102": { name: "Iqra Maqbool", parent: "Mohd Maqbool" },
-            "UCC/HD/26/BCC103": { name: "Noor Ul Saba", parent: "Fayaz Ahmad Pir" },
-            "UCC/HD/26/BCC104": { name: "Tabasum Jan", parent: "Mohd Yousuf Mir" },
-            "UCC/HD/26/BCC105": { name: "Aadiya Ahad", parent: "Ab Ahad" },
-            "UCC/HD/26/BCC106": { name: "Mehak Qasim", parent: "Mohd Qasim Shah" },
-            "UCC/HD/26/BCC107": { name: "Sheikh Suraiya Yousuf", parent: "Mohd Yousuf Sheikh" },
-            "UCC/HD/26/BCC108": { name: "Zainab Jan", parent: "Javid Ahmad Bhat" },
-            "UCC/HD/26/BCC109": { name: "Shabnum Bano", parent: "Ab Razak Lone" },
-            "UCC/HD/26/BCC110": { name: "Ronak Jan", parent: "Rayaz Ahmad Dar" },
-            "UCC/HD/26/BCC111": { name: "Iqra Rayees", parent: "Rayees Ahmad Bat" },
-            "UCC/HD/26/BCC112": { name: "Sadiya Nazir", parent: "Nazir Ahmad Chopan" },
-            "UCC/HD/26/BCC113": { name: "Khusbhoo Habib", parent: "Habibullah Ganie" },
-            "UCC/HD/26/BCC114": { name: "Ishrat Irshad", parent: "Irshad Ahmad Banday" },
-            "UCC/HD/26/BCC115": { name: "Muskaan Majeed", parent: "Ab Majeed Dar" },
-            "UCC/HD/26/BCC116": { name: "Rifat Yousuf", parent: "Mohd Yousuf Dar" },
-            "UCC/HD/26/BCC117": { name: "Nadiya Aslam", parent: "Mohd Aslam Bhat" },
-            "UCC/HD/26/BCC118": { name: "Arzoo Rehman", parent: "Ab Rehman Mir" },
-            "UCC/HD/26/BCC119": { name: "Muskaan Akhter", parent: "Moh Addullah Ganie" },
-            "UCC/HD/26/BCC120": { name: "Misba Imtiyaz", parent: "Imtiyaz Ahmad Sheikh" },
-            "UCC/HD/26/BCC121": { name: "Suraiya Shabir", parent: "Shabir Ahmad Mir" },
-            "UCC/HD/26/BCC122": { name: "Neelofar Nazir", parent: "Nazir Ahmad Malik" },
-            "UCC/HD/26/BCC123": { name: "Uznain Nazir", parent: "Nazir Ahmad Bhat" },
-            "UCC/HD/26/BCC124": { name: "Rehana Nabi", parent: "Gh Nabi Ahanger" },
-            "UCC/HD/26/BCC125": { name: "Rehana Rashid", parent: "Ab Rashid Khuja" },
-            "UCC/HD/26/BCC126": { name: "Anjum Ara", parent: "Mushtaq Ahmad Tantary" },
-            "UCC/HD/26/BCC127": { name: "Nahida Majeed", parent: "Ab Majeed Mir" },
-            "UCC/HD/26/BCC128": { name: "Mahak Rashid", parent: "Ab Rashid Sofi" },
-            "UCC/HD/26/BCC129": { name: "Suraiya", parent: "Ab Rashid Sofi" },
-            "UCC/HD/26/BCC130": { name: "Zaniab Farooz", parent: "Farooz Ahmad Bhat" },
-            "UCC/HD/26/BCC131": { name: "Afreen Sultan", parent: "Moh Sultan Lone" },
-            "UCC/HD/26/BCC132": { name: "Najma Hilal", parent: "Hilal Ahmad Lone" },
-            "UCC/HD/26/BCC133": { name: "Khushboo Nissar", parent: "Nissar Ahmad Wani" },
-            "UCC/HD/26/BCC134": { name: "Khalida Hassan", parent: "Gh Hassan Sheikh" },
-            "UCC/HD/26/BCC135": { name: "Mursaleen Amin", parent: "Mohd Amin Bhat" },
-            "UCC/HD/26/BCC136": { name: "Aiman Nabi Mir", parent: "Gh Nbai Mir" },
-            "UCC/HD/26/BCC137": { name: "Iqra Jamal Wani", parent: "Mohd Jamal Wani" },
-            "UCC/HD/26/BCC138": { name: "Afshana Nabi", parent: "Gn Nabi Rather" },
-            "UCC/HD/26/BCC139": { name: "Ishrat Hassan", parent: "Gn Hassan Bhat" },
-            "UCC/HD/26/BCC140": { name: "Saima Shafi", parent: "Moh Shafi Bhat" },
-            "UCC/HD/26/BCC141": { name: "Seerat Fayaz", parent: "Fayaz Ahmad Lone" },
-            "UCC/HD/26/BCC142": { name: "Neelofar Rashid", parent: "Ab Rashid Khan" },
-            "UCC/HD/26/BCC143": { name: "Kareena Nabi", parent: "GH Nabi Dar" },
-            "UCC/HD/26/BCC144": { name: "Tabasum Jan", parent: "Ab Gani Rashi" },
-            "UCC/HD/26/BCC145": { name: "Sabreena Akhter", parent: "Jamal Din Khatana" },
-            "UCC/HD/26/BCC146": { name: "Nahida Nazir", parent: "Nazir Ahmad Rashi" },
-            "UCC/HD/26/BCC147": { name: "Rubeena Bashir", parent: "Bashir Ahmad Tantray" },
-            "UCC/HD/26/BCC148": { name: "Sadiya Bashir", parent: "Bashir Ahmad Dar" },
-            "UCC/HD/26/BCC149": { name: "Zainab Mushtaq", parent: "Mushtaq Ahmad Rather" },
-            "UCC/HD/26/BCC150": { name: "Sumaiya Majeed", parent: "Ab Majeed Sheikh" },
-            "UCC/HD/26/BCC151": { name: "Safiya Bashir", parent: "Bashir Ahmad Wani" },
-            "UCC/HD/26/BCC152": { name: "Shahid Ali Mir", parent: "Ali Moha Mir" },
-            "UCC/HD/26/BCC153": { name: "Irfan Ahmad Bhat", parent: "Ab Rasheed Bhat" },
-            "UCC/HD/26/BCC154": { name: "Kaisar Majeed War", parent: "Ab Majeed War" },
-            "UCC/HD/26/BCC155": { name: "Imtiyaz Ahmad Sheikh", parent: "Ab Rashid Sheikh" },
-            "UCC/HD/26/BCC156": { name: "Aarif Hussan Lone", parent: "Saif Ud Din Lone" },
-            "UCC/HD/26/BCC157": { name: "Talib Farooq", parent: "Farooq Ahmad Dar" },
-            "UCC/HD/26/BCC158": { name: "Irfan Ahmad Meloo", parent: "Mahir Din Maloo" },
-            "UCC/HD/26/BCC159": { name: "Saqib Bashir", parent: "Bashir Ahmad War" },
-            "UCC/HD/26/BCC160": { name: "Wahid Nabi Ahanger", parent: "Gh Nabi Ahanger" }
+            "UCC/HD/26/BCC101": { name: "Insha Gul", parent: "Gh Mohd Wani" }
         };
 
         const masterBank = [
-            { q: "What is a computer?", a: ["Electronic machine", "Mechanical tool", "Calculator only", "Storage device"], c: "Electronic machine" },
-            { q: "Which is not a type of computer?", a: ["Desktop", "Laptop", "Tablet", "Scanner"], c: "Scanner" },
-            { q: "Which device is used to display output?", a: ["Keyboard", "Mouse", "Monitor", "Scanner"], c: "Monitor" },
-            { q: "Which is an input device?", a: ["Printer", "Speaker", "Keyboard", "Monitor"], c: "Keyboard" },
-            { q: "CPU is known as?", a: ["Brain of computer", "Memory unit", "Input unit", "Output unit"], c: "Brain of computer" },
-
-            { q: "Which memory is temporary?", a: ["ROM", "RAM", "Hard Disk", "CD"], c: "RAM" },
-            { q: "Which memory is permanent?", a: ["RAM", "Cache", "ROM", "Register"], c: "ROM" },
-            { q: "Which device is used for printing?", a: ["Monitor", "Printer", "Scanner", "Keyboard"], c: "Printer" },
-            { q: "UPS is used for?", a: ["Storage", "Power backup", "Printing", "Typing"], c: "Power backup" },
-            { q: "Hard disk is?", a: ["Primary memory", "Secondary storage", "Input device", "Output device"], c: "Secondary storage" },
-
-            { q: "Operating system is?", a: ["Hardware", "Software", "Device", "Program only"], c: "Software" },
-            { q: "Example of OS?", a: ["MS Word", "Windows", "Excel", "Paint"], c: "Windows" },
-            { q: "Desktop is?", a: ["File", "Main screen", "Folder", "Program"], c: "Main screen" },
-            { q: "Taskbar is located at?", a: ["Top", "Bottom", "Left", "Right"], c: "Bottom" },
-            { q: "Recycle bin stores?", a: ["New files", "Deleted files", "Programs", "Images"], c: "Deleted files" },
-
-            { q: "File is?", a: ["Collection of data", "Device", "Program", "Folder"], c: "Collection of data" },
-            { q: "Folder is used to?", a: ["Delete files", "Store files", "Run programs", "Print files"], c: "Store files" },
-            { q: "Shortcut to copy?", a: ["Ctrl+V", "Ctrl+C", "Ctrl+X", "Ctrl+Z"], c: "Ctrl+C" },
-            { q: "Shortcut to paste?", a: ["Ctrl+C", "Ctrl+V", "Ctrl+Z", "Ctrl+X"], c: "Ctrl+V" },
-            { q: "Shortcut to cut?", a: ["Ctrl+X", "Ctrl+C", "Ctrl+V", "Ctrl+A"], c: "Ctrl+X" },
-
-            { q: "Internet is?", a: ["Device", "Network", "Software", "Program"], c: "Network" },
-            { q: "WWW stands for?", a: ["World Wide Web", "Wide Web World", "Web World Wide", "World Web Wide"], c: "World Wide Web" },
-            { q: "Which is a browser?", a: ["Chrome", "Excel", "Word", "Paint"], c: "Chrome" },
-            { q: "Email is used for?", a: ["Typing", "Messaging", "Drawing", "Calculations"], c: "Messaging" },
-            { q: "Google is?", a: ["Browser", "Search engine", "OS", "Software"], c: "Search engine" },
-
-            { q: "Virus is?", a: ["Hardware", "Program", "Malicious software", "Device"], c: "Malicious software" },
-            { q: "Antivirus is used for?", a: ["Typing", "Protection", "Drawing", "Storage"], c: "Protection" },
-            { q: "Strong password should include?", a: ["Only letters", "Only numbers", "Mix of characters", "Only symbols"], c: "Mix of characters" },
-            { q: "Safe internet use means?", a: ["Sharing password", "Clicking unknown links", "Using antivirus", "Ignoring security"], c: "Using antivirus" },
-
-            { q: "MS Word is used for?", a: ["Spreadsheet", "Presentation", "Typing documents", "Coding"], c: "Typing documents" },
-            { q: "Ctrl+S is used for?", a: ["Save", "Search", "Select", "Size"], c: "Save" },
-            { q: "Bold shortcut?", a: ["Ctrl+B", "Ctrl+I", "Ctrl+U", "Ctrl+P"], c: "Ctrl+B" },
-            { q: "Italic shortcut?", a: ["Ctrl+B", "Ctrl+I", "Ctrl+U", "Ctrl+S"], c: "Ctrl+I" },
-            { q: "Underline shortcut?", a: ["Ctrl+U", "Ctrl+B", "Ctrl+I", "Ctrl+P"], c: "Ctrl+U" },
-
-            { q: "Font size changes?", a: ["Text size", "Page size", "Image size", "File size"], c: "Text size" },
-            { q: "Paragraph alignment includes?", a: ["Left, Center, Right", "Top, Bottom", "Bold, Italic", "None"], c: "Left, Center, Right" },
-            { q: "Table is used for?", a: ["Images", "Data in rows/columns", "Typing", "Printing"], c: "Data in rows/columns" },
-
-            { q: "MS Excel is used for?", a: ["Typing", "Spreadsheet", "Drawing", "Email"], c: "Spreadsheet" },
-            { q: "Excel file extension?", a: [".docx", ".pptx", ".xlsx", ".txt"], c: ".xlsx" },
-            { q: "Formula starts with?", a: ["=", "#", "@", "$"], c: "=" },
-            { q: "SUM function is used for?", a: ["Multiply", "Add", "Divide", "Subtract"], c: "Add" },
-            { q: "AVERAGE function?", a: ["Sum", "Mean", "Max", "Min"], c: "Mean" },
-
-            { q: "Row is?", a: ["Vertical", "Horizontal", "Diagonal", "None"], c: "Horizontal" },
-            { q: "Column is?", a: ["Vertical", "Horizontal", "Diagonal", "None"], c: "Vertical" },
-
-            { q: "PowerPoint is used for?", a: ["Typing", "Spreadsheet", "Presentation", "Coding"], c: "Presentation" },
-            { q: "Slide is?", a: ["Page in PPT", "File", "Folder", "Image"], c: "Page in PPT" },
-            { q: "Animation is?", a: ["Text effect", "Sound", "Image", "File"], c: "Text effect" },
-            { q: "Slide show is?", a: ["Editing", "Presentation view", "Typing", "Saving"], c: "Presentation view" },
-            { q: "Which is input + output device?", a: ["Monitor", "Touchscreen", "Printer", "Speaker"], c: "Touchscreen" },
-            { q: "Which is secondary storage?", a: ["RAM", "ROM", "Hard Disk", "Register"], c: "Hard Disk" },
-            { q: "Booting means?", a: ["Shutdown", "Restart", "Start computer", "Sleep"], c: "Start computer" },
-
-            { q: "Cold boot is?", a: ["Restart", "First start", "Shutdown", "Sleep"], c: "First start" },
-            { q: "Warm boot is?", a: ["Restart", "Shutdown", "Sleep", "Power off"], c: "Restart" },
-
-            { q: "Desktop icons represent?", a: ["Programs/files", "CPU", "Memory", "Keyboard"], c: "Programs/files" },
-            { q: "Double click means?", a: ["Open file", "Delete", "Copy", "Paste"], c: "Open file" },
-            { q: "Right click shows?", a: ["Menu", "Delete", "Copy", "Paste"], c: "Menu" },
-
-            { q: "Task manager is used for?", a: ["Typing", "Managing programs", "Drawing", "Printing"], c: "Managing programs" },
-
-            { q: "LAN stands for?", a: ["Local Area Network", "Large Area Network", "Light Area Network", "Line Area Network"], c: "Local Area Network" },
-            { q: "Internet connection types?", a: ["WiFi", "LAN", "Mobile data", "All"], c: "All" },
-
-            { q: "Email subject is?", a: ["Title", "Message", "File", "Attachment"], c: "Title" },
-            { q: "Spam mail is?", a: ["Important", "Unwanted", "Saved", "Draft"], c: "Unwanted" },
-
-            { q: "Firewall is?", a: ["Security system", "Hardware", "Software", "Device"], c: "Security system" },
-
-            { q: "Word wrap is?", a: ["Auto line break", "Delete text", "Copy", "Paste"], c: "Auto line break" },
-            { q: "Bullet list is?", a: ["Points list", "Paragraph", "Table", "Image"], c: "Points list" },
-
-            { q: "Excel sorting is?", a: ["Arrange data", "Delete", "Copy", "Paste"], c: "Arrange data" },
-            { q: "Filter is used for?", a: ["Show specific data", "Delete", "Print", "Save"], c: "Show specific data" },
-
-            { q: "Cell reference example?", a: ["A1", "1A", "AA", "11"], c: "A1" },
-            { q: "Workbook is?", a: ["Excel file", "Sheet", "Cell", "Row"], c: "Excel file" },
-
-            { q: "PPT slide show shortcut?", a: ["F5", "F2", "F10", "F1"], c: "F5" },
-
-            { q: "Animation pane is used for?", a: ["Manage animations", "Typing", "Printing", "Saving"], c: "Manage animations" },
-
-            { q: "PDF means?", a: ["Portable Document Format", "Print Document File", "Portable Data File", "Print Data Format"], c: "Portable Document Format" },
-
-            { q: "Scanner converts?", a: ["Hard to soft copy", "Soft to hard", "Audio", "Video"], c: "Hard to soft copy" },
-
-            { q: "Printer converts?", a: ["Soft to hard copy", "Hard to soft", "Audio", "Video"], c: "Soft to hard copy" },
-
-            { q: "Typing accuracy means?", a: ["Speed", "Correct typing", "Mistakes", "Random typing"], c: "Correct typing" },
-
-            { q: "Internet safety includes?", a: ["Sharing passwords", "Using strong passwords", "Clicking unknown links", "Ignoring warnings"], c: "Using strong passwords" },
-
-            { q: "Cloud storage example?", a: ["Google Drive", "RAM", "ROM", "CPU"], c: "Google Drive" },
-
-            { q: "Download means?", a: ["Upload", "Receive data", "Delete", "Print"], c: "Receive data" },
-            { q: "Upload means?", a: ["Send data", "Receive", "Delete", "Print"], c: "Send data" },
-
-            { q: "Zoom is used for?", a: ["Video meeting", "Typing", "Drawing", "Printing"], c: "Video meeting" },
-
-            { q: "Shortcut for new file?", a: ["Ctrl+N", "Ctrl+S", "Ctrl+P", "Ctrl+O"], c: "Ctrl+N" },
-            { q: "Shortcut for open file?", a: ["Ctrl+O", "Ctrl+N", "Ctrl+S", "Ctrl+P"], c: "Ctrl+O" },
-
-            { q: "Basic control panel used for?", a: ["Settings", "Typing", "Drawing", "Printing"], c: "Settings" },
-
-            { q: "File rename shortcut?", a: ["F2", "F5", "F10", "F12"], c: "F2" },
-
-            { q: "Delete file moves to?", a: ["Recycle bin", "Folder", "Desktop", "Drive"], c: "Recycle bin" },
-
-            { q: "Permanent delete shortcut?", a: ["Shift+Delete", "Ctrl+Delete", "Alt+Delete", "Delete"], c: "Shift+Delete" },
-
-            { q: "Which device is used to hear sound?", a: ["Monitor", "Speaker", "Keyboard", "Mouse"], c: "Speaker" },
-            { q: "Which device is used to capture images?", a: ["Printer", "Scanner", "Camera", "Speaker"], c: "Camera" },
-            { q: "Which is an example of output device?", a: ["Mouse", "Keyboard", "Printer", "Scanner"], c: "Printer" },
-
-            { q: "RAM is also called?", a: ["Primary memory", "Secondary memory", "External memory", "Permanent memory"], c: "Primary memory" },
-            { q: "ROM is also called?", a: ["Temporary memory", "Permanent memory", "Cache memory", "Register"], c: "Permanent memory" },
-
-            { q: "Which is fastest storage?", a: ["Hard disk", "RAM", "Cache", "CD"], c: "Cache" },
-
-            { q: "Operating system manages?", a: ["Hardware & software", "Only hardware", "Only software", "None"], c: "Hardware & software" },
-
-            { q: "Which is not OS?", a: ["Windows", "Linux", "Android", "MS Word"], c: "MS Word" },
-
-            { q: "Desktop background is called?", a: ["Theme", "Wallpaper", "Icon", "Screen"], c: "Wallpaper" },
-
-            { q: "Minimize button does?", a: ["Close app", "Hide window", "Maximize", "Delete"], c: "Hide window" },
-            { q: "Maximize button does?", a: ["Close", "Full screen", "Hide", "Delete"], c: "Full screen" },
-            { q: "Close button does?", a: ["Hide", "Close app", "Maximize", "Open"], c: "Close app" },
-
-            { q: "Drag and drop is used for?", a: ["Move files", "Delete", "Print", "Save"], c: "Move files" },
-
-            { q: "Which is example of file?", a: ["Document", "Folder", "Drive", "Desktop"], c: "Document" },
-
-            { q: "Which drive is main storage?", a: ["C Drive", "D Drive", "E Drive", "F Drive"], c: "C Drive" },
-
-            { q: "Internet speed is measured in?", a: ["KB", "MB", "Mbps", "GB"], c: "Mbps" },
-
-            { q: "Website address is called?", a: ["URL", "IP", "DNS", "WWW"], c: "URL" },
-
-            { q: "Online form is used for?", a: ["Data entry", "Printing", "Drawing", "Typing"], c: "Data entry" },
-
-            { q: "Google Chrome is?", a: ["Search engine", "Browser", "OS", "Software"], c: "Browser" },
-
-            { q: "Incognito mode is used for?", a: ["Private browsing", "Download", "Upload", "Print"], c: "Private browsing" },
-
-            { q: "Email CC means?", a: ["Copy", "Carbon copy", "Close copy", "Code copy"], c: "Carbon copy" },
-            { q: "Email BCC means?", a: ["Blind Carbon Copy", "Basic Copy", "Big Copy", "Binary Copy"], c: "Blind Carbon Copy" },
-
-            { q: "Attachment limit depends on?", a: ["Email service", "Computer", "Internet", "Keyboard"], c: "Email service" },
-
-            { q: "Strong password length should be?", a: ["4", "6", "8+", "2"], c: "8+" },
-
-            { q: "Virus spreads through?", a: ["USB", "Internet", "Files", "All"], c: "All" },
-
-            { q: "Antivirus updates are needed for?", a: ["Security", "Speed", "Storage", "Typing"], c: "Security" },
-
-            { q: "MS Word alignment option?", a: ["Justify", "Merge", "Split", "Sort"], c: "Justify" },
-
-            { q: "Page number is inserted in?", a: ["Header/Footer", "Body", "Image", "Table"], c: "Header/Footer" },
-
-            { q: "Spell check shortcut?", a: ["F7", "F5", "F2", "F10"], c: "F7" },
-
-            { q: "Zoom in Word is used for?", a: ["View size", "Typing", "Saving", "Printing"], c: "View size" },
-
-            { q: "Excel auto fill is used for?", a: ["Fill data automatically", "Delete", "Print", "Save"], c: "Fill data automatically" },
-
-            { q: "Excel cell address example?", a: ["B2", "22", "BB", "2B"], c: "B2" },
-
-            { q: "Excel formula example?", a: ["=A1+B1", "A1+B1", "#A1", "@A1"], c: "=A1+B1" },
-
-            { q: "Excel sheet tab is?", a: ["Worksheet name", "File", "Row", "Column"], c: "Worksheet name" },
-
-            { q: "Excel sorting order?", a: ["A-Z", "Z-A", "Both", "None"], c: "Both" },
-
-            { q: "PowerPoint slide master is?", a: ["Design template", "File", "Animation", "Text"], c: "Design template" },
-
-            { q: "Slide transition applies to?", a: ["Between slides", "Text", "Image", "Table"], c: "Between slides" },
-
-            { q: "Animation applies to?", a: ["Objects", "Slides", "Files", "Folders"], c: "Objects" },
-
-            { q: "Slide duplication shortcut?", a: ["Ctrl+D", "Ctrl+C", "Ctrl+V", "Ctrl+X"], c: "Ctrl+D" },
-
-            { q: "Presentation view is called?", a: ["Slide show", "Edit mode", "Normal view", "Print view"], c: "Slide show" },
-
-            { q: "Typing practice improves?", a: ["Speed & accuracy", "Only speed", "Only accuracy", "Nothing"], c: "Speed & accuracy" },
-
-            { q: "File extension for text file?", a: [".txt", ".docx", ".pptx", ".xlsx"], c: ".txt" },
-
-            { q: "PDF files are?", a: ["Editable", "Fixed format", "Executable", "Temporary"], c: "Fixed format" },
-
-            { q: "Print preview shows?", a: ["Before printing", "After printing", "Delete", "Save"], c: "Before printing" },
-
-            { q: "Scanner resolution measured in?", a: ["DPI", "KB", "MB", "GB"], c: "DPI" },
-
-            { q: "Internet usage includes?", a: ["Browsing", "Email", "Download", "All"], c: "All" },
-
-            { q: "File backup means?", a: ["Copy data", "Delete", "Move", "Rename"], c: "Copy data" },
-
-            { q: "Cloud storage advantage?", a: ["Access anywhere", "Slow", "Limited", "Offline only"], c: "Access anywhere" },
-
-            { q: "Computer works on?", a: ["Electricity", "Water", "Air", "Fuel"], c: "Electricity" }
+            { q: "What is a computer?", a: ["Electronic machine", "Mechanical tool", "Writing device", "None"], c: "Electronic machine" },
+            { q: "Who is known as the father of computer?", a: ["Charles Babbage", "Bill Gates", "Steve Jobs", "Alan Turing"], c: "Charles Babbage" },
+            { q: "Which of the following is an input device?", a: ["Monitor", "Keyboard", "Printer", "Speaker"], c: "Keyboard" },
+            { q: "CPU stands for?", a: ["Central Processing Unit", "Computer Personal Unit", "Central Printing Unit", "Control Processing Unit"], c: "Central Processing Unit" },
+            { q: "Which device is used to print documents?", a: ["Scanner", "Printer", "Monitor", "Mouse"], c: "Printer" },
+            { q: "RAM stands for?", a: ["Random Access Memory", "Read Access Memory", "Run Access Memory", "Random Active Machine"], c: "Random Access Memory" },
+            { q: "Which of the following is a storage device?", a: ["Pen Drive", "Monitor", "Keyboard", "Mouse"], c: "Pen Drive" },
+            { q: "Windows is a type of?", a: ["Software", "Hardware", "Input device", "Storage device"], c: "Software" },
+            { q: "Which device is used to move the cursor?", a: ["Printer", "Mouse", "Scanner", "Monitor"], c: "Mouse" },
+            { q: "MS Word is used for?", a: ["Typing documents", "Playing games", "Watching videos", "Internet"], c: "Typing documents" },
+            { q: "MS Excel is used for?", a: ["Calculations", "Drawing", "Music", "Printing"], c: "Calculations" },
+            { q: "Internet is used for?", a: ["Communication", "Information", "Email", "All of these"], c: "All of these" },
+            { q: "UPS stands for?", a: ["Uninterruptible Power Supply", "Universal Power System", "United Power Supply", "Unlimited Power Source"], c: "Uninterruptible Power Supply" },
+            { q: "Shortcut to copy text?", a: ["Ctrl + C", "Ctrl + V", "Ctrl + X", "Ctrl + P"], c: "Ctrl + C" },
+            { q: "Shortcut to paste text?", a: ["Ctrl + C", "Ctrl + V", "Ctrl + X", "Ctrl + A"], c: "Ctrl + V" },
+            { q: "Email stands for?", a: ["Electronic Mail", "Easy Mail", "Extra Mail", "End Mail"], c: "Electronic Mail" },
+            { q: "Which company developed Windows?", a: ["Microsoft", "Apple", "Google", "IBM"], c: "Microsoft" },
+            { q: "Full form of WWW?", a: ["World Wide Web", "World Web Wide", "Web World Wide", "Wide World Web"], c: "World Wide Web" },
+            { q: "Paint program is used for?", a: ["Drawing", "Typing", "Calculations", "Email"], c: "Drawing" },
+            { q: "Google is a?", a: ["Search Engine", "Software", "Printer", "Hardware"], c: "Search Engine" },
+            { q: "Folder is used to?", a: ["Store files", "Print files", "Scan files", "Delete files"], c: "Store files" },
+            { q: "Caps Lock key is used for?", a: ["Capital letters", "Numbers", "Symbols", "Space"], c: "Capital letters" },
+            { q: "Bluetooth is used for?", a: ["Wireless connection", "Printing", "Typing", "Scanning"], c: "Wireless connection" },
+            { q: "Pen Drive is also called?", a: ["USB Drive", "Hard Disk", "CD", "RAM"], c: "USB Drive" },
+            { q: "Antivirus is used for?", a: ["Protect computer", "Typing", "Printing", "Drawing"], c: "Protect computer" },
+            { q: "Shortcut key for permanently deleting a file?", a: ["Shift+Alt+Del", "Ctrl+Alt+Del", "Alt+Del", "Shift+Del"], c: "Shift+Del" },
+            { q: "Which software runs in background all the time?", a: ["MS Word", "Operating System", "Paint", "BIOS"], c: "Operating System" },
+            { q: "VDU stands for?", a: ["Visual Data Unit", "Video Display Unit", "Virtual Display Unit", "Visual Device Unit"], c: "Video Display Unit" },
+            { q: "Main disadvantage of desktop computer?", a: ["High speed", "Easy to carry", "Not portable", "Large storage"], c: "Not portable" },
+            { q: "Shortcut for warm booting?", a: ["Ctrl + C", "Ctrl + Alt + Delete", "Ctrl + V", "Alt + F4"], c: "Ctrl + Alt + Delete" },
+            { q: "Shortcut to maximize window?", a: ["Alt + F4", "Windows + D", "Windows + Up Arrow", "Ctrl + M"], c: "Windows + Up Arrow" },
+            { q: "Shortcut key for cropping in Paint?", a: ["Ctrl + C", "Ctrl + V", "Ctrl + Shift + X", "Ctrl + X"], c: "Ctrl + Shift + X" },
+            { q: "Maximize/minimize using mouse?", a: ["Right-click desktop", "Click title bar buttons", "Scroll wheel", "Double-click taskbar"], c: "Click title bar buttons" },
+            { q: "Total columns in Excel 2010?", a: ["10256", "10200", "10224", "16384"], c: "16384" },
+            { q: "Correct arguments of HYPERLINK?", a: ["(link_location, [friendly_name])", "(url, name, address)", "(file, text, link)", "(location, display, value)"], c: "(link_location, [friendly_name])" },
+            { q: "Minimum zoom in Excel 2010?", a: ["5%", "10%", "25%", "50%"], c: "10%" },
+            { q: "PowerPoint 2010 extension?", a: [".ppt", ".docx", ".xlsx", ".pptx"], c: ".pptx" },
+            { q: "Product operator in Excel?", a: ["Plus", "Minus", "Asterisk", "Slash"], c: "Asterisk" },
+            { q: "Logical operator in Excel?", a: ["NOR", "*", "AND", "/"], c: "AND" },
+            { q: "COUNTA function used for?", a: ["Counts only numbers", "Counts empty cells", "Counts non-empty cells", "Counts only text"], c: "Counts non-empty cells" },
+            { q: "Correct formula to add A1 to A10?", a: ["=ADD(A1:A10)", "=SUM(A1:A10)", "=TOTAL(A1:A10)", "=PLUS(A1:A10)"], c: "=SUM(A1:A10)" },
+            { q: "IF function does?", a: ["Adds numbers", "Checks a condition", "Formats cells", "Sorts data"], c: "Checks a condition" },
+            { q: "Tab for animations in PowerPoint?", a: ["Home", "Insert", "Design", "Animations"], c: "Animations" },
+            { q: "Shortcut to start slideshow?", a: ["F2", "F5", "F7", "Ctrl + S"], c: "F5" },
+            { q: "Use of transitions?", a: ["Add sound", "Move between slides", "Edit text", "Create charts"], c: "Move between slides" },
+            { q: "Function returns current date?", a: ["DATE", "NOW", "TODAY", "TIME"], c: "TODAY" },
+            { q: "Function removes extra spaces?", a: ["CLEAN", "TRIM", "REMOVE", "SPACE"], c: "TRIM" },
+            { q: "Which part controls CPU operations?", a: ["ALU", "Control Unit", "Memory", "Register"], c: "Control Unit" },
+            { q: "Refresh key?", a: ["F2", "F5", "F7", "F12"], c: "F5" },
+            { q: "Shortcut to insert new slide?", a: ["Ctrl + M", "Ctrl + N", "Ctrl + S", "Ctrl + P"], c: "Ctrl + M" }
         ];
 
         let selectedQuestions = [], currentIdx = 0, answers = {}, currentStudent = null, timerInterval;
-
-        function handleExamAccess() {
-            const user = document.getElementById('accessUser').value.trim();
-            const pass = document.getElementById('accessPass').value.trim();
-            if (accessRegistry[user] && accessRegistry[user] === pass) {
-                document.getElementById('exam-access-screen').classList.add('hidden');
-                document.getElementById('login-screen').classList.remove('hidden');
-                document.getElementById('portal-status').innerText = "Portal Unlocked";
-                document.getElementById('portal-status').className = "px-3 py-1 bg-green-100 text-green-800 text-[10px] font-black rounded uppercase tracking-widest";
-            } else { alert("Unauthorized Access Denied."); }
-        }
 
         function handleLogin() {
             let raw = document.getElementById('stuRoll').value.trim();
@@ -633,25 +253,41 @@
         }
 
         function startExam() {
-            selectedQuestions = [...masterBank].sort(() => 0.5 - Math.random()).slice(0, 25);
+            selectedQuestions = [...masterBank];
             document.getElementById('dashboard-screen').classList.add('hidden');
             document.getElementById('exam-screen').classList.remove('hidden');
-            renderCurrentQuestion(); startTimer(20);
+            renderCurrentQuestion(); startTimer(40);
         }
 
         function renderCurrentQuestion() {
             const q = selectedQuestions[currentIdx];
             const area = document.getElementById('question-area');
-            document.getElementById('progress-text').innerText = `${currentIdx + 1} / 25`;
+            document.getElementById('progress-text').innerText = `${currentIdx + 1} / 50`;
             document.getElementById('prevBtn').style.visibility = (currentIdx === 0) ? 'hidden' : 'visible';
-            document.getElementById('nextBtn').classList.toggle('hidden', currentIdx === 24);
-            document.getElementById('submit-container').classList.toggle('hidden', currentIdx !== 24);
-            area.innerHTML = `<div class="animate__animated animate__fadeIn"><h3 class="text-xl md:text-2xl font-black text-slate-800 mb-8 leading-tight">Q${currentIdx + 1}. ${q.q}</h3><div class="space-y-4">${q.a.map((opt, i) => `<label class="option-card flex items-center p-5 border-2 border-slate-100 rounded-2xl cursor-pointer has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50 shadow-sm"><input type="radio" name="q${currentIdx}" value="${opt}" ${answers[currentIdx] === opt ? 'checked' : ''} onchange="saveAnswer(${currentIdx}, '${opt}')" class="w-5 h-5 text-blue-800 focus:ring-0"><span class="ml-4 font-bold text-slate-600 uppercase text-sm">${String.fromCharCode(65 + i)}. ${opt}</span></label>`).join('')}</div></div>`;
+            document.getElementById('nextBtn').classList.toggle('hidden', currentIdx === 49);
+            document.getElementById('submit-container').classList.toggle('hidden', currentIdx !== 49);
+            area.innerHTML = `<div class="animate__animated animate__fadeIn">
+                <h3 class="text-xl md:text-2xl font-black text-slate-800 mb-8 leading-tight">Q${currentIdx + 1}. ${q.q}</h3>
+                <div class="space-y-4">
+                    ${q.a.map((opt, i) => `
+                        <label class="option-card flex items-center p-5 border-2 border-slate-100 rounded-2xl cursor-pointer has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50 shadow-sm">
+                            <input type="radio" name="q${currentIdx}" value="${opt}" ${answers[currentIdx] === opt ? 'checked' : ''} onchange="saveAnswer(${currentIdx}, '${opt}')" class="w-5 h-5 text-blue-800 focus:ring-0">
+                            <span class="ml-4 font-bold text-slate-600 uppercase text-sm">${String.fromCharCode(65 + i)}. ${opt}</span>
+                        </label>`).join('')}
+                </div>
+            </div>`;
         }
 
         function saveAnswer(idx, val) { answers[idx] = val; }
         function navigate(step) { currentIdx += step; renderCurrentQuestion(); }
-        function startTimer(mins) { let time = mins * 60; timerInterval = setInterval(() => { let m = Math.floor(time / 60), s = time % 60; document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`; if (time-- <= 0) { clearInterval(timerInterval); finalSubmit(true); } }, 1000); }
+        function startTimer(mins) { 
+            let time = mins * 60; 
+            timerInterval = setInterval(() => { 
+                let m = Math.floor(time / 60), s = time % 60; 
+                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`; 
+                if (time-- <= 0) { clearInterval(timerInterval); finalSubmit(true); } 
+            }, 1000); 
+        }
 
         function finalSubmit(auto = false) {
             if (!auto && !confirm("Confirm Final Paper Submission?")) return;
@@ -663,23 +299,49 @@
 
         function downloadPDF(type) {
             const container = document.getElementById('pdf-export-container');
+            const certContent = document.getElementById('certificate-content');
+            const sheetContent = document.getElementById('answersheet-content');
+            const certWrap = document.getElementById('cert-wrap');
+            
+            // Calculate Marks
+            let marks = 0;
+            selectedQuestions.forEach((q, i) => { if (answers[i] === q.c) marks += 2; });
+
+            // Common Data
+            const today = new Date().toLocaleDateString();
             document.getElementById('pdf-name').innerText = currentStudent.name;
             document.getElementById('pdf-parent').innerText = currentStudent.parent;
             document.getElementById('pdf-roll').innerText = currentStudent.roll;
             document.getElementById('pdf-date').innerText = new Date().toLocaleString();
-            const tbody = document.getElementById('pdf-table-body');
-            const scoreArea = document.getElementById('pdf-score-area');
-            const tableArea = document.getElementById('pdf-table-area');
-            let marks = 0;
-            tbody.innerHTML = selectedQuestions.map((q, i) => {
-                const isCorrect = answers[i] === q.c; if (isCorrect) marks += 2;
-                return `<tr><td>${i + 1}</td><td style="font-size: 9pt;">${q.q}</td><td class="${isCorrect ? 'text-right-ans' : 'text-wrong-ans'}">${answers[i] || 'SKIPPED'}</td><td class="text-right-ans">${q.c}</td></tr>`;
-            }).join('');
-            document.getElementById('pdf-marks').innerText = `${marks} / 50`;
-            if (type === 'receipt') { scoreArea.style.display = 'none'; tableArea.style.display = 'none'; document.getElementById('pdf-doc-type').innerText = "CANDIDATE SUBMISSION RECEIPT"; }
-            else { scoreArea.style.display = 'block'; tableArea.style.display = 'block'; document.getElementById('pdf-doc-type').innerText = "DETAILED THEORY ANSWERSHEET"; }
+            
+            if (type === 'certificate') {
+                certContent.style.display = 'block';
+                sheetContent.style.display = 'none';
+                certWrap.style.border = '10px double #1e40af';
+                document.getElementById('cert-student-name').innerText = currentStudent.name;
+                document.getElementById('cert-parent-name').innerText = currentStudent.parent;
+                document.getElementById('cert-roll').innerText = currentStudent.roll;
+                document.getElementById('cert-date').innerText = today;
+                document.getElementById('cert-final-marks').innerText = `${marks} / 100`;
+            } else {
+                certContent.style.display = 'none';
+                sheetContent.style.display = 'block';
+                certWrap.style.border = 'none';
+                const tbody = document.getElementById('pdf-table-body');
+                tbody.innerHTML = selectedQuestions.map((q, i) => {
+                    const isCorrect = answers[i] === q.c;
+                    return `<tr><td>${i + 1}</td><td>${q.q}</td><td class="${isCorrect ? 'text-right-ans' : 'text-wrong-ans'}">${answers[i] || 'SKIPPED'}</td><td class="text-right-ans">${q.c}</td></tr>`;
+                }).join('');
+                document.getElementById('pdf-marks').innerText = `${marks} / 100`;
+            }
+
             container.style.display = 'block';
-            html2pdf().from(container).set({ margin: 0, filename: `UCC_${type}_${currentStudent.name}.pdf`, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4' } }).save().then(() => container.style.display = 'none');
+            html2pdf().from(container).set({ 
+                margin: 0, 
+                filename: `UCC_${type}_${currentStudent.name}.pdf`, 
+                html2canvas: { scale: 3 }, 
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
+            }).save().then(() => container.style.display = 'none');
         }
     </script>
 </body>

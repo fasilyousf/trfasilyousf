@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tr Fasil Yousf | UCC Handwara</title>
     <meta name="description" content="Fasil Yousf - Web Developer and IT Instructor">
-    <meta name="keywords" content="Fasil Yousf, Web Developer and IT Instructor">
     <meta name="author" content="Fasil Yousf">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
     <style>
+        body { font-family: 'Inter', sans-serif; }
+        
         .footer-h4-underline::after {
             content: '';
             position: absolute;
@@ -21,176 +24,205 @@
             background-color: #f1c40f;
         }
 
-        .nav-menu.active {
-            display: flex !important;
+        /* Smooth Mobile Menu */
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
+            transform: translateY(-10px);
+            opacity: 0;
+            pointer-events: none;
+        }
+        #mobile-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
         }
 
-        #nav-menu {
-            transition: all 0.3s ease-in-out;
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #f1c40f;
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after {
+            width: 100%;
         }
     </style>
 </head>
 
-<body class="bg-[#f4f6f9] text-[#333] font-sans antialiased">
+<body class="bg-[#f4f6f9] text-[#333] antialiased">
 
-    <header class="bg-[#2c3e50] text-white sticky top-0 z-50 px-[6%] py-4 shadow-md">
+    <header class="bg-[#2c3e50] text-white sticky top-0 z-[100] px-[5%] py-3 shadow-xl border-b border-white/5">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="logo text-xl md:text-2xl font-bold">
-                Tr <span class="text-[#f1c40f]">Fasil Yousf</span>
+            
+            <div class="flex items-center gap-3 group cursor-pointer">
+                <div class="w-10 h-10 bg-[#f1c40f] rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300">
+                    <i class="fas fa-terminal text-[#2c3e50] text-xl font-bold"></i>
+                </div>
+                <div class="logo text-xl md:text-2xl font-extrabold tracking-tight">
+                    Tr <span class="text-[#f1c40f]">Fasil Yousf</span>
+                </div>
             </div>
-            <nav class="flex items-center gap-6">
-                <ul class="nav-menu hidden md:flex md:flex-row md:items-center md:gap-8 flex-col absolute md:static top-[60px] left-0 w-full md:w-auto bg-[#2c3e50] md:bg-transparent p-6 md:p-0 shadow-lg md:shadow-none text-center gap-4"
-                    id="nav-menu">
-                    <li><a href="index.html" class="text-[#f1c40f] font-medium">Home</a></li>
-                    <li><a href="courses.html" class="hover:text-[#f1c40f] transition">Courses</a></li>
-                    <li><a href="notes.html" class="hover:text-[#f1c40f] transition">Notes</a></li>
-                    <li><a href="gallery.html" class="hover:text-[#f1c40f] transition">Gallery</a></li>
-                    <li><a href="about.html" class="hover:text-[#f1c40f] transition">About</a></li>
-                    <li><a href="contact.html" class="hover:text-[#f1c40f] transition">Contact</a></li>
-                </ul>
-                
-                <a href="./exzam/final exzam/dbexzam.html" class="hidden sm:block bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded-lg transition animate-pulse">
-                    Final Exam
+
+            <nav class="hidden lg:flex items-center gap-8 font-semibold text-sm">
+                <a href="index.html" class="text-[#f1c40f] nav-link">HOME</a>
+                <a href="courses.html" class="hover:text-[#f1c40f] nav-link">COURSES</a>
+                <a href="notes.html" class="hover:text-[#f1c40f] nav-link">NOTES</a>
+                <a href="gallery.html" class="hover:text-[#f1c40f] nav-link">GALLERY</a>
+                <a href="about.html" class="hover:text-[#f1c40f] nav-link">ABOUT</a>
+            </nav>
+
+            <div class="flex items-center gap-2 sm:gap-4">
+                <!-- <div class="hidden sm:flex items-center gap-1 border-r border-white/20 pr-4 mr-2">
+                    <button id="loginBtn" class="text-xs font-bold hover:text-[#f1c40f] transition px-3 py-2 uppercase tracking-tighter">Login</button>
+                    <button id="logoutBtn" class="hidden text-xs font-bold text-red-400 hover:text-red-500 transition px-3 py-2 uppercase tracking-tighter">Logout</button>
+                </div> -->
+
+                <a href="./login.html" 
+                   class="bg-[#f1c40f] hover:bg-yellow-500 text-[#2c3e50] text-xs md:text-sm font-black py-2.5 px-6 rounded-full transition-all shadow-lg hover:shadow-yellow-500/20 transform hover:-translate-y-0.5 active:scale-95 uppercase">
+                    Login Or Signup
                 </a>
 
-                <button class="flex flex-col gap-1.5 cursor-pointer md:hidden" id="hamburger">
+                <button class="lg:hidden flex flex-col gap-1.5 p-2" id="hamburger">
+                    <span class="w-6 h-0.5 bg-[#f1c40f]"></span>
                     <span class="w-6 h-0.5 bg-gray-200"></span>
-                    <span class="w-6 h-0.5 bg-gray-200"></span>
-                    <span class="w-6 h-0.5 bg-gray-200"></span>
+                    <span class="w-6 h-0.5 bg-[#f1c40f]"></span>
                 </button>
-            </nav>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="lg:hidden absolute top-full left-0 w-full bg-[#1e2b38] p-6 shadow-2xl border-t border-white/10">
+            <ul class="flex flex-col gap-5 text-center font-bold tracking-widest uppercase">
+                <li><a href="index.html" class="text-[#f1c40f]">Home</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="notes.html">Notes</a></li>
+                <li><a href="about.html">About</a></li>
+                <li class="pt-4 border-t border-white/10 flex justify-center gap-4">
+                    <button class="text-sm">Login</button>
+                    <span class="text-white/20">|</span>
+                    <button class="text-sm text-red-400">Logout</button>
+                </li>
+            </ul>
         </div>
     </header>
 
-    <section class="bg-gradient-to-br from-[#3498db] to-[#2c3e50] text-white py-12 md:py-24 px-[6%]">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <section class="bg-gradient-to-br from-[#3498db] to-[#2c3e50] text-white py-16 md:py-28 px-[6%] overflow-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div class="text-center md:text-left order-2 md:order-1">
-                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
+                <span class="inline-block py-1 px-4 rounded-full bg-white/10 border border-white/20 text-[#f1c40f] text-xs font-bold uppercase tracking-widest mb-6">UCC Handwara Official</span>
+                <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold mb-8 leading-[1.1] tracking-tight">
                     Bridging Tradition with <span class="text-[#f1c40f]">Digital Excellence</span>
                 </h1>
-                <p class="text-base sm:text-lg mb-8 text-gray-100 max-w-xl mx-auto md:mx-0">
-                    Empowering the youth of Handwara at United Community College. From modern IT skills to professional
-                    trades, we build livelihoods.
+                <p class="text-lg md:text-xl mb-10 text-gray-200 max-w-xl mx-auto md:mx-0 leading-relaxed font-light">
+                    Empowering the youth of Handwara at United Community College. From modern IT skills to professional trades.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                    <a href="./exzam/final exzam/dbexzam.html"
-                        class="bg-red-600 text-white px-8 py-3 rounded-full font-bold hover:bg-red-700 hover:scale-105 transition shadow-lg text-center flex items-center justify-center gap-2">
-                        <i class="fas fa-file-signature"></i> Final Exam
+                <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+                    <a href="./exzam/final exzam/dbexzam.html" class="bg-red-600 px-8 py-4 rounded-2xl font-bold hover:bg-red-700 transition shadow-xl flex items-center gap-3 group">
+                        <i class="fas fa-file-signature group-hover:rotate-12 transition"></i> Final Exam
                     </a>
-                    
-                    <a href="notes.html"
-                        class="bg-[#f1c40f] text-[#2c3e50] px-8 py-3 rounded-full font-bold hover:scale-105 transition shadow-lg text-center">Download
-                        Notes</a>
-                    <a href="about.html"
-                        class="border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#2c3e50] transition text-center">About
-                        UCC</a>
+                    <a href="notes.html" class="bg-white text-[#2c3e50] px-8 py-4 rounded-2xl font-bold hover:bg-[#f1c40f] transition shadow-lg">
+                        Download Notes
+                    </a>
                 </div>
             </div>
             <div class="order-1 md:order-2 flex justify-center">
-                <div class="relative group">
-                    <div
-                        class="absolute -inset-1 bg-[#f1c40f] rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000">
-                    </div>
-                    <img src="./images/hero fasil.jpeg" alt="Fasil Yousf"
-                        class="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-2xl shadow-2xl object-cover border-4 border-white/10">
+                <div class="relative">
+                    <div class="absolute -inset-4 bg-[#f1c40f]/20 rounded-full blur-3xl"></div>
+                    <img src="./images/hero fasil.jpeg" alt="Fasil Yousf" class="relative w-64 h-64 md:w-96 md:h-96 rounded-3xl shadow-2xl object-cover border-8 border-white/5 ring-1 ring-white/20">
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-16 px-[6%] bg-white border-b border-gray-100">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <section class="py-24 px-[6%] bg-white">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
             <div>
-                <span class="text-[#3498db] font-bold tracking-widest uppercase text-sm">About the Institution</span>
-                <h2 class="text-3xl font-bold text-[#2c3e50] mt-2 mb-6">United Community College Handwara</h2>
-                <p class="text-gray-600 text-base md:text-lg leading-relaxed mb-6">
-                    UCC Handwara is a premier skill development center dedicated to transforming lives in Jammu &
-                    Kashmir. We bridge the gap between <strong>Tradition, Technology, and Opportunity</strong> by
-                    offering a curriculum that blends modern industry needs with local heritage.
+                <h2 class="text-4xl font-extrabold text-[#2c3e50] mb-8 leading-tight">United Community College Handwara</h2>
+                <p class="text-gray-600 text-lg leading-relaxed mb-8">
+                    UCC Handwara is a premier skill development center dedicated to transforming lives. We bridge the gap between <strong>Tradition, Technology, and Opportunity</strong>.
                 </p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                    <div class="flex items-center gap-3 bg-[#f4f6f9] p-4 rounded-lg">
-                        <i class="fas fa-hand-holding-heart text-[#f1c40f]"></i>
-                        <span class="text-sm font-semibold">Social Upliftment Programs</span>
+                    <div class="flex items-center gap-4 bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <i class="fas fa-hand-holding-heart text-2xl text-[#f1c40f]"></i>
+                        <span class="font-bold text-slate-700">Social Upliftment</span>
                     </div>
-                    <div class="flex items-center gap-3 bg-[#f4f6f9] p-4 rounded-lg">
-                        <i class="fas fa-leaf text-green-600"></i>
-                        <span class="text-sm font-semibold">Green Tech Focus</span>
+                    <div class="flex items-center gap-4 bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <i class="fas fa-leaf text-2xl text-green-600"></i>
+                        <span class="font-bold text-slate-700">Green Tech Focus</span>
                     </div>
                 </div>
-                <p class="text-gray-500 italic border-l-4 border-[#f1c40f] pl-4">
-                    "We are committed to providing free training and support to underprivileged and disabled learners in
-                    our community, fostering dignity and resilience."
-                </p>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div
-                    class="bg-[#2c3e50] text-white p-8 rounded-2xl flex flex-col items-center justify-center text-center shadow-lg">
-                    <h4 class="text-2xl font-bold text-[#f1c40f]">Mission</h4>
-                    <p class="text-xs mt-2 text-gray-300">Equipping learners with practical skills for livelihood.</p>
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-[#2c3e50] text-white p-10 rounded-[2.5rem] shadow-2xl">
+                    <h4 class="text-3xl font-bold text-[#f1c40f] mb-4">Mission</h4>
+                    <p class="text-sm opacity-80 leading-relaxed text-gray-300">Equipping learners with practical skills for a sustainable livelihood.</p>
                 </div>
-                <div
-                    class="bg-[#f1c40f] text-[#2c3e50] p-8 rounded-2xl flex flex-col items-center justify-center text-center shadow-lg">
-                    <h4 class="text-2xl font-bold">Vision</h4>
-                    <p class="text-xs mt-2 font-medium">A community where tradition and technology coexist.</p>
-                </div>
-                <div
-                    class="col-span-2 bg-gray-100 rounded-2xl p-6 flex items-center justify-between border border-gray-200">
-                    <div class="text-left">
-                        <p class="text-sm font-bold text-[#2c3e50]">Zargar Mohalla, Handwara</p>
-                        <p class="text-xs text-gray-500 italic">Central Location for Accessible Learning</p>
-                    </div>
-                    <i class="fas fa-university text-3xl text-[#2c3e50] opacity-20"></i>
+                <div class="bg-[#f1c40f] text-[#2c3e50] p-10 rounded-[2.5rem] shadow-xl">
+                    <h4 class="text-3xl font-bold mb-4">Vision</h4>
+                    <p class="text-sm font-bold opacity-90 leading-relaxed">A community where tradition and technology coexist seamlessly.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-[#1e2b38] text-gray-300 py-16 px-[6%] border-t-4 border-[#f1c40f]">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+    <footer class="bg-[#1e2b38] text-gray-300 py-20 px-[6%] border-t-8 border-[#f1c40f]">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
             <div>
-                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 pb-2 relative footer-h4-underline">Tr Fasil Yousf</h4>
-                <p class="text-sm leading-relaxed mb-6">Leading IT Instructor at UCC Handwara. Empowering the next
-                    generation through quality education and practical training since 21 JAN 2026.</p>
-                <div class="flex gap-4">
-                    <a href="#" class="hover:text-[#f1c40f] transition text-xl"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="hover:text-[#f1c40f] transition text-xl"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="hover:text-[#f1c40f] transition text-xl"><i class="fab fa-youtube"></i></a>
+                <h4 class="text-[#f1c40f] text-2xl font-black mb-8 relative footer-h4-underline uppercase tracking-widest pb-3">Tr Fasil Yousf</h4>
+                <p class="text-sm leading-relaxed mb-8 opacity-70 italic font-light text-gray-400">
+                    "Empowering the next generation through quality education and practical training in Handwara."
+                </p>
+                <div class="flex gap-6">
+                    <a href="#" class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-[#f1c40f] hover:text-[#2c3e50] transition-all"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
             <div>
-                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 pb-2 relative footer-h4-underline">UCC Links</h4>
-                <ul class="grid grid-cols-2 gap-3 text-sm">
+                <h4 class="text-[#f1c40f] text-2xl font-black mb-8 relative footer-h4-underline uppercase tracking-widest pb-3">Quick Links</h4>
+                <ul class="grid grid-cols-2 gap-4 font-bold text-sm">
                     <li><a href="index.html" class="hover:text-white transition">Home</a></li>
                     <li><a href="courses.html" class="hover:text-white transition">Courses</a></li>
                     <li><a href="notes.html" class="hover:text-white transition">Notes</a></li>
                     <li><a href="gallery.html" class="hover:text-white transition">Gallery</a></li>
-                    <li><a href="contact.html" class="hover:text-white transition">Contact</a></li>
                 </ul>
             </div>
             <div>
-                <h4 class="text-[#f1c40f] text-xl font-bold mb-6 pb-2 relative footer-h4-underline">Contact UCC</h4>
-                <ul class="space-y-4 text-sm">
-                    <li class="flex items-start gap-3"><i class="fas fa-map-marker-alt text-[#f1c40f] mt-1"></i> Zargar
-                        Mohalla, Handwara, 193221</li>
-                    <li class="flex items-center gap-3"><i class="fas fa-phone text-[#f1c40f]"></i> +91-7006960788</li>
-                    <li class="flex items-center gap-3"><i class="fas fa-envelope text-[#f1c40f]"></i>
-                        trfasilyousf@gmail.com</li>
+                <h4 class="text-[#f1c40f] text-2xl font-black mb-8 relative footer-h4-underline uppercase tracking-widest pb-3">Contact UCC</h4>
+                <ul class="space-y-6 text-sm">
+                    <li class="flex gap-4"><i class="fas fa-map-marker-alt text-[#f1c40f] text-xl"></i><span>Zargar Mohalla, Handwara, 193221</span></li>
+                    <li class="flex gap-4"><i class="fas fa-phone-alt text-[#f1c40f] text-xl"></i><span>+91-7006960788</span></li>
+                    <li class="flex gap-4"><i class="fas fa-envelope text-[#f1c40f] text-xl"></i><span>trfasilyousf@gmail.com</span></li>
                 </ul>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-gray-700 text-center text-xs text-gray-500">
-            <p>© 2026 United Community College Handwara. Designed for the students of Kupwara.</p>
+        <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-white/5 text-center text-xs font-bold uppercase tracking-widest opacity-40">
+            © 2026 United Community College Handwara. Crafted for Kupwara Students.
         </div>
     </footer>
 
     <script>
         const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('nav-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
         hamburger.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            hamburger.classList.toggle('rotate-90');
         });
+
+        // Close menu on click outside
+        window.onclick = (e) => {
+            if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        };
     </script>
 </body>
-
 </html>
