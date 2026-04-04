@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>UCC Nexus | Attendance & Exports</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Outfit', sans-serif; box-sizing: border-box; }
+        body { background: #060912; color: #f8fafc; overflow-x: hidden; }
+        .glass-panel { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #060912 100%); border-right: 1px solid rgba(241,196,15,0.1); }
+        .student-card { background: rgba(30, 41, 59, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease; }
+        .student-card:hover { border-color: rgba(241, 196, 15, 0.3); transform: translateY(-4px); }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+        .dot-present { background: #10b981; box-shadow: 0 0 10px #10b981; }
+        .dot-absent { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+        .date-badge { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid rgba(241,196,15,0.2); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #f1c40f; border-radius: 10px; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <aside class="fixed lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300">
+        <div class="p-8 pb-6 text-center lg:text-left">
+            <h1 class="text-xl font-black tracking-tighter text-white">UCC <span class="text-[#f1c40f]">NEXUS</span></h1>
+            <p class="text-[9px] text-slate-500 font-bold uppercase tracking-[0.3em]">Command Center</p>
+        </div>
+        <nav class="flex-1 px-6 py-4 space-y-2">
+            <a href="dashboard.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-2xl transition-all font-semibold text-sm">
+                <i class="fas fa-th-large w-5"></i> Dashboard
+            </a>
+            <a href="#" class="flex items-center gap-4 px-5 py-3.5 bg-[#f1c40f]/10 text-[#f1c40f] rounded-2xl font-bold text-sm border-l-4 border-[#f1c40f]">
+                <i class="fas fa-calendar-check w-5"></i> Attendance
+            </a>
+        </nav>
+        <div class="p-6 mt-auto">
+            <button onclick="logout()" class="w-full px-6 py-4 bg-rose-500/10 text-rose-500 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-rose-500 hover:text-white transition-all">
+                <i class="fas fa-power-off mr-2"></i> Exit
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 w-full p-4 md:p-8 lg:p-10">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-10">
+            <div>
+                <h2 class="text-3xl font-black text-white tracking-tight">Attendance Intelligence</h2>
+                <div class="flex gap-3 mt-4">
+                    <button onclick="exportDailyCSV()" class="bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-slate-900 px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest border border-emerald-500/20 transition-all">
+                        <i class="fas fa-file-export mr-2"></i> Daily CSV
+                    </button>
+                    <button onclick="exportMonthlyCSV()" class="bg-sky-500/10 hover:bg-sky-500 text-sky-500 hover:text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest border border-sky-500/20 transition-all">
+                        <i class="fas fa-file-archive mr-2"></i> Monthly Report
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 date-badge p-2 rounded-3xl shadow-2xl">
+                <button onclick="changeDate(-1)" class="w-12 h-12 flex items-center justify-center bg-slate-800 hover:bg-[#f1c40f] hover:text-slate-900 rounded-2xl transition-all"><i class="fas fa-chevron-left"></i></button>
+                <div class="px-6 text-center min-w-[140px]">
+                    <p class="text-[10px] font-black text-[#f1c40f] uppercase tracking-widest">Active Date</p>
+                    <h4 id="displayDate" class="text-lg font-black text-white tracking-tighter mt-0.5">-- / -- / ----</h4>
+                </div>
+                <button onclick="changeDate(1)" class="w-12 h-12 flex items-center justify-center bg-slate-800 hover:bg-[#f1c40f] hover:text-slate-900 rounded-2xl transition-all"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            <div class="glass-panel p-6 rounded-[2.5rem] border-b-4 border-emerald-500">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Present</p>
+                <h3 id="presentCount" class="text-4xl font-black text-white">0</h3>
+            </div>
+            <div class="glass-panel p-6 rounded-[2.5rem] border-b-4 border-rose-500">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Absent</p>
+                <h3 id="absentCount" class="text-4xl font-black text-white">0</h3>
+            </div>
+            <div class="glass-panel p-6 rounded-[2.5rem] border-b-4 border-[#f1c40f]">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Enrollment</p>
+                <h3 id="totalCount" class="text-4xl font-black text-white">0</h3>
+            </div>
+            <div class="glass-panel p-6 rounded-[2.5rem] border-b-4 border-sky-500">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Rate</p>
+                <h3 id="attPercent" class="text-4xl font-black text-white">0%</h3>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 bg-slate-900/50 p-4 rounded-3xl border border-white/5">
+            <input type="text" id="searchStudentInput" placeholder="Quick search scholar..." class="w-full md:w-96 bg-slate-800 border border-slate-700 rounded-2xl py-3.5 px-6 text-white focus:border-[#f1c40f] outline-none transition">
+            <div class="flex gap-3 w-full md:w-auto">
+                <button id="markAllPresentBtn" class="flex-1 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-white px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase">Mark All Present</button>
+                <button id="saveAllBtn" class="flex-1 bg-[#f1c40f] text-slate-900 px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase shadow-xl hover:bg-white transition-all">Sync to Cloud</button>
+            </div>
+        </div>
+
+        <div id="studentsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+    </main>
+
+    <div id="toastContainer" class="fixed bottom-10 right-10 flex flex-col gap-3 z-[200]"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, setDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
+            authDomain: "trfasilyousf1.firebaseapp.com",
+            projectId: "trfasilyousf1",
+            storageBucket: "trfasilyousf1.firebasestorage.app",
+            messagingSenderId: "158147210589",
+            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let allStudents = [];
+        let currentAttendance = {};
+        let selectedDate = new Date().toISOString().split('T')[0];
+
+        function formatToDMY(isoDate) {
+            const [y, m, d] = isoDate.split('-');
+            return `${d}/${m}/${y}`;
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `bg-slate-800 text-white px-8 py-4 rounded-3xl shadow-2xl flex items-center gap-4 text-sm font-bold border border-white/10`;
+            toast.innerHTML = `<i class="fas fa-check-circle text-[#f1c40f]"></i> <span>${msg}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 3000);
+        }
+
+        async function initPage() {
+            const snap = await getDocs(collection(db, "users"));
+            allStudents = [];
+            snap.forEach(d => { if(d.data().role === 'student') allStudents.push({ uid: d.id, ...d.data() }); });
+            document.getElementById('totalCount').innerText = allStudents.length;
+
+            await loadAttendance();
+            renderUI();
+        }
+
+        async function loadAttendance() {
+            const q = query(collection(db, "attendance"), where("date", "==", selectedDate));
+            const snap = await getDocs(q);
+            const statusMap = {};
+            snap.forEach(d => { statusMap[d.data().studentId] = d.data().status; });
+            allStudents.forEach(s => { currentAttendance[s.uid] = statusMap[s.uid] || "absent"; });
+        }
+
+        function renderUI() {
+            const container = document.getElementById('studentsGrid');
+            document.getElementById('displayDate').innerText = formatToDMY(selectedDate);
+            let pCount = 0;
+            const search = document.getElementById('searchStudentInput').value.toLowerCase();
+            const filtered = allStudents.filter(s => s.fullName.toLowerCase().includes(search));
+
+            container.innerHTML = filtered.map(s => {
+                const isP = currentAttendance[s.uid] === 'present';
+                if(isP) pCount++;
+                return `
+                    <div class="student-card rounded-[2.5rem] p-6">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-[#f1c40f] font-black border border-white/5">${s.fullName.charAt(0)}</div>
+                                <div><h4 class="font-bold text-white text-sm">${s.fullName}</h4><p class="text-[9px] text-slate-500 font-mono">${s.email}</p></div>
+                            </div>
+                            <span class="text-[8px] font-black uppercase ${isP ? 'text-emerald-500' : 'text-rose-500'}"><span class="status-dot ${isP ? 'dot-present' : 'dot-absent'}"></span>${isP ? 'Present' : 'Absent'}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="markSingle('${s.uid}', 'present')" class="py-2.5 rounded-xl ${isP ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase">Present</button>
+                            <button onclick="markSingle('${s.uid}', 'absent')" class="py-2.5 rounded-xl ${!isP ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase">Absent</button>
+                        </div>
+                    </div>`;
+            }).join('');
+            document.getElementById('presentCount').innerText = pCount;
+            document.getElementById('absentCount').innerText = allStudents.length - pCount;
+            document.getElementById('attPercent').innerText = allStudents.length ? Math.round((pCount/allStudents.length)*100) + '%' : '0%';
+        }
+
+        window.markSingle = (uid, status) => { currentAttendance[uid] = status; renderUI(); };
+        window.changeDate = (delta) => {
+            const d = new Date(selectedDate);
+            d.setDate(d.getDate() + delta);
+            selectedDate = d.toISOString().split('T')[0];
+            loadAttendance().then(renderUI);
+        };
+
+        // --- EXPORT LOGIC ---
+        window.exportDailyCSV = () => {
+            let csvRows = [["Student Name", "Email", "Status", "Date"]];
+            allStudents.forEach(s => {
+                csvRows.push([s.fullName, s.email, currentAttendance[s.uid].toUpperCase(), formatToDMY(selectedDate)]);
+            });
+            downloadCSV(csvRows, `UCC_Attendance_${selectedDate}.csv`);
+        };
+
+        window.exportMonthlyCSV = async () => {
+            showToast("Generating 30-day report...");
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            const startStr = thirtyDaysAgo.toISOString().split('T')[0];
+            
+            const q = query(collection(db, "attendance"), where("date", ">=", startStr));
+            const snap = await getDocs(q);
+            
+            let csvRows = [["Date", "Student Name", "Status", "Recorded At"]];
+            snap.forEach(doc => {
+                const d = doc.data();
+                csvRows.push([formatToDMY(d.date), d.studentName, d.status.toUpperCase(), d.timestamp]);
+            });
+            downloadCSV(csvRows, `UCC_Monthly_Report.csv`);
+        };
+
+        function downloadCSV(rows, filename) {
+            const csvContent = rows.map(e => e.map(cell => `"${cell}"`).join(",")).join("\n");
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+
+        document.getElementById('saveAllBtn').onclick = async () => {
+            const btn = document.getElementById('saveAllBtn');
+            btn.innerText = "Syncing...";
+            const promises = allStudents.map(s => {
+                return setDoc(doc(db, "attendance", `${s.uid}_${selectedDate}`), {
+                    studentId: s.uid, studentName: s.fullName, date: selectedDate, status: currentAttendance[s.uid], timestamp: new Date().toISOString()
+                }, { merge: true });
+            });
+            await Promise.all(promises);
+            btn.innerText = "Sync to Cloud";
+            showToast("Records Updated Successfully");
+        };
+
+        document.getElementById('markAllPresentBtn').onclick = () => {
+            allStudents.forEach(s => currentAttendance[s.uid] = 'present');
+            renderUI();
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if(user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().role === 'admin') initPage();
+                else window.location.href = "../auth/login.html";
+            } else window.location.href = "../auth/login.html";
+        });
+
+        window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
+    </script>
+</body>
+</html>

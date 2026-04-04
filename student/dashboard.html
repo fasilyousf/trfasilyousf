@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Student Dashboard | UCC Handwara</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #f1f5f9; }
+        .sidebar-gradient { background: #1a2233; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .stat-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .stat-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .active-link { background: rgba(241, 196, 15, 0.1); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
+        .ucc-gold { color: #f1c40f; }
+        .course-card { transition: all 0.2s ease; }
+        .course-card:hover { transform: translateY(-4px); }
+        .fee-badge { font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 40px; text-transform: uppercase; display: inline-block; }
+        .fee-paid { background: #10b98120; color: #10b981; }
+        .fee-partial { background: #f59e0b20; color: #f59e0b; }
+        .fee-due { background: #ef444420; color: #ef4444; }
+
+        /* Mobile sidebar – fixed positioning */
+        @media (max-width: 768px) {
+            .sidebar-mobile {
+                position: fixed;
+                top: 0;
+                left: 0;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+                width: 280px;
+                height: 100vh;
+                overflow-y: auto;
+            }
+            .sidebar-mobile.active {
+                transform: translateX(0);
+            }
+            .sidebar-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+                display: none;
+            }
+            .sidebar-overlay.active {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <aside id="sidebar" class="sidebar-mobile w-72 sidebar-gradient text-white flex flex-col shadow-2xl shrink-0">
+        <div class="p-8 text-center md:text-left flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-[#f1c40f] rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fas fa-university text-slate-900"></i>
+                </div>
+                <h1 class="text-xl font-black tracking-tighter uppercase text-white">UCC <span class="ucc-gold">Portal</span></h1>
+            </div>
+            <button id="closeSidebar" class="md:hidden text-white text-2xl"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <nav class="flex-grow px-4 mt-6 space-y-2">
+            <a href="dashboard.html" class="active-link flex items-center gap-4 p-4 rounded-2xl transition group">
+                <i class="fas fa-th-large"></i> <span class="font-bold text-sm uppercase">Dashboard</span>
+            </a>
+            <a href="courses.html" class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-2xl transition text-slate-400 hover:text-white group">
+                <i class="fas fa-book-open"></i> <span class="font-bold text-sm uppercase">My Courses</span>
+            </a>
+            <a href="attendance.html" class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-2xl transition text-slate-400 hover:text-white group">
+                <i class="fas fa-calendar-check"></i> <span class="font-bold text-sm uppercase">Attendance</span>
+            </a>
+            <a href="profile.html" class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-2xl transition text-slate-400 hover:text-white group">
+                <i class="fas fa-user-circle"></i> <span class="font-bold text-sm uppercase">My Profile</span>
+            </a>
+        </nav>
+
+        <div class="p-6 border-t border-white/5">
+            <button onclick="logout()" class="w-full flex items-center gap-4 p-4 text-rose-500 font-black text-xs uppercase hover:bg-rose-500/10 rounded-2xl transition">
+                <i class="fas fa-power-off"></i> <span>Sign Out</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-grow p-4 md:p-12 overflow-x-hidden">
+        
+        <div class="flex md:hidden justify-between items-center mb-6">
+            <button id="openSidebar" class="text-slate-800 text-2xl p-2 bg-white rounded-xl shadow-sm"><i class="fas fa-bars"></i></button>
+            <div class="w-10 h-10 bg-ucc-gold rounded-full flex items-center justify-center font-black">UCC</div>
+        </div>
+
+        <header class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+            <div class="text-center md:text-left w-full">
+                <h2 class="text-3xl md:text-5xl font-black text-slate-800 tracking-tight leading-tight">
+                    Salam, <span id="displayUsername" class="text-emerald-600">...</span>!
+                </h2>
+                <p class="text-slate-500 font-medium mt-1">Ready for today's learning session?</p>
+            </div>
+            
+            <div class="glass-card p-3 rounded-[2rem] flex items-center gap-5 pr-8 shadow-sm w-full md:w-auto">
+                <img id="userAvatar" src="https://via.placeholder.com/100" class="w-14 h-14 md:w-16 md:h-16 rounded-[1.5rem] object-cover shadow-lg border-2 border-white transform rotate-2">
+                <div>
+                    <p id="userEmail" class="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-tighter">Syncing...</p>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                        <p class="text-[10px] font-black text-slate-700 uppercase tracking-widest text-emerald-600">Active</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div id="noticeAlert" class="hidden bg-slate-900 rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 text-white relative overflow-hidden shadow-2xl border-b-8 border-[#f1c40f] mb-12">
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-4 md:mb-6">
+                    <span class="bg-[#f1c40f] text-slate-900 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Notice</span>
+                    <span id="noticeTime" class="text-[9px] font-bold text-slate-400 uppercase"></span>
+                </div>
+                <h3 class="text-xl md:text-3xl font-black mb-4 leading-tight italic" id="studentNoticeText"></h3>
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">verified by UCC</p>
+            </div>
+            <i class="fas fa-quote-right absolute -bottom-10 -right-10 text-[10rem] md:text-[18rem] text-white/5 rotate-12"></i>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <a href="attendance.html" class="stat-card glass-card p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border-b-4 border-emerald-500 block group">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 text-xl md:text-2xl shadow-inner">
+                    <i class="fas fa-fingerprint"></i>
+                </div>
+                <h3 class="text-slate-400 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em]">Attendance</h3>
+                <p class="text-4xl md:text-5xl font-black text-slate-800 mt-2" id="quickAttendance">0%</p>
+            </a>
+
+            <div class="stat-card glass-card p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border-b-4 border-blue-500">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 text-xl md:text-2xl shadow-inner">
+                    <i class="fas fa-rupee-sign"></i>
+                </div>
+                <h3 class="text-slate-400 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em]">Fee Status</h3>
+                <div id="feeDisplay" class="mt-2 space-y-1"><p class="text-xl font-black">Loading...</p></div>
+                <div class="mt-2"><span id="feeStatusBadge" class="fee-badge fee-paid">—</span></div>
+            </div>
+
+            <div class="stat-card glass-card p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border-b-4 border-amber-500">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mb-6 text-xl md:text-2xl shadow-inner">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 class="text-slate-400 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em]">Exam Grade</h3>
+                <p class="text-4xl md:text-5xl font-black text-slate-800 mt-2">A+</p>
+            </div>
+        </div>
+
+        <div class="mt-12 md:mt-16">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl md:text-2xl font-black text-slate-800">My Enrolled Courses</h3>
+                <a href="courses.html" class="text-xs font-bold text-emerald-600">View All</a>
+            </div>
+            <div id="coursesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                 </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, orderBy, documentId } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
+            authDomain: "trfasilyousf1.firebaseapp.com",
+            projectId: "trfasilyousf1",
+            storageBucket: "trfasilyousf1.firebasestorage.app",
+            messagingSenderId: "158147210589",
+            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let redirectGuard = false;
+        let allCoursesMap = new Map();
+
+        async function getUserWithRetry(uid, retries = 2) {
+            for (let i = 0; i <= retries; i++) {
+                try {
+                    const docSnap = await getDoc(doc(db, "users", uid));
+                    return docSnap;
+                } catch (err) {
+                    if (i === retries) throw err;
+                    await new Promise(r => setTimeout(r, 800));
+                }
+            }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const userDoc = await getUserWithRetry(user.uid, 2);
+                    if (userDoc.exists()) {
+                        const data = userDoc.data();
+                        document.getElementById('displayUsername').innerText = data.fullName || "Student";
+                        document.getElementById('userEmail').innerText = user.email;
+                        document.getElementById('userAvatar').src = data.profilePic || `https://ui-avatars.com/api/?name=${data.fullName}&background=f1c40f&color=1a2233`;
+                        await loadAllCourses();
+                        fetchNotice();
+                        loadQuickAttendance(user.uid);
+                        await loadFeeStatus(user.uid, data.enrolledCourses || []);
+                        await loadCourses(data.enrolledCourses || []);
+                    }
+                } catch (err) { console.error(err); }
+            } else {
+                if (!redirectGuard) {
+                    redirectGuard = true;
+                    setTimeout(() => { if (!auth.currentUser) window.location.href = "../auth/login.html"; }, 1200);
+                }
+            }
+        });
+
+        async function loadAllCourses() {
+            try {
+                const coursesSnap = await getDocs(collection(db, "courses"));
+                allCoursesMap.clear();
+                coursesSnap.forEach(doc => {
+                    allCoursesMap.set(doc.id, { courseName: doc.data().courseName, courseFee: doc.data().courseFee });
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        async function loadFeeStatus(uid, enrolledCourseIds) {
+            let totalFee = 0;
+            enrolledCourseIds.forEach(cid => {
+                const course = allCoursesMap.get(cid);
+                if (course) totalFee += course.courseFee;
+            });
+            let totalPaid = 0;
+            const paymentsSnap = await getDocs(collection(db, "users", uid, "payments"));
+            paymentsSnap.forEach(p => totalPaid += p.data().amount || 0);
+            const due = totalFee - totalPaid;
+            document.getElementById('feeDisplay').innerHTML = `<p class='text-sm font-bold text-slate-500'>Total: ₹${totalFee}</p><p class='text-sm font-bold text-emerald-600'>Paid: ₹${totalPaid}</p>`;
+            const b = document.getElementById('feeStatusBadge');
+            if (due <= 0) { b.innerText = "Paid ✓"; b.className = "fee-badge fee-paid"; }
+            else { b.innerText = "Due: ₹" + due; b.className = "fee-badge fee-due"; }
+        }
+
+        async function loadQuickAttendance(uid) {
+            const q = query(collection(db, "attendance"), where("studentId", "==", uid), orderBy("date", "desc"));
+            const snap = await getDocs(q);
+            let p = 0, total = 0;
+            snap.forEach(d => { total++; if (d.data().status.toLowerCase() === 'present') p++; });
+            const percent = total > 0 ? Math.round((p / total) * 100) : 0;
+            const display = document.getElementById('quickAttendance');
+            display.innerText = percent + "%";
+            display.className = percent < 75 ? "text-4xl md:text-5xl font-black text-rose-500 mt-2" : "text-4xl md:text-5xl font-black text-emerald-600 mt-2";
+        }
+
+        async function loadCourses(courseIds) {
+            const container = document.getElementById('coursesContainer');
+            if (!courseIds.length) { container.innerHTML = "<p class='p-10 text-slate-400'>No courses found.</p>"; return; }
+            const q = query(collection(db, "courses"), where(documentId(), "in", courseIds.slice(0, 10)));
+            const snap = await getDocs(q);
+            container.innerHTML = "";
+            snap.forEach(doc => {
+                const c = doc.data();
+                container.innerHTML += `
+                    <div class="glass-card rounded-2xl overflow-hidden shadow-md course-card">
+                        <div class="h-20 bg-slate-800 flex items-center justify-center"><i class="fas fa-chalkboard-user text-2xl text-ucc-gold"></i></div>
+                        <div class="p-4"><h4 class="font-black text-slate-800 truncate text-sm">${c.courseName}</h4><p class="text-[9px] text-slate-400 uppercase font-bold mt-1">${c.courseCode}</p></div>
+                    </div>`;
+            });
+        }
+
+        async function fetchNotice() {
+            const snap = await getDoc(doc(db, "notices", "latest"));
+            if (snap.exists()) {
+                document.getElementById('studentNoticeText').innerText = snap.data().message;
+                document.getElementById('noticeAlert').classList.remove('hidden');
+            }
+        }
+
+        window.logout = async () => { if(confirm("Logout?")) { await signOut(auth); window.location.href = "../index.html"; } };
+
+        // MOBILE SIDEBAR TOGGLE (unchanged logic, only references updated)
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const openBtn = document.getElementById('openSidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        if (openBtn) openBtn.addEventListener('click', toggleSidebar);
+        if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+        if (overlay) overlay.addEventListener('click', toggleSidebar);
+    </script>
+</body>
+</html>

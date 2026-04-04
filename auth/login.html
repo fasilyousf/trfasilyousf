@@ -37,7 +37,7 @@
 </head>
 <body class="bg-animate min-h-screen flex items-center justify-center p-6">
 
-    <a href="index.html" class="absolute top-8 left-8 text-white/80 hover:text-white flex items-center gap-2 font-semibold transition">
+    <a href="../index.html" class="absolute top-8 left-8 text-white/80 hover:text-white flex items-center gap-2 font-semibold transition">
         <i class="fas fa-arrow-left"></i> Back to Home
     </a>
 
@@ -47,12 +47,11 @@
                 <i class="fas fa-user-graduate text-[#2c3e50] text-3xl"></i>
             </div>
             <h1 class="text-3xl font-extrabold text-white tracking-tight">Welcome <span class="text-[#f1c40f]">Back</span></h1>
-            <p class="text-white/60 text-sm mt-2">Login to access your courses and notes</p>
+            <p class="text-white/60 text-sm mt-2">Login to access your dashboard</p>
         </div>
 
         <div class="glass-container rounded-[2.5rem] p-10 shadow-2xl">
             <form id="loginForm" class="space-y-6">
-                
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-2 ml-1">Email Address</label>
                     <div class="relative">
@@ -91,22 +90,6 @@
                 </button>
             </form>
 
-            <div class="mt-8">
-                <div class="relative flex items-center justify-center mb-6">
-                    <div class="flex-grow border-t border-slate-200"></div>
-                    <span class="flex-shrink mx-4 text-slate-400 text-xs font-bold uppercase tracking-widest">Or login with</span>
-                    <div class="flex-grow border-t border-slate-200"></div>
-                </div>
-                <div class="flex gap-4">
-                    <button onclick="socialLogin('Google')" class="flex-1 py-3 border border-slate-200 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-50 transition font-semibold text-sm">
-                        <i class="fab fa-google text-red-500"></i> Google
-                    </button>
-                    <button onclick="socialLogin('Facebook')" class="flex-1 py-3 border border-slate-200 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-50 transition font-semibold text-sm">
-                        <i class="fab fa-facebook text-blue-600"></i> Facebook
-                    </button>
-                </div>
-            </div>
-
             <div class="mt-10 text-center">
                 <p class="text-slate-500 font-medium text-sm">
                     New student? 
@@ -121,11 +104,11 @@
     </div>
 
     <script type="module">
-        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        // Added Firestore imports to check roles
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Your Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
             authDomain: "trfasilyousf1.firebaseapp.com",
@@ -136,9 +119,9 @@
             measurementId: "G-JJ5GE7HS02"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
         const loginForm = document.getElementById('loginForm');
         const loginBtn = document.getElementById('loginBtn');
@@ -146,14 +129,12 @@
         const btnIcon = document.getElementById('btnIcon');
         const btnLoader = document.getElementById('btnLoader');
 
-        // Login Handler
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const email = document.getElementById('loginEmail').value;
             const pass = document.getElementById('loginPass').value;
 
-            // Start Loading
             loginBtn.disabled = true;
             btnText.innerText = "Verifying...";
             btnIcon.classList.add('hidden');
@@ -161,16 +142,31 @@
 
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-                console.log("Logged in:", userCredential.user);
-                window.location.href = "dashboard.html"; // Your dashboard page
+                const user = userCredential.user;
+
+                // 1. Fetch User Role from Firestore
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    
+                    // 2. Redirect based on role
+                    if (userData.role === 'admin') {
+                        window.location.href = "../admin/dashboard.html"; 
+                    } else {
+                        window.location.href = "../student/dashboard.html"; 
+                    }
+                } else {
+                    // Fallback if document doesn't exist yet
+                    window.location.href = "../student/dashboard.html";
+                }
+
             } catch (error) {
                 console.error("Login Error:", error.code);
                 let message = "An error occurred during login.";
                 if (error.code === 'auth/invalid-credential') message = "Invalid email or password.";
-                if (error.code === 'auth/user-not-found') message = "No user found with this email.";
                 alert(message);
             } finally {
-                // Stop Loading
                 loginBtn.disabled = false;
                 btnText.innerText = "Sign In";
                 btnIcon.classList.remove('hidden');
@@ -178,7 +174,6 @@
             }
         });
 
-        // Forgot Password Handler
         document.getElementById('forgotPass').addEventListener('click', async (e) => {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
@@ -193,11 +188,6 @@
                 alert("Error: " + error.message);
             }
         });
-
-        // Placeholder for Social Logins
-        window.socialLogin = (provider) => {
-            alert(provider + " login requires additional configuration in Firebase Console.");
-        };
     </script>
 </body>
 </html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Notes | UCC Handwara</title>
+    <link rel="shortcut icon" href="../assets/img/icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Outfit', sans-serif; scroll-behavior: smooth; background: #f8fafc; }
+        .bg-ucc-dark { background-color: #1a2233; }
+        .text-ucc-gold { color: #f1c40f; }
+        .bg-ucc-gold { background-color: #f1c40f; }
+        
+        .nav-link { position: relative; transition: all 0.3s; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background: #f1c40f; transition: 0.3s; }
+        .nav-link:hover::after { width: 100%; }
+
+        #mobile-menu { transition: all 0.3s ease-in-out; max-height: 0; overflow: hidden; opacity: 0; }
+        #mobile-menu.active { max-height: 450px; opacity: 1; padding: 1.5rem; }
+
+        .footer-h4-underline::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 3px; background-color: #f1c40f; border-radius: 10px; }
+
+        .note-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(0,0,0,0.05); }
+        .note-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); }
+        
+        .search-glow:focus { box-shadow: 0 0 20px rgba(241, 196, 15, 0.2); border-color: #f1c40f; }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <header class="bg-ucc-dark text-white sticky top-0 z-[100] px-[5%] py-4 shadow-2xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 group cursor-pointer" onclick="window.location.href='../index.html'">
+                <div class="w-10 h-10 bg-ucc-gold rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300">
+                    <i class="fas fa-university text-[#1a2233] text-xl"></i>
+                </div>
+                 <div class="logo text-xl md:text-2xl font-black tracking-tighter ">
+                    Tr <span class="text-ucc-gold"> Fasil Yousf</span>
+                </div>
+            </div>
+
+            <nav class="hidden lg:flex items-center gap-10 font-bold text-[11px] tracking-[0.2em]">
+                <a href="../index.html" class="nav-link">HOME</a>
+                <a href="courses.html" class="nav-link">COURSES</a>
+                <a href="notes.html" class="text-ucc-gold nav-link">E-NOTES</a>
+                <a href="gallery.html" class="hover:text-ucc-gold nav-link">GALLERY</a>
+                <a href="about.html" class="hover:text-ucc-gold nav-link">ABOUT</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <a href="../auth/login.html" class="bg-ucc-gold hover:bg-white text-ucc-dark px-6 py-2.5 rounded-full font-black text-xs uppercase transition-all shadow-lg active:scale-95">
+                    Student Login
+                </a>
+                <button class="lg:hidden text-ucc-gold text-2xl" id="hamburger"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="lg:hidden absolute top-full left-0 w-full bg-[#1e2b38] shadow-2xl border-t border-white/10">
+            <ul class="flex flex-col gap-5 font-bold tracking-widest uppercase text-xs">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="notes.html" class="text-ucc-gold">E-Notes</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="bg-ucc-dark text-white py-16 px-[6%] text-center relative overflow-hidden">
+        <div class="relative z-10 max-w-3xl mx-auto">
+            <span class="bg-ucc-gold/10 text-ucc-gold border border-ucc-gold/20 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-6 inline-block">Digital Resource Center</span>
+            <h1 class="text-4xl md:text-5xl font-black mb-4 uppercase tracking-tighter">Handwritten <span class="text-ucc-gold">E-Notes</span></h1>
+            <p class="text-slate-400 text-lg font-medium mb-10">Simplified, high-quality study materials for United Community College students.</p>
+            
+            <div class="relative group">
+                <input type="text" id="noteSearch" placeholder="Search topics (Excel, Word, Paint)..." 
+                    class="w-full px-8 py-5 rounded-2xl text-slate-900 bg-white shadow-2xl outline-none transition-all text-lg font-bold search-glow">
+                <div class="absolute right-8 top-5 text-slate-400 group-focus-within:text-ucc-gold transition">
+                    <i class="fas fa-search text-xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-ucc-gold/5 rounded-full blur-3xl"></div>
+    </section>
+
+    <main class="py-20 px-[6%] max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10" id="notes-container">
+            
+            <div class="note-card bg-white p-8 rounded-[2.5rem] flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 bg-blue-50 text-blue-600 flex items-center justify-center rounded-2xl mb-6 shadow-inner">
+                        <i class="fas fa-palette text-2xl"></i>
+                    </div>
+                    <span class="text-[9px] font-black uppercase tracking-widest text-blue-500 bg-blue-50 px-4 py-1 rounded-full">Foundation</span>
+                    <h3 class="text-2xl font-black text-ucc-dark mt-4 mb-3 uppercase tracking-tight">MS-Paint Notes</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 font-medium">Complete guide for digital beginners. Drawing tools, custom colors, and image resizing.</p>
+                </div>
+                <div class="flex gap-4">
+                    <a href="../notes/MS-Paint(fasilyousf).pdf" download class="flex-1 bg-ucc-dark hover:bg-black text-white py-4 rounded-xl text-[10px] font-black text-center transition uppercase tracking-widest">PDF</a>
+                    <a href="../notes/MS-Paint(fasilyousf).pdf" target="_blank" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-4 rounded-xl text-[10px] font-black text-center transition uppercase tracking-widest">Preview</a>
+                </div>
+            </div>
+
+            <div class="note-card bg-white p-8 rounded-[2.5rem] flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 bg-orange-50 text-orange-600 flex items-center justify-center rounded-2xl mb-6 shadow-inner">
+                        <i class="fas fa-desktop text-2xl"></i>
+                    </div>
+                    <span class="text-[9px] font-black uppercase tracking-widest text-orange-500 bg-orange-50 px-4 py-1 rounded-full">Core Theory</span>
+                    <h3 class="text-2xl font-black text-ucc-dark mt-4 mb-3 uppercase tracking-tight">IT Basics</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 font-medium">Handwritten notes on hardware, OS, and I/O devices. The perfect foundation for IT.</p>
+                </div>
+                <div class="flex gap-4">
+                    <a href="../notes/Hand Written Notes Computers Basics Fasil Yousf.pdf" download class="flex-1 bg-ucc-dark hover:bg-black text-white py-4 rounded-xl text-[10px] font-black text-center transition uppercase tracking-widest">PDF</a>
+                    <a href="../notes/Hand Written Notes Computers Basics Fasil Yousf.pdf" target="_blank" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-4 rounded-xl text-[10px] font-black text-center transition uppercase tracking-widest">Preview</a>
+                </div>
+            </div>
+
+            <div class="note-card bg-white p-8 rounded-[2.5rem] flex flex-col justify-between border-b-8 border-indigo-500">
+                <div>
+                    <div class="w-14 h-14 bg-indigo-50 text-indigo-600 flex items-center justify-center rounded-2xl mb-6 shadow-inner">
+                        <i class="fas fa-file-word text-2xl"></i>
+                    </div>
+                    <span class="text-[9px] font-black uppercase tracking-widest text-indigo-500 bg-indigo-50 px-4 py-1 rounded-full">Office Suite</span>
+                    <h3 class="text-2xl font-black text-ucc-dark mt-4 mb-3 uppercase tracking-tight">MS-Word</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 font-medium">Step-by-step document formatting and layout shortcuts. Essential for office work.</p>
+                </div>
+                <div class="flex gap-4">
+                    <a href="../notes/Ms Word Hand written notes.pdf" download class="flex-1 bg-ucc-dark hover:bg-black text-white py-4 rounded-xl text-[10px] font-black text-center transition uppercase tracking-widest">PDF</a>
+                    <a href="../notes/Ms Word Hand written notes.pdf" target="_blank" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-4 rounded-xl text-[10px] font-black text-center transition uppercase tracking-widest">Preview</a>
+                </div>
+            </div>
+
+            <div class="note-card bg-white p-8 rounded-[2.5rem] flex flex-col justify-between border-b-8 border-emerald-500">
+                <div>
+                    <div class="w-14 h-14 bg-emerald-50 text-emerald-600 flex items-center justify-center rounded-2xl mb-6 shadow-inner">
+                        <i class="fas fa-table text-2xl"></i>
+                    </div>
+                    <span class="text-[9px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-50 px-4 py-1 rounded-full">Data Analysis</span>
+                    <h3 class="text-2xl font-black text-ucc-dark mt-4 mb-3 uppercase tracking-tight">MS-Excel</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 font-medium">Covers 50+ essential formulas, VLOOKUP, and sorting. Best for data management.</p>
+                </div>
+                <div class="flex gap-4">
+                    <a href="../notes/Excel Notes Handwritten By Fasil Yousf.pdf" download class="flex-1 bg-ucc-dark hover:bg-black text-white py-4 rounded-xl text-[10px] font-black text-center transition uppercase tracking-widest">PDF</a>
+                    <a href="../notes/Excel Notes Handwritten By Fasil Yousf.pdf" target="_blank" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-4 rounded-xl text-[10px] font-black text-center transition uppercase tracking-widest">Preview</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-ucc-dark text-slate-400 py-20 px-[6%] border-t-8 border-ucc-gold">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16">
+            <div>
+                <h4 class="text-white text-xl font-black mb-8 relative footer-h4-underline uppercase tracking-widest pb-4">Tr Fasil Yousf</h4>
+                <p class="text-sm leading-relaxed mb-8 font-medium">Leading the digital revolution in Handwara since 2020. Quality education for a digital future.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center hover:bg-ucc-gold hover:text-ucc-dark transition-all"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center hover:bg-ucc-gold hover:text-ucc-dark transition-all"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center hover:bg-ucc-gold hover:text-ucc-dark transition-all"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white text-xl font-black mb-8 relative footer-h4-underline uppercase tracking-widest pb-4">Resource Hub</h4>
+                <ul class="space-y-4 font-black text-xs uppercase tracking-widest">
+                    <li><a href="../index.html" class="hover:text-ucc-gold transition">Portal Home</a></li>
+                    <li><a href="courses.html" class="hover:text-ucc-gold transition">Our Courses</a></li>
+                    <li><a href="notes.html" class="text-ucc-gold">Download Notes</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white text-xl font-black mb-8 relative footer-h4-underline uppercase tracking-widest pb-4">Contact UCC</h4>
+                <ul class="space-y-6 text-sm">
+                    <li class="flex gap-4"><i class="fas fa-map-marker-alt text-ucc-gold"></i><span>Handwara, Kupwara, J&K</span></li>
+                    <li class="flex gap-4"><i class="fas fa-phone-alt text-ucc-gold"></i><span class="font-bold">+91 70069 60788</span></li>
+                    <li class="flex gap-4"><i class="fas fa-envelope text-ucc-gold"></i><span>trfasilyousf@gmail.com</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-white/5 text-center text-[10px] font-black uppercase tracking-[0.5em] opacity-40">
+            © 2026 United Community College. Crafted by Fasil Yousf.
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        hamburger.addEventListener('click', () => mobileMenu.classList.toggle('active'));
+
+        // Live Filter Logic
+        const searchInput = document.getElementById('noteSearch');
+        const noteCards = document.querySelectorAll('.note-card');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            noteCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const desc = card.querySelector('p').textContent.toLowerCase();
+                card.style.display = (title.includes(term) || desc.includes(term)) ? 'flex' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>

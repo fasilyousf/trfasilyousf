@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Fee Management | UCC Nexus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Outfit', sans-serif; box-sizing: border-box; }
+        body { background: #060912; color: #f8fafc; overflow-x: hidden; }
+        .glass-panel { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #060912 100%); border-right: 1px solid rgba(241,196,15,0.1); }
+        .status-badge { padding: 4px 12px; border-radius: 40px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+        .status-paid { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .status-partial { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .status-due { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .modal-backdrop { animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-card { animation: slideUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #f1c40f; border-radius: 10px; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <aside class="fixed lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300">
+        <div class="p-8 pb-6 text-center lg:text-left">
+            <h1 class="text-xl font-black tracking-tighter text-white">UCC <span class="text-[#f1c40f]">NEXUS</span></h1>
+            <p class="text-[9px] text-slate-500 font-bold uppercase tracking-[0.3em]">Command Center</p>
+        </div>
+        <nav class="flex-1 px-6 py-4 space-y-2">
+            <a href="dashboard.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-2xl transition-all font-semibold text-sm">
+                <i class="fas fa-users w-5"></i> Directory
+            </a>
+            <a href="attendance.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-2xl transition-all font-semibold text-sm">
+                <i class="fas fa-calendar-check w-5"></i> Attendance
+            </a>
+            <a href="#" class="flex items-center gap-4 px-5 py-3.5 bg-[#f1c40f]/10 text-[#f1c40f] rounded-2xl font-bold text-sm border-l-4 border-[#f1c40f]">
+                <i class="fas fa-rupee-sign w-5"></i> Fee Management
+            </a>
+        </nav>
+        <div class="p-6 mt-auto">
+            <button onclick="logout()" class="w-full px-6 py-4 bg-rose-500/10 text-rose-500 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-rose-500 hover:text-white transition-all">
+                <i class="fas fa-power-off mr-2"></i> Exit
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 w-full p-4 md:p-8 lg:p-10">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-10">
+            <div>
+                <h2 class="text-3xl font-black text-white tracking-tight">Fee Intelligence</h2>
+                <div class="flex gap-3 mt-4">
+                    <button onclick="exportFullCSV()" class="bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-slate-900 px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest border border-emerald-500/20 transition-all">
+                        <i class="fas fa-file-export mr-2"></i> Export CSV
+                    </button>
+                    <button onclick="refreshData()" class="bg-sky-500/10 hover:bg-sky-500 text-sky-500 hover:text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest border border-sky-500/20 transition-all">
+                        <i class="fas fa-sync-alt mr-2"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <input type="text" id="searchStudent" placeholder="Search student..." class="bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-2 text-sm w-64 focus:border-[#f1c40f] outline-none">
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="glass-panel rounded-2xl p-6 border-l-4 border-emerald-500">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-wallet text-3xl text-emerald-400"></i>
+                    <div>
+                        <p class="text-slate-400 text-xs uppercase font-bold">Total Collected</p>
+                        <p class="text-2xl font-black text-white" id="totalCollected">₹0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-panel rounded-2xl p-6 border-l-4 border-amber-500">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-clock text-3xl text-amber-400"></i>
+                    <div>
+                        <p class="text-slate-400 text-xs uppercase font-bold">Total Due</p>
+                        <p class="text-2xl font-black text-white" id="totalDue">₹0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-panel rounded-2xl p-6 border-l-4 border-rose-500">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-exclamation-triangle text-3xl text-rose-400"></i>
+                    <div>
+                        <p class="text-slate-400 text-xs uppercase font-bold">Defaulters (Due > 0)</p>
+                        <p class="text-2xl font-black text-white" id="defaulterCount">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fee Table -->
+        <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-900/80 text-[11px] font-black uppercase tracking-widest text-slate-400 border-b border-white/10">
+                        <tr>
+                            <th class="px-6 py-5">Student</th>
+                            <th class="px-6 py-5">Total Fee (₹)</th>
+                            <th class="px-6 py-5">Paid (₹)</th>
+                            <th class="px-6 py-5">Due (₹)</th>
+                            <th class="px-6 py-5">Last Payment</th>
+                            <th class="px-6 py-5 text-center">Status</th>
+                            <th class="px-6 py-5 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feeTableBody" class="divide-y divide-white/5">
+                        <tr><td colspan="7" class="p-10 text-center"><div class="skeleton h-12 w-full rounded-xl"></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-8 shadow-2xl border border-white/20 modal-card">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h3 class="text-2xl font-black text-white">Record Payment</h3>
+                    <p id="modalStudentName" class="text-slate-400 text-sm mt-1">Student Name</p>
+                </div>
+                <button onclick="closePaymentModal()" class="text-slate-500 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button>
+            </div>
+            <form id="paymentForm">
+                <input type="hidden" id="paymentStudentId">
+                <div class="mb-4">
+                    <label class="text-[11px] font-black uppercase text-slate-500 ml-2">Amount (₹)</label>
+                    <input type="number" id="paymentAmount" required class="w-full mt-1 px-5 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none">
+                </div>
+                <div class="mb-4">
+                    <label class="text-[11px] font-black uppercase text-slate-500 ml-2">Payment Date</label>
+                    <input type="date" id="paymentDate" required class="w-full mt-1 px-5 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none">
+                </div>
+                <div class="mb-4">
+                    <label class="text-[11px] font-black uppercase text-slate-500 ml-2">Payment Method</label>
+                    <select id="paymentMethod" class="w-full mt-1 px-5 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none">
+                        <option value="Cash">Cash</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                        <option value="Online">Online (UPI/Card)</option>
+                        <option value="Cheque">Cheque</option>
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="text-[11px] font-black uppercase text-slate-500 ml-2">Notes (Optional)</label>
+                    <textarea id="paymentNotes" rows="2" class="w-full mt-1 px-5 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none"></textarea>
+                </div>
+                <button type="submit" id="submitPaymentBtn" class="w-full py-3 bg-emerald-500 text-slate-900 font-black uppercase rounded-xl hover:bg-emerald-400 transition">Add Payment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="historyModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
+        <div class="glass-panel w-full max-w-2xl rounded-3xl p-8 shadow-2xl border border-white/20 modal-card">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h3 class="text-2xl font-black text-white">Payment History</h3>
+                    <p id="historyStudentName" class="text-slate-400 text-sm mt-1">Student Name</p>
+                </div>
+                <button onclick="closeHistoryModal()" class="text-slate-500 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button>
+            </div>
+            <div id="historyList" class="max-h-96 overflow-y-auto space-y-2">
+                <div class="text-center text-slate-400">Loading...</div>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeHistoryModal()" class="px-6 py-2 bg-slate-700 rounded-xl text-white text-sm font-bold">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Fee Breakdown Modal -->
+    <div id="coursesModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
+        <div class="glass-panel w-full max-w-2xl rounded-3xl p-8 shadow-2xl border border-white/20 modal-card">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h3 class="text-2xl font-black text-white">Course Fee Breakdown</h3>
+                    <p id="coursesStudentName" class="text-slate-400 text-sm mt-1">Student Name</p>
+                </div>
+                <button onclick="closeCoursesModal()" class="text-slate-500 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button>
+            </div>
+            <div id="coursesList" class="max-h-96 overflow-y-auto space-y-2">
+                <div class="text-center text-slate-400">Loading...</div>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeCoursesModal()" class="px-6 py-2 bg-slate-700 rounded-xl text-white text-sm font-bold">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="fixed bottom-10 right-10 flex flex-col gap-3 z-[200]"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, getDocs, collection, addDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
+            authDomain: "trfasilyousf1.firebaseapp.com",
+            projectId: "trfasilyousf1",
+            storageBucket: "trfasilyousf1.firebasestorage.app",
+            messagingSenderId: "158147210589",
+            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let allStudentsData = []; // store full student objects with fee details
+        let allCoursesMap = new Map(); // courseId -> { courseName, courseFee }
+
+        function showToast(msg, isError = false) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `bg-slate-800 text-white px-8 py-4 rounded-3xl shadow-2xl flex items-center gap-4 text-sm font-bold border border-white/10`;
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle text-rose-500' : 'fa-check-circle text-[#f1c40f]'}"></i> <span>${msg}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 3000);
+        }
+
+        // Load all courses and their fees
+        async function loadCourses() {
+            const coursesSnap = await getDocs(collection(db, "courses"));
+            allCoursesMap.clear();
+            coursesSnap.forEach(doc => {
+                const data = doc.data();
+                allCoursesMap.set(doc.id, {
+                    courseName: data.courseName || "Unnamed",
+                    courseFee: data.courseFee || 0
+                });
+            });
+        }
+
+        // Compute total fee for a student based on enrolledCourses array
+        function computeTotalFee(enrolledCourses) {
+            if (!enrolledCourses || !enrolledCourses.length) return 0;
+            let total = 0;
+            for (let cid of enrolledCourses) {
+                const course = allCoursesMap.get(cid);
+                if (course) total += course.courseFee;
+            }
+            return total;
+        }
+
+        async function loadAllStudents() {
+            const usersSnap = await getDocs(collection(db, "users"));
+            const students = [];
+            for (const docSnap of usersSnap.docs) {
+                const data = docSnap.data();
+                if (data.role === 'student') {
+                    const studentId = docSnap.id;
+                    const enrolledCourses = data.enrolledCourses || [];
+                    const totalFee = computeTotalFee(enrolledCourses);
+                    
+                    // Get payments
+                    const paymentsSnap = await getDocs(collection(db, "users", studentId, "payments"));
+                    let totalPaid = 0;
+                    let lastPaymentDate = null;
+                    paymentsSnap.forEach(p => {
+                        totalPaid += p.data().amount;
+                        if (p.data().date && (!lastPaymentDate || p.data().date > lastPaymentDate)) {
+                            lastPaymentDate = p.data().date;
+                        }
+                    });
+                    const due = totalFee - totalPaid;
+                    students.push({
+                        id: studentId,
+                        fullName: data.fullName,
+                        email: data.email,
+                        enrolledCourses: enrolledCourses,
+                        totalFee: totalFee,
+                        paid: totalPaid,
+                        due: due,
+                        lastPayment: lastPaymentDate
+                    });
+                }
+            }
+            allStudentsData = students;
+            renderFeeTable(students);
+            updateStats(students);
+        }
+
+        function renderFeeTable(students) {
+            const tbody = document.getElementById('feeTableBody');
+            const searchTerm = document.getElementById('searchStudent').value.toLowerCase();
+            const filtered = students.filter(s => s.fullName.toLowerCase().includes(searchTerm) || s.email.toLowerCase().includes(searchTerm));
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-10 text-center text-slate-400">No students found</td></tr>`;
+                return;
+            }
+            
+            tbody.innerHTML = filtered.map(s => {
+                let statusClass = '', statusText = '';
+                if (s.due <= 0) { statusClass = 'status-paid'; statusText = 'Paid'; }
+                else if (s.paid > 0 && s.due > 0) { statusClass = 'status-partial'; statusText = 'Partial'; }
+                else { statusClass = 'status-due'; statusText = 'Due'; }
+                return `
+                    <tr class="hover:bg-white/[0.03] transition">
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-white">${escapeHtml(s.fullName)}</div>
+                            <div class="text-[10px] text-slate-500">${escapeHtml(s.email)}</div>
+                        </td>
+                        <td class="px-6 py-4 font-mono">₹${s.totalFee.toLocaleString()}</td>
+                        <td class="px-6 py-4 font-mono text-emerald-400">₹${s.paid.toLocaleString()}</td>
+                        <td class="px-6 py-4 font-mono ${s.due > 0 ? 'text-rose-400' : 'text-slate-400'}">₹${s.due.toLocaleString()}</td>
+                        <td class="px-6 py-4 text-xs">${s.lastPayment ? new Date(s.lastPayment).toLocaleDateString() : '—'}</td>
+                        <td class="px-6 py-4 text-center"><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td class="px-6 py-4 text-right space-x-2">
+                            <button onclick="viewCourses('${s.id}', '${escapeHtml(s.fullName)}')" class="bg-[#f1c40f]/20 text-[#f1c40f] p-2 rounded-xl hover:bg-[#f1c40f] hover:text-slate-900 transition" title="Course Fees"><i class="fas fa-book-open"></i></button>
+                            <button onclick="openPaymentModal('${s.id}', '${escapeHtml(s.fullName)}')" class="bg-emerald-500/20 text-emerald-400 p-2 rounded-xl hover:bg-emerald-500 hover:text-white transition" title="Record Payment"><i class="fas fa-rupee-sign"></i></button>
+                            <button onclick="viewHistory('${s.id}', '${escapeHtml(s.fullName)}')" class="bg-slate-700 text-slate-300 p-2 rounded-xl hover:bg-slate-600 transition" title="Payment History"><i class="fas fa-history"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateStats(students) {
+            let totalCollected = 0, totalDue = 0, defaulters = 0;
+            students.forEach(s => {
+                totalCollected += s.paid;
+                totalDue += s.due;
+                if (s.due > 0) defaulters++;
+            });
+            document.getElementById('totalCollected').innerText = '₹' + totalCollected.toLocaleString();
+            document.getElementById('totalDue').innerText = '₹' + totalDue.toLocaleString();
+            document.getElementById('defaulterCount').innerText = defaulters;
+        }
+
+        // View enrolled courses with fee breakdown
+        window.viewCourses = async (studentId, studentName) => {
+            const student = allStudentsData.find(s => s.id === studentId);
+            if (!student) return;
+            document.getElementById('coursesStudentName').innerHTML = `<i class="fas fa-user-graduate mr-2"></i> ${studentName}`;
+            const coursesListDiv = document.getElementById('coursesList');
+            if (!student.enrolledCourses.length) {
+                coursesListDiv.innerHTML = '<div class="text-center text-slate-400">No courses enrolled.</div>';
+            } else {
+                let html = `<div class="space-y-2">`;
+                let total = 0;
+                for (let cid of student.enrolledCourses) {
+                    const course = allCoursesMap.get(cid);
+                    if (course) {
+                        html += `<div class="bg-slate-800/50 rounded-xl p-3 flex justify-between items-center">
+                                    <div><span class="font-bold text-white">${escapeHtml(course.courseName)}</span><br><span class="text-[10px] text-slate-400">Course ID: ${cid}</span></div>
+                                    <div class="font-mono text-emerald-400">₹${course.courseFee.toLocaleString()}</div>
+                                </div>`;
+                        total += course.courseFee;
+                    } else {
+                        html += `<div class="bg-slate-800/50 rounded-xl p-3 flex justify-between items-center">
+                                    <div><span class="font-bold text-white">Unknown Course</span><br><span class="text-[10px] text-slate-400">ID: ${cid}</span></div>
+                                    <div class="font-mono text-rose-400">Fee not set</div>
+                                </div>`;
+                    }
+                }
+                html += `<div class="bg-slate-800 rounded-xl p-3 flex justify-between items-center border border-[#f1c40f]/30">
+                            <span class="font-black text-white">TOTAL FEE</span>
+                            <span class="font-black text-[#f1c40f] text-xl">₹${total.toLocaleString()}</span>
+                         </div></div>`;
+                coursesListDiv.innerHTML = html;
+            }
+            document.getElementById('coursesModal').classList.remove('hidden');
+        };
+        window.closeCoursesModal = () => { document.getElementById('coursesModal').classList.add('hidden'); };
+
+        // Payment Modal
+        window.openPaymentModal = (studentId, studentName) => {
+            document.getElementById('paymentStudentId').value = studentId;
+            document.getElementById('modalStudentName').innerText = studentName;
+            document.getElementById('paymentAmount').value = '';
+            document.getElementById('paymentDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('paymentMethod').value = 'Cash';
+            document.getElementById('paymentNotes').value = '';
+            document.getElementById('paymentModal').classList.remove('hidden');
+        };
+        window.closePaymentModal = () => { document.getElementById('paymentModal').classList.add('hidden'); };
+
+        document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const studentId = document.getElementById('paymentStudentId').value;
+            const amount = parseFloat(document.getElementById('paymentAmount').value);
+            const date = document.getElementById('paymentDate').value;
+            const method = document.getElementById('paymentMethod').value;
+            const notes = document.getElementById('paymentNotes').value;
+            if (!amount || amount <= 0) { alert("Enter a valid amount"); return; }
+            const btn = document.getElementById('submitPaymentBtn');
+            btn.disabled = true; btn.innerText = "Processing...";
+            try {
+                await addDoc(collection(db, "users", studentId, "payments"), {
+                    amount, date, method, notes, timestamp: new Date().toISOString()
+                });
+                showToast("Payment recorded successfully!");
+                closePaymentModal();
+                await refreshData();
+            } catch (err) { alert("Error: " + err.message); }
+            finally { btn.disabled = false; btn.innerText = "Add Payment"; }
+        });
+
+        // History Modal
+        window.viewHistory = async (studentId, studentName) => {
+            document.getElementById('historyStudentName').innerText = studentName;
+            document.getElementById('historyModal').classList.remove('hidden');
+            const historyDiv = document.getElementById('historyList');
+            historyDiv.innerHTML = '<div class="text-center text-slate-400">Loading...</div>';
+            try {
+                const paymentsSnap = await getDocs(query(collection(db, "users", studentId, "payments"), orderBy("date", "desc")));
+                if (paymentsSnap.empty) historyDiv.innerHTML = '<div class="text-center text-slate-400">No payment records found.</div>';
+                else {
+                    historyDiv.innerHTML = paymentsSnap.docs.map(d => {
+                        const p = d.data();
+                        return `<div class="bg-slate-800/50 rounded-xl p-3 flex justify-between items-center">
+                                    <div><div class="font-bold text-white">₹${p.amount.toLocaleString()}</div>
+                                    <div class="text-[10px] text-slate-400">${p.method} • ${new Date(p.date).toLocaleDateString()}</div>
+                                    ${p.notes ? `<div class="text-[10px] text-slate-500 mt-1">${escapeHtml(p.notes)}</div>` : ''}</div>
+                                    <i class="fas fa-receipt text-slate-500"></i>
+                                </div>`;
+                    }).join('');
+                }
+            } catch (err) { historyDiv.innerHTML = '<div class="text-center text-rose-500">Failed to load history.</div>'; }
+        };
+        window.closeHistoryModal = () => { document.getElementById('historyModal').classList.add('hidden'); };
+
+        // Export CSV (full current filtered list)
+        window.exportFullCSV = () => {
+            const searchTerm = document.getElementById('searchStudent').value.toLowerCase();
+            const filtered = allStudentsData.filter(s => s.fullName.toLowerCase().includes(searchTerm) || s.email.toLowerCase().includes(searchTerm));
+            const rows = [["Student Name", "Email", "Total Fee (₹)", "Paid (₹)", "Due (₹)", "Last Payment", "Status"]];
+            filtered.forEach(s => {
+                let status = "";
+                if (s.due <= 0) status = "Paid";
+                else if (s.paid > 0) status = "Partial";
+                else status = "Due";
+                rows.push([s.fullName, s.email, s.totalFee, s.paid, s.due, s.lastPayment || "", status]);
+            });
+            const csvContent = rows.map(e => e.map(cell => `"${cell}"`).join(",")).join("\n");
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `UCC_Fee_Report_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            showToast("CSV exported");
+        };
+
+        window.refreshData = async () => {
+            await loadCourses();
+            await loadAllStudents();
+            showToast("Data refreshed");
+        };
+
+        // Search filter
+        document.getElementById('searchStudent').addEventListener('input', () => {
+            renderFeeTable(allStudentsData);
+        });
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Auth guard
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().role === 'admin') {
+                    await loadCourses();
+                    await loadAllStudents();
+                } else { await signOut(auth); window.location.href = "../auth/login.html"; }
+            } else { window.location.href = "../auth/login.html"; }
+        });
+
+        window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
+    </script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>UCC Handwara | Admin Nexus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Outfit', sans-serif; }
+        body { background: #0b1120; color: #ecf3f2; }
+        .glass-panel { background: rgba(15, 23, 42, 0.68); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.06); }
+        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%); backdrop-filter: blur(4px); border-right: 1px solid rgba(241,196,15,0.12); }
+        .modal-backdrop { animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-card { animation: slideUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #f1c40f; border-radius: 10px; }
+        .skeleton { background: linear-gradient(90deg, #1e293b 25%, #2d3a4e 50%, #1e293b 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .course-tag { background: rgba(241,196,15,0.15); border: 1px solid rgba(241,196,15,0.3); padding: 6px 14px; border-radius: 40px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; }
+        .remove-course { cursor: pointer; color: #ef4444; font-size: 12px; transition: 0.2s; }
+        .remove-course:hover { color: #ff6666; transform: scale(1.1); }
+        .active-link { background: rgba(241,196,15,0.1); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <div id="mobileSidebarOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+    
+    <aside id="mainSidebar" class="fixed lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
+        <div class="p-6 border-b border-white/5">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
+                    <i class="fas fa-crown text-slate-900 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-tight text-white">UCC <span class="text-[#f1c40f]">ADMIN</span></h1>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Control Core</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 p-5 space-y-2 mt-4">
+            <!-- Directory (current page) -->
+            <a href="#" id="btn-directory" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
+                <i class="fas fa-users text-lg w-6"></i> Directory
+            </a>
+            <!-- Link to separate Fee Management file -->
+            <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+                <i class="fas fa-rupee-sign w-6"></i> Fee Management
+            </a>
+            <button onclick="openAddModal()" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase group">
+                <i class="fas fa-user-plus text-emerald-400 w-6 group-hover:scale-110 transition"></i> Register
+            </button>
+            <a href="attendance.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+                <i class="fas fa-calendar-check w-6"></i> Attendance
+            </a>
+        </nav>
+
+        <div class="p-5 border-t border-white/10">
+            <button onclick="logout()" class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase">
+                <i class="fas fa-sign-out-alt w-6"></i> Exit Panel
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 w-full p-5 md:p-10 overflow-x-hidden">
+        
+        <!-- Header -->
+        <div class="glass-panel rounded-3xl p-6 md:p-8 mb-8 border border-white/5 flex flex-wrap items-center justify-between gap-6">
+            <div class="flex items-center gap-5">
+                <div class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg" id="adminInitial">?</div>
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight" id="adminName">Authenticating...</h2>
+                    <p class="text-slate-400 text-sm font-medium" id="adminEmail">Secure session verifying</p>
+                </div>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div class="bg-slate-800/70 rounded-2xl px-6 py-3 border border-[#f1c40f]/20">
+                    <div class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Students</div>
+                    <div class="text-3xl font-black text-[#f1c40f]" id="studentCount">0</div>
+                </div>
+                <button onclick="openAddModal()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-900 px-6 py-3.5 rounded-2xl font-black uppercase text-xs transition-all shadow-xl hover:scale-105 flex items-center gap-2">
+                    <i class="fas fa-plus"></i> Enroll
+                </button>
+                <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+
+        <!-- Directory Section (Student List) -->
+        <div class="relative w-full md:w-96 mb-6">
+            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"></i>
+            <input type="text" id="searchBar" placeholder="Search scholars..." class="w-full bg-slate-800/60 border border-slate-700 rounded-2xl py-3.5 pl-12 pr-5 text-white focus:border-[#f1c40f] transition outline-none">
+        </div>
+
+        <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto custom-scroll">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-900/80 text-[11px] font-black uppercase tracking-widest text-slate-400 border-b border-white/10">
+                        <tr>
+                            <th class="px-6 py-5">Scholar Identity</th>
+                            <th class="px-6 py-5">Login ID</th>
+                            <th class="px-6 py-5">Enrollment Date</th>
+                            <th class="px-6 py-5 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody" class="divide-y divide-white/5">
+                        <tr><td colspan="4" class="p-10"><div class="skeleton h-12 w-full rounded-xl"></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- ADD STUDENT MODAL (unchanged) -->
+    <div id="addModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
+        <div class="glass-panel w-full max-w-xl rounded-[3rem] p-8 md:p-12 shadow-2xl border border-white/20 modal-card">
+            <div class="flex justify-between items-start mb-8">
+                <div>
+                    <h3 class="text-3xl font-black text-white">Enroll Scholar</h3>
+                    <p class="text-slate-400 text-sm mt-1">Issue secure digital credentials</p>
+                </div>
+                <button onclick="closeAddModal()" class="text-slate-500 hover:text-white text-3xl"><i class="fas fa-times-circle"></i></button>
+            </div>
+            <form id="addStudentForm" class="space-y-6">
+                <div>
+                    <label class="text-[11px] font-black uppercase text-slate-500 ml-2">Full Name</label>
+                    <input type="text" id="addName" class="w-full mt-1 px-6 py-4 bg-slate-900 border border-slate-700 rounded-2xl text-white focus:border-[#f1c40f] outline-none transition" required>
+                </div>
+                <div>
+                    <label class="text-[11px] font-black uppercase text-slate-500 ml-2">Email Address</label>
+                    <input type="email" id="addEmail" class="w-full mt-1 px-6 py-4 bg-slate-900 border border-slate-700 rounded-2xl text-white focus:border-[#f1c40f] outline-none transition" required>
+                </div>
+                <div>
+                    <label class="text-[11px] font-black uppercase text-slate-500 ml-2">Secure Password</label>
+                    <input type="text" id="addPass" class="w-full mt-1 px-6 py-4 bg-slate-900 border border-slate-700 rounded-2xl text-white focus:border-[#f1c40f] outline-none transition" value="UCC@2026" required>
+                </div>
+                <div>
+                    <label class="text-[11px] font-black uppercase text-slate-500 ml-2">Total Fee (₹)</label>
+                    <input type="number" id="addFeeTotal" class="w-full mt-1 px-6 py-4 bg-slate-900 border border-slate-700 rounded-2xl text-white focus:border-[#f1c40f] outline-none transition" value="25000" required>
+                </div>
+                <button type="submit" id="createBtn" class="w-full py-5 bg-emerald-500 text-slate-900 font-black uppercase rounded-2xl hover:bg-white transition-all shadow-xl">
+                    Create Account & Enroll
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ASSIGN COURSES MODAL (unchanged) -->
+    <div id="courseModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
+        <div class="glass-panel w-full max-w-4xl rounded-[3rem] p-8 md:p-10 shadow-2xl border border-white/20 modal-card">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h3 class="text-3xl font-black text-white"><i class="fas fa-book-open mr-3 text-[#f1c40f]"></i> Assign Courses</h3>
+                    <p class="text-slate-400 text-sm mt-1" id="modalStudentName">Loading...</p>
+                </div>
+                <button onclick="closeCourseModal()" class="text-slate-500 hover:text-white text-3xl"><i class="fas fa-times-circle"></i></button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                <div>
+                    <h4 class="text-lg font-bold text-white mb-3 flex items-center gap-2"><i class="fas fa-check-circle text-emerald-400"></i> Currently Enrolled</h4>
+                    <div id="enrolledCoursesList" class="bg-slate-900/50 rounded-2xl p-4 min-h-[200px] max-h-[300px] overflow-y-auto custom-scroll"></div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold text-white mb-3 flex items-center gap-2"><i class="fas fa-plus-circle text-[#f1c40f]"></i> Available Courses</h4>
+                    <div id="availableCoursesList" class="bg-slate-900/50 rounded-2xl p-4 min-h-[200px] max-h-[300px] overflow-y-auto custom-scroll space-y-2"></div>
+                </div>
+            </div>
+            <div class="flex justify-end mt-8 pt-4 border-t border-white/10">
+                <button onclick="closeCourseModal()" class="px-8 py-3 bg-slate-700 text-white rounded-xl font-bold uppercase text-xs hover:bg-slate-600 transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, setDoc, deleteDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
+            authDomain: "trfasilyousf1.firebaseapp.com",
+            projectId: "trfasilyousf1",
+            storageBucket: "trfasilyousf1.firebasestorage.app",
+            messagingSenderId: "158147210589",
+            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const secondaryApp = initializeApp(firebaseConfig, "secondary");
+        const auth = getAuth(app);
+        const secAuth = getAuth(secondaryApp);
+        const db = getFirestore(app);
+
+        let studentsData = [];
+        let allCourses = [];
+
+        // Helper
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Admin Auth
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().role === 'admin') {
+                    const data = userDoc.data();
+                    document.getElementById('adminName').innerText = "Salam, " + (data.fullName || "Admin");
+                    document.getElementById('adminEmail').innerText = data.email;
+                    document.getElementById('adminInitial').innerText = (data.fullName || "A").charAt(0).toUpperCase();
+                    await loadStudents();
+                    await loadAllCourses();
+                } else { await signOut(auth); window.location.href = "../auth/login.html"; }
+            } else { window.location.href = "../auth/login.html"; }
+        });
+
+        // Load students for Directory
+        async function loadStudents() {
+            const tbody = document.getElementById('studentTableBody');
+            try {
+                const snap = await getDocs(collection(db, "users"));
+                studentsData = [];
+                snap.forEach(d => {
+                    if(d.data().role === 'student') studentsData.push({ id: d.id, ...d.data() });
+                });
+                renderTable(studentsData);
+                document.getElementById('studentCount').innerText = studentsData.length;
+            } catch (e) { console.error(e); }
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('studentTableBody');
+            tbody.innerHTML = data.map(s => `
+                <tr class="hover:bg-white/[0.03] transition-all">
+                    <td class="px-6 py-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-[#f1c40f]/10 text-[#f1c40f] flex items-center justify-center font-bold">${s.fullName.charAt(0).toUpperCase()}</div>
+                            <div>
+                                <div class="font-bold text-white">${s.fullName}</div>
+                                <div class="text-[10px] text-slate-500 font-mono uppercase tracking-tighter">UCC-${s.id.slice(-6)}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-5 text-slate-300 text-sm">${s.email}</td>
+                    <td class="px-6 py-5 text-slate-400 text-xs font-mono">${s.createdAt ? new Date(s.createdAt).toLocaleDateString() : '—'}</td>
+                    <td class="px-6 py-5 text-right space-x-2 whitespace-nowrap">
+                        <button onclick="openCourseModal('${s.id}', '${escapeHtml(s.fullName)}')" class="text-[#f1c40f] bg-[#f1c40f]/10 p-3 rounded-xl hover:bg-[#f1c40f] hover:text-slate-900 transition shadow-lg"><i class="fas fa-book-open"></i></button>
+                        <button onclick="deleteStudent('${s.id}', '${s.fullName}')" class="text-rose-500 bg-rose-500/10 p-3 rounded-xl hover:bg-rose-500 hover:text-white transition shadow-lg"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Load courses
+        async function loadAllCourses() {
+            try {
+                const coursesSnap = await getDocs(collection(db, "courses"));
+                allCourses = [];
+                coursesSnap.forEach(doc => { allCourses.push({ id: doc.id, ...doc.data() }); });
+                if (allCourses.length === 0) {
+                    allCourses = [
+                        { id: "course1", courseName: "English Language Proficiency", courseCode: "ELP101", credits: 4 },
+                        { id: "course2", courseName: "Academic Writing", courseCode: "AW102", credits: 3 },
+                        { id: "course3", courseName: "Public Speaking", courseCode: "PS103", credits: 3 },
+                        { id: "course4", courseName: "Critical Reading", courseCode: "CR104", credits: 3 }
+                    ];
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        // Course Modal
+        window.openCourseModal = async (studentId, studentName) => {
+            const studentDoc = await getDoc(doc(db, "users", studentId));
+            if (!studentDoc.exists()) return;
+            const studentData = studentDoc.data();
+            document.getElementById('modalStudentName').innerHTML = `<i class="fas fa-user-graduate mr-2"></i> ${studentName} (${studentData.email})`;
+            const enrolledIds = studentData.enrolledCourses || [];
+            const enrolledCourses = allCourses.filter(c => enrolledIds.includes(c.id));
+            const enrolledContainer = document.getElementById('enrolledCoursesList');
+            if (enrolledCourses.length === 0) enrolledContainer.innerHTML = '<div class="text-slate-400 text-sm italic">No courses enrolled yet.</div>';
+            else {
+                enrolledContainer.innerHTML = enrolledCourses.map(c => `
+                    <div class="course-tag mb-2 justify-between w-full">
+                        <span><strong>${c.courseName}</strong> (${c.courseCode || c.id})</span>
+                        <i class="fas fa-trash-alt remove-course" onclick="removeCourseFromStudent('${studentId}', '${c.id}')"></i>
+                    </div>
+                `).join('');
+            }
+            const availableCourses = allCourses.filter(c => !enrolledIds.includes(c.id));
+            const availableContainer = document.getElementById('availableCoursesList');
+            if (availableCourses.length === 0) availableContainer.innerHTML = '<div class="text-slate-400 text-sm italic">All courses already enrolled.</div>';
+            else {
+                availableContainer.innerHTML = availableCourses.map(c => `
+                    <div class="bg-slate-800/50 p-3 rounded-xl flex justify-between items-center hover:bg-slate-700/50 transition">
+                        <div><span class="font-bold text-white">${c.courseName}</span><span class="text-[10px] text-slate-400 ml-2">${c.courseCode || c.id}</span></div>
+                        <button onclick="addCourseToStudent('${studentId}', '${c.id}')" class="bg-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-bold hover:bg-emerald-500 hover:text-white transition">+ Assign</button>
+                    </div>
+                `).join('');
+            }
+            document.getElementById('courseModal').classList.remove('hidden');
+        };
+        window.closeCourseModal = () => { document.getElementById('courseModal').classList.add('hidden'); };
+        window.addCourseToStudent = async (studentId, courseId) => {
+            try {
+                const studentRef = doc(db, "users", studentId);
+                await updateDoc(studentRef, { enrolledCourses: arrayUnion(courseId) });
+                const studentDoc = await getDoc(studentRef);
+                if (studentDoc.exists()) await openCourseModal(studentId, studentDoc.data().fullName);
+                await loadStudents();
+            } catch (err) { alert("Error assigning course: " + err.message); }
+        };
+        window.removeCourseFromStudent = async (studentId, courseId) => {
+            if (!confirm("Remove this course?")) return;
+            try {
+                const studentRef = doc(db, "users", studentId);
+                await updateDoc(studentRef, { enrolledCourses: arrayRemove(courseId) });
+                const studentDoc = await getDoc(studentRef);
+                if (studentDoc.exists()) await openCourseModal(studentId, studentDoc.data().fullName);
+                await loadStudents();
+            } catch (err) { alert("Error removing course: " + err.message); }
+        };
+
+        // Add Student (with feeTotal)
+        document.getElementById('addStudentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('createBtn');
+            const name = document.getElementById('addName').value;
+            const email = document.getElementById('addEmail').value;
+            const pass = document.getElementById('addPass').value;
+            const feeTotal = parseFloat(document.getElementById('addFeeTotal').value) || 0;
+            btn.disabled = true; btn.innerText = "Provisioning...";
+            try {
+                const cred = await createUserWithEmailAndPassword(secAuth, email, pass);
+                await setDoc(doc(db, "users", cred.user.uid), {
+                    fullName: name, email, role: 'student', createdAt: new Date().toISOString(),
+                    enrolledCourses: [], feeTotal: feeTotal
+                });
+                await signOut(secAuth);
+                alert(`Student Registered: ${name}`);
+                closeAddModal();
+                loadStudents();
+                document.getElementById('addStudentForm').reset();
+            } catch (err) { alert("Failed: " + err.message); }
+            finally { btn.disabled = false; btn.innerText = "Create Account & Enroll"; }
+        });
+
+        // Delete Student
+        window.deleteStudent = async (id, name) => {
+            if(confirm(`Purge student: ${name}?`)) {
+                await deleteDoc(doc(db, "users", id));
+                loadStudents();
+            }
+        };
+
+        // Search
+        document.getElementById('searchBar').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = studentsData.filter(s => s.fullName.toLowerCase().includes(term) || s.email.toLowerCase().includes(term));
+            renderTable(filtered);
+        });
+
+        // Modals
+        window.openAddModal = () => document.getElementById('addModal').classList.remove('hidden');
+        window.closeAddModal = () => document.getElementById('addModal').classList.add('hidden');
+        window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
+
+        // Mobile Sidebar
+        document.getElementById('mobileMenuButton').onclick = () => {
+            document.getElementById('mainSidebar').classList.remove('-translate-x-full');
+            document.getElementById('mobileSidebarOverlay').classList.remove('hidden');
+        };
+        document.getElementById('mobileSidebarOverlay').onclick = () => {
+            document.getElementById('mainSidebar').classList.add('-translate-x-full');
+            document.getElementById('mobileSidebarOverlay').classList.add('hidden');
+        };
+    </script>
+</body>
+</html>
