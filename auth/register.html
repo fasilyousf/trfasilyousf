@@ -3,19 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | Tr Fasil Yousf</title>
+    <title>Register | UCC Handwara Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Outfit', sans-serif; }
-        .glass-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
+        .glass-container { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
         .bg-animate {
-            background: linear-gradient(-45deg, #2c3e50, #27ae60, #2c3e50, #f1c40f);
+            background: linear-gradient(-45deg, #1a2233, #2c3e50, #1a2233, #f1c40f);
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
         }
@@ -24,14 +20,8 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        .input-focus:focus {
-            border-color: #27ae60;
-            box-shadow: 0 0 0 4px rgba(39, 174, 96, 0.1);
-        }
-        .loader {
-            border-top-color: #f1c40f;
-            animation: spinner 1.5s linear infinite;
-        }
+        .input-focus:focus { border-color: #f1c40f; box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.1); }
+        .loader { border-top-color: #f1c40f; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -46,86 +36,55 @@
             <div class="inline-flex w-16 h-16 bg-[#f1c40f] rounded-2xl items-center justify-center shadow-xl mb-4 transform rotate-6">
                 <i class="fas fa-user-plus text-[#2c3e50] text-3xl"></i>
             </div>
-            <h1 class="text-3xl font-extrabold text-white tracking-tight">Create <span class="text-[#f1c40f]">Account</span></h1>
-            <p class="text-white/60 text-sm mt-2">Join United Community College Handwara today</p>
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">Scholar <span class="text-[#f1c40f]">Registration</span></h1>
+            <p class="text-white/60 text-sm mt-2">United Community College Handwara</p>
         </div>
 
         <div class="glass-container rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
             <form id="registerForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 <div class="md:col-span-2">
-                    <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">Full Name</label>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Full Legal Name</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400"><i class="fas fa-user"></i></span>
-                        <input type="text" id="regName" placeholder="Fasil Yousf" required
-                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
+                        <input type="text" id="regName" placeholder="Student Name" required class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">Email Address</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400"><i class="fas fa-envelope"></i></span>
-                        <input type="email" id="regEmail" placeholder="mail@example.com" required
-                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
-                    </div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Email Address</label>
+                    <input type="email" id="regEmail" placeholder="mail@example.com" required class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">Phone Number</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400"><i class="fas fa-phone"></i></span>
-                        <input type="tel" id="regPhone" placeholder="7006XXXXXX" required
-                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
-                    </div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Phone Number</label>
+                    <input type="tel" id="regPhone" placeholder="7006XXXXXX" required class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">Institute Admission Code</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400"><i class="fas fa-university"></i></span>
-                        <input type="text" id="regInstCode" placeholder="Enter Admission Code" required
-                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700 font-bold uppercase">
-                    </div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Admission Code</label>
+                    <input type="text" id="regInstCode" placeholder="Enter UCC2026" required class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700 font-bold uppercase tracking-widest text-center">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">Create Password</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400"><i class="fas fa-lock"></i></span>
-                        <input type="password" id="regPass" placeholder="••••••••" required
-                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
-                    </div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Create Password</label>
+                    <input type="password" id="regPass" placeholder="••••••••" required class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">Confirm Password</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400"><i class="fas fa-check-double"></i></span>
-                        <input type="password" id="regConfirmPass" placeholder="••••••••" required
-                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
-                    </div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Confirm</label>
+                    <input type="password" id="regConfirmPass" placeholder="••••••••" required class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
                 </div>
 
-                <div class="md:col-span-2 flex items-start gap-3 ml-1">
-                    <input type="checkbox" id="terms" required class="mt-1 w-4 h-4 rounded border-slate-300 text-[#27ae60] focus:ring-[#27ae60]">
-                    <label for="terms" class="text-xs font-medium text-slate-500 leading-relaxed">
-                        I agree to the <a href="#" class="text-[#3498db] font-bold">Privacy Policy</a> and understand that my data will be used for educational purposes at UCC.
-                    </label>
-                </div>
-
-                <button type="submit" id="submitBtn"
-                    class="md:col-span-2 w-full py-4 bg-[#2c3e50] text-white font-bold rounded-2xl shadow-xl hover:bg-[#1a252f] transform active:scale-95 transition-all flex items-center justify-center gap-3 uppercase tracking-[0.2em] text-sm">
-                    <span id="btnText">Create My Account</span>
-                    <i class="fas fa-arrow-right" id="btnIcon"></i>
-                    <div id="btnLoader" class="loader hidden ease-linear rounded-full border-2 border-t-2 border-gray-200 h-5 w-5"></div>
+                <button type="submit" id="submitBtn" class="md:col-span-2 w-full py-4 bg-[#1a2233] text-white font-black rounded-2xl shadow-xl hover:bg-black transition-all flex items-center justify-center gap-3 uppercase tracking-[0.2em] text-xs">
+                    <span id="btnText">Initialize Account</span>
+                    <div id="btnLoader" class="loader hidden rounded-full border-2 border-t-2 border-white/20 h-4 w-4"></div>
                 </button>
             </form>
 
-            <div class="mt-10 text-center border-t border-slate-100 pt-8">
-                <p class="text-slate-500 font-medium text-sm">
-                    Already a member? 
-                    <a href="login.html" class="text-[#3498db] font-extrabold hover:underline ml-1 uppercase">Login here</a>
+            <div class="mt-8 text-center pt-6 border-t border-slate-100">
+                <p class="text-slate-400 font-bold text-[10px] uppercase tracking-widest">
+                    Already a scholar? <a href="login.html" class="text-[#f1c40f] hover:underline ml-1">Login</a>
                 </p>
             </div>
         </div>
@@ -133,7 +92,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -142,80 +101,59 @@
             projectId: "trfasilyousf1",
             storageBucket: "trfasilyousf1.firebasestorage.app",
             messagingSenderId: "158147210589",
-            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4",
-            measurementId: "G-JJ5GE7HS02"
+            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const form = document.getElementById('registerForm');
-        const btn = document.getElementById('submitBtn');
-        const btnText = document.getElementById('btnText');
-        const btnIcon = document.getElementById('btnIcon');
-        const btnLoader = document.getElementById('btnLoader');
-
-        form.addEventListener('submit', async (e) => {
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const loader = document.getElementById('btnLoader');
+            const txt = document.getElementById('btnText');
 
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const phone = document.getElementById('regPhone').value;
             const instCode = document.getElementById('regInstCode').value.toUpperCase();
-            const password = document.getElementById('regPass').value;
-            const confirmPass = document.getElementById('regConfirmPass').value;
-
-            // 1. Validate Institute Code
-            // IMPORTANT: Replace the code below with your preferred secret code
-            const SECRET_INSTITUTE_CODE = "UCC2026"; 
-            if (instCode !== SECRET_INSTITUTE_CODE) {
-                alert("Invalid Institute Code! Please contact Tr Fasil Yousf for the valid code.");
+            if (instCode !== "UCC2026") {
+                alert("Invalid Admission Code!");
                 return;
             }
 
-            // 2. Validate Password match
-            if (password !== confirmPass) {
+            if (document.getElementById('regPass').value !== document.getElementById('regConfirmPass').value) {
                 alert("Passwords do not match!");
                 return;
             }
 
-            // Start Loading
             btn.disabled = true;
-            btnText.innerText = "Verifying...";
-            btnIcon.classList.add('hidden');
-            btnLoader.classList.remove('hidden');
+            txt.innerText = "Processing...";
+            loader.classList.remove('hidden');
 
             try {
-                // 3. Create Auth Account
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // 4. Save to Firestore under Admin's reference
-                // NOTE: Replace 'ADMIN_USER_ID' with your actual Admin UID from Firebase Console
-                await setDoc(doc(db, "users", user.uid), {
-                    uid: user.uid,
-                    fullName: name,
+                const email = document.getElementById('regEmail').value;
+                const pass = document.getElementById('regPass').value;
+                
+                const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                
+                await setDoc(doc(db, "users", cred.user.uid), {
+                    fullName: document.getElementById('regName').value,
                     email: email,
-                    phoneNumber: phone,
+                    phoneNumber: document.getElementById('regPhone').value,
                     role: "student",
-                    instituteCode: instCode,
-                    adminId: "ADMIN_USER_ID", // IMPORTANT: Put your Admin UID here
-                    status: "approved",
-                    createdAt: new Date().toISOString()
+                    createdAt: new Date().toISOString(),
+                    status: "active"
                 });
 
-                alert("Account Created! You can now login.");
+                alert("Registration Successful! Please Login.");
                 window.location.href = "login.html";
 
-            } catch (error) {
-                console.error("Registration Error:", error);
-                alert("Error: " + error.message);
+            } catch (err) {
+                console.error(err);
+                alert("Registration Failed: " + err.message);
             } finally {
                 btn.disabled = false;
-                btnText.innerText = "Create My Account";
-                btnIcon.classList.remove('hidden');
-                btnLoader.classList.add('hidden');
+                txt.innerText = "Initialize Account";
+                loader.classList.add('hidden');
             }
         });
     </script>
