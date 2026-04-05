@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Admission | UCC Handwara</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Outfit', sans-serif; background: #1a2233; }
+        .glass-form { background: rgba(255, 255, 255, 0.98); border-radius: 2.5rem; }
+        .input-style { width: 100%; padding: 1rem 1.25rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 1rem; outline: none; transition: 0.3s; }
+        .input-style:focus { border-color: #f1c40f; box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.1); }
+    </style>
+
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("BZ2E5BMbDJgulIhEo"); // Your Public Key
+        })();
+    </script>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 py-12">
+
+    <div class="w-full max-w-2xl">
+        <div class="text-center mb-10">
+            <a href="courses.html" class="inline-flex items-center gap-2 text-white/60 hover:text-white mb-6 transition">
+                <i class="fas fa-arrow-left"></i> Back to Courses
+            </a>
+            <h1 class="text-4xl font-black text-white uppercase tracking-tighter">Admission <span class="text-[#f1c40f]">Form</span></h1>
+            <p class="text-white/50 text-sm mt-2 font-bold tracking-widest uppercase">United Community College Handwara</p>
+        </div>
+
+        <div class="glass-form p-8 md:p-12 shadow-2xl">
+            <form id="admissionForm" class="space-y-6">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Full Name</label>
+                        <input type="text" id="stuName" required placeholder="Full Name" class="input-style">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">WhatsApp Number</label>
+                        <input type="tel" id="stuPhone" required placeholder="7006XXXXXX" class="input-style">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Email ID</label>
+                    <input type="email" id="stuEmail" required placeholder="example@mail.com" class="input-style">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Course Interested In</label>
+                        <select id="stuCourse" required class="input-style font-bold text-slate-700">
+                            <option value="">Select Course</option>
+                            <option value="Computer Course (6 Months)">Computer Course (6 Months)</option>
+                            <option value="Computer Course (3 Months)">Computer Course (3 Months)</option>
+                            <option value="Tailoring Course">Tailoring Course</option>
+                            <option value="Mehndi Design">Mehndi Design</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Qualification</label>
+                        <select id="stuQual" required class="input-style font-bold text-slate-700">
+                            <option value="Below 10th">Below 10th</option>
+                            <option value="10th Pass">10th Pass</option>
+                            <option value="12th Pass">12th Pass</option>
+                            <option value="Graduate">Graduate</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="w-full py-5 bg-[#1a2233] text-white font-black rounded-2xl shadow-xl hover:bg-black transition-all flex items-center justify-center gap-3 uppercase tracking-[0.2em] text-xs">
+                    <span id="btnText">Submit Application</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
+            authDomain: "trfasilyousf1.firebaseapp.com",
+            projectId: "trfasilyousf1",
+            storageBucket: "trfasilyousf1.firebasestorage.app",
+            messagingSenderId: "158147210589",
+            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById('admissionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const txt = document.getElementById('btnText');
+
+            const formData = {
+                name: document.getElementById('stuName').value,
+                phone: document.getElementById('stuPhone').value,
+                email: document.getElementById('stuEmail').value,
+                course: document.getElementById('stuCourse').value,
+                qualification: document.getElementById('stuQual').value,
+                appliedAt: new Date().toLocaleString()
+            };
+
+            btn.disabled = true;
+            txt.innerText = "SENDING DETAILS...";
+
+            try {
+                // 1. Save to Firebase so you have a digital record
+                await addDoc(collection(db, "public_applications"), formData);
+
+                // 2. Send Email to You via EmailJS
+                // Change "service_qlu55cj" and "YOUR_ADMIN_TEMPLATE_ID"
+                await emailjs.send("service_qlu55cj", "template_eit6f3r", {
+                    from_name: formData.name,
+                    student_email: formData.email,
+                    phone: formData.phone,
+                    course: formData.course,
+                    qualification: formData.qualification
+                });
+
+                alert("Application Received! Tr Fasil Yousf will contact you shortly.");
+                window.location.href = "courses.html";
+
+            } catch (err) {
+                console.error(err);
+                alert("Submission failed. Please call +91 7006960788");
+            } finally {
+                btn.disabled = false;
+                txt.innerText = "Submit Application";
+            }
+        });
+    </script>
+</body>
+</html>
