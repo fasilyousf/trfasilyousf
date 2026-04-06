@@ -40,7 +40,7 @@
     <!-- Mobile Sidebar Overlay -->
     <div id="mobileSidebarOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden"></div>
     
-    <!-- Sidebar - Left aligned -->
+    <!-- Sidebar - Left aligned, consistent with dashboard -->
     <aside id="mainSidebar" class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
         <div class="p-6 border-b border-white/5">
             <div class="flex items-center gap-3">
@@ -55,10 +55,16 @@
         </div>
 
         <nav class="flex-1 p-5 space-y-2 mt-4">
-            <a href="dashboard.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+            <a href="index.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-users text-lg w-6"></i> Directory
             </a>
-            <a href="#" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase bg-[#f1c40f]/10 text-[#f1c40f] border-l-4 border-[#f1c40f]">
+            <a href="profile.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+                <i class="fas fa-user-circle w-6"></i> My Profile
+            </a>
+            <a href="edairy.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+                <i class="fas fa-book-open w-6"></i> eDairy
+            </a>
+            <a href="fees.html" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
                 <i class="fas fa-rupee-sign w-6"></i> Fee Management
             </a>
             <a href="attendance.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
@@ -77,11 +83,15 @@
         <!-- Header with Profile on Right & Hamburger Left -->
         <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8 border border-white/5">
             <div class="flex flex-wrap items-center justify-between gap-4">
-                <!-- Left side: mobile menu button -->
                 <div class="flex items-center gap-4">
                     <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-black text-white tracking-tight">
+                            <i class="fas fa-chart-line text-[#f1c40f] mr-2"></i> Fee Management
+                        </h2>
+                        <p class="text-slate-400 text-xs md:text-sm font-medium">Track payments, manage dues, and financial overview</p>
+                    </div>
                 </div>
-                <!-- Right side: Admin Profile -->
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg" id="adminInitial">?</div>
                     <div>
@@ -136,6 +146,7 @@
                 <button onclick="exportFullCSV()" class="bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-slate-900 px-5 py-2 rounded-xl font-black text-xs uppercase border border-emerald-500/20 transition-all flex items-center gap-2">
                     <i class="fas fa-file-excel"></i> Export
                 </button>
+                <button onclick="refreshData()" class="bg-[#f1c40f]/10 hover:bg-[#f1c40f]/20 text-[#f1c40f] px-4 py-2 rounded-xl transition"><i class="fas fa-sync-alt"></i></button>
             </div>
         </div>
 
@@ -162,7 +173,7 @@
         </div>
     </main>
 
-    <!-- Modals (Payment, Courses, History, Override) - same as your original fee management code -->
+    <!-- Modals -->
     <div id="paymentModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 shadow-2xl border border-white/20 modal-card">
             <div class="flex justify-between items-start mb-5">
@@ -222,7 +233,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, getDocs, collection, addDoc, query, orderBy, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, getDocs, collection, addDoc, query, orderBy, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
@@ -243,7 +254,7 @@
         function showToast(msg, isError = false) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `bg-slate-800 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-sm font-bold border border-white/10`;
+            toast.className = `bg-slate-800 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-sm font-bold border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-300`;
             toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle text-rose-500' : 'fa-check-circle text-[#f1c40f]'}"></i> ${msg}`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
@@ -259,6 +270,7 @@
             if (allCoursesMap.size === 0) {
                 allCoursesMap.set("default1", { courseName: "English Proficiency", courseFee: 12000 });
                 allCoursesMap.set("default2", { courseName: "Academic Writing", courseFee: 8000 });
+                allCoursesMap.set("default3", { courseName: "Public Speaking", courseFee: 6000 });
             }
         }
 
@@ -382,7 +394,7 @@
             btn.disabled = true; btn.innerText = "Processing...";
             try {
                 await addDoc(collection(db, "users", studentId, "payments"), { amount, date: document.getElementById('paymentDate').value, method: document.getElementById('paymentMethod').value, notes: document.getElementById('paymentNotes').value, timestamp: new Date().toISOString() });
-                showToast("Payment recorded");
+                showToast("Payment recorded successfully");
                 closePaymentModal();
                 await refreshData();
             } catch (err) { showToast(err.message, true); }
@@ -396,11 +408,11 @@
             container.innerHTML = '<div class="text-center text-slate-400">Loading...</div>';
             try {
                 const snap = await getDocs(query(collection(db, "users", studentId, "payments"), orderBy("date", "desc")));
-                if (snap.empty) container.innerHTML = '<div class="text-center text-slate-400">No payments</div>';
+                if (snap.empty) container.innerHTML = '<div class="text-center text-slate-400">No payments recorded</div>';
                 else {
                     container.innerHTML = snap.docs.map(d => { const p = d.data(); return `<div class="bg-slate-800/50 rounded-xl p-3 flex justify-between items-center"><div><div class="font-bold text-white">₹${p.amount.toLocaleString()}</div><div class="text-[10px] text-slate-400">${p.method} • ${new Date(p.date).toLocaleDateString()}</div>${p.notes ? `<div class="text-[10px] text-slate-500">${escapeHtml(p.notes)}</div>` : ''}</div><i class="fas fa-receipt text-slate-500"></i></div>`; }).join('');
                 }
-            } catch (err) { container.innerHTML = '<div class="text-center text-rose-500">Error loading</div>'; }
+            } catch (err) { container.innerHTML = '<div class="text-center text-rose-500">Error loading history</div>'; }
         };
         window.closeHistoryModal = () => document.getElementById('historyModal').classList.add('hidden');
 
@@ -419,7 +431,7 @@
             if (isNaN(newFee) || newFee < 0) { showToast("Invalid fee amount", true); return; }
             const reason = document.getElementById('overrideReason').value;
             try {
-                await setDoc(doc(db, "users", studentId), { customTotalFee: newFee, feeOverrideReason: reason, feeOverrideDate: new Date().toISOString() }, { merge: true });
+                await updateDoc(doc(db, "users", studentId), { customTotalFee: newFee, feeOverrideReason: reason, feeOverrideDate: new Date().toISOString() });
                 showToast(`Fee updated to ₹${newFee.toLocaleString()}`);
                 closeFeeOverrideModal();
                 await refreshData();
@@ -449,6 +461,7 @@
         window.refreshData = async () => { await loadCourses(); await loadStudents(); showToast("Data refreshed"); };
         document.getElementById('searchStudent').addEventListener('input', applyFilterAndRender);
         document.getElementById('statusFilter').addEventListener('change', applyFilterAndRender);
+        
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
 
         onAuthStateChanged(auth, async (user) => {
@@ -459,11 +472,14 @@
                     document.getElementById('adminName').innerText = "Salam, " + (data.fullName || "Admin");
                     document.getElementById('adminEmail').innerText = data.email;
                     document.getElementById('adminInitial').innerText = (data.fullName || "A").charAt(0).toUpperCase();
-                    await loadCourses(); await loadStudents();
+                    await loadCourses(); 
+                    await loadStudents();
                 } else { await signOut(auth); window.location.href = "../auth/login.html"; }
             } else { window.location.href = "../auth/login.html"; }
         });
+        
         window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
+        
         document.getElementById('mobileMenuButton').onclick = () => {
             document.getElementById('mainSidebar').classList.remove('-translate-x-full');
             document.getElementById('mobileSidebarOverlay').classList.remove('hidden');

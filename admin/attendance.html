@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>UCC Admin | Attendance Intelligence</title>
+    <title>UCC Admin Nexus | Attendance Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -30,12 +30,16 @@
         @media (max-width: 640px) {
             .student-card { padding: 1rem; }
         }
+        .skeleton { background: linear-gradient(90deg, #1e293b 25%, #2d3a4e 50%, #1e293b 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     </style>
 </head>
 <body class="flex min-h-screen">
 
+    <!-- Mobile Sidebar Overlay -->
     <div id="mobileSidebarOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden"></div>
     
+    <!-- Sidebar - Left aligned, consistent with dashboard -->
     <aside id="mainSidebar" class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
         <div class="p-6 border-b border-white/5">
             <div class="flex items-center gap-3">
@@ -53,10 +57,16 @@
             <a href="dashboard.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-users text-lg w-6"></i> Directory
             </a>
+            <a href="profile.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+                <i class="fas fa-user-circle w-6"></i> My Profile
+            </a>
+            <a href="edairy.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+                <i class="fas fa-book-open w-6"></i> eDairy
+            </a>
             <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-rupee-sign w-6"></i> Fee Management
             </a>
-            <a href="#" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
+            <a href="attendance.html" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
                 <i class="fas fa-calendar-check w-6"></i> Attendance
             </a>
         </nav>
@@ -69,11 +79,17 @@
     </aside>
 
     <main class="flex-1 w-full p-4 md:p-8 lg:p-10 overflow-x-hidden">
-        <!-- Header with Profile on Right, Hamburger Left -->
+        <!-- Header with Profile on Right & Hamburger Left -->
         <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8 border border-white/5">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-black text-white tracking-tight">
+                            <i class="fas fa-clipboard-list text-[#f1c40f] mr-2"></i> Attendance Intelligence
+                        </h2>
+                        <p class="text-slate-400 text-xs md:text-sm font-medium">Track daily attendance, mark holidays, and generate reports</p>
+                    </div>
                 </div>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg" id="adminInitial">?</div>
@@ -88,8 +104,7 @@
         <!-- Attendance Controls -->
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
             <div>
-                <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">Attendance Intelligence</h2>
-                <div class="flex gap-3 mt-4">
+                <div class="flex gap-3 mt-2">
                     <button id="exportDailyBtn" class="bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-slate-900 px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest border border-emerald-500/20 transition-all">
                         <i class="fas fa-file-export mr-2"></i> Daily CSV
                     </button>
@@ -141,7 +156,10 @@
 
         <!-- Search & Bulk Actions -->
         <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 bg-slate-900/50 p-4 rounded-3xl border border-white/5">
-            <input type="text" id="searchStudentInput" placeholder="Quick search scholar..." class="w-full md:w-96 bg-slate-800 border border-slate-700 rounded-2xl py-3.5 px-6 text-white focus:border-[#f1c40f] outline-none transition text-sm">
+            <div class="relative w-full md:w-96">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+                <input type="text" id="searchStudentInput" placeholder="Quick search scholar by name or email..." class="w-full bg-slate-800 border border-slate-700 rounded-2xl py-3.5 pl-10 pr-4 text-white focus:border-[#f1c40f] outline-none transition text-sm">
+            </div>
             <div class="flex gap-3 w-full md:w-auto">
                 <button id="markAllPresentBtn" class="flex-1 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-white px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase transition-all">Mark All Present</button>
                 <button id="saveAllBtn" class="flex-1 bg-[#f1c40f] text-slate-900 px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase shadow-xl hover:bg-white transition-all">Sync to Cloud</button>
@@ -157,7 +175,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, getDoc, setDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, setDoc, query, where, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
@@ -181,10 +199,11 @@
 
         function formatToDMY(isoDate) { const [y,m,d] = isoDate.split('-'); return `${d}/${m}/${y}`; }
         function getDayName(dateStr) { const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; return days[new Date(dateStr).getDay()]; }
+        
         function showToast(msg, isError = false) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `bg-slate-800 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-sm font-bold border border-white/10`;
+            toast.className = `bg-slate-800 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-sm font-bold border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-300`;
             toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle text-rose-500' : 'fa-check-circle text-[#f1c40f]'}"></i> ${msg}`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
@@ -198,15 +217,16 @@
             const warningMsgSpan = document.getElementById('holidayMsg');
             const reasonBadge = document.getElementById('holidayReasonBadge');
             const disabled = (isSunday || isHoliday);
+            
             if (disabled) {
-                container.classList.add('disabled-attendance');
+                container?.classList.add('disabled-attendance');
                 markAllBtn.classList.add('btn-disabled');
                 saveBtn.classList.add('btn-disabled');
                 warningDiv.classList.remove('hidden');
                 if (isSunday) warningMsgSpan.innerHTML = `<i class="fas fa-calendar-week mr-1"></i> SUNDAY (Weekly Off) – Attendance disabled, marked as OFF/Holiday`;
                 else if (isHoliday) warningMsgSpan.innerHTML = `<i class="fas fa-gift mr-1"></i> HOLIDAY: ${holidayReason || 'Institute Closed'} – Attendance disabled, marked as OFF/Holiday`;
             } else {
-                container.classList.remove('disabled-attendance');
+                container?.classList.remove('disabled-attendance');
                 markAllBtn.classList.remove('btn-disabled');
                 saveBtn.classList.remove('btn-disabled');
                 warningDiv.classList.add('hidden');
@@ -218,11 +238,18 @@
             try {
                 const holidayRef = doc(db, "holidays", selectedDate);
                 const snap = await getDoc(holidayRef);
-                if (snap.exists() && snap.data().isHoliday === true) { isHoliday = true; holidayReason = snap.data().reason || "Institute Off"; }
-                else { isHoliday = false; holidayReason = ""; }
+                if (snap.exists() && snap.data().isHoliday === true) { 
+                    isHoliday = true; 
+                    holidayReason = snap.data().reason || "Institute Off"; 
+                } else { 
+                    isHoliday = false; 
+                    holidayReason = ""; 
+                }
                 const btnSpan = document.getElementById('holidayBtnText');
-                if (isHoliday) btnSpan.innerText = "Remove Holiday";
-                else btnSpan.innerText = "Set as Holiday";
+                if (btnSpan) {
+                    if (isHoliday) btnSpan.innerText = "Remove Holiday";
+                    else btnSpan.innerText = "Set as Holiday";
+                }
                 updateAttendanceBlocker();
             } catch (err) { console.error(err); isHoliday = false; }
         }
@@ -231,7 +258,9 @@
             try {
                 const snap = await getDocs(collection(db, "users"));
                 allStudents = [];
-                snap.forEach(d => { if(d.data().role === 'student') allStudents.push({ uid: d.id, ...d.data() }); });
+                snap.forEach(d => { 
+                    if(d.data().role === 'student') allStudents.push({ uid: d.id, ...d.data() }); 
+                });
                 document.getElementById('totalCount').innerText = allStudents.length;
                 await loadAttendance();
                 await loadHolidayStatus();
@@ -260,7 +289,10 @@
         }
 
         function renderUI() {
-            if (!allStudents.length) { document.getElementById('studentsGrid').innerHTML = `<div class="col-span-full text-center py-20 text-slate-400">No students found</div>`; return; }
+            if (!allStudents.length) { 
+                document.getElementById('studentsGrid').innerHTML = `<div class="col-span-full text-center py-20 text-slate-400"><i class="fas fa-users-slash text-4xl mb-3 opacity-30"></i><p>No students enrolled yet</p></div>`; 
+                return; 
+            }
             const container = document.getElementById('studentsGrid');
             document.getElementById('displayDate').innerText = formatToDMY(selectedDate);
             const day = getDayName(selectedDate);
@@ -269,42 +301,123 @@
             updateAttendanceBlocker(); 
             let pCount = 0, aCount = 0;
             const search = document.getElementById('searchStudentInput').value.toLowerCase();
-            const filtered = allStudents.filter(s => s.fullName.toLowerCase().includes(search));
+            const filtered = allStudents.filter(s => s.fullName?.toLowerCase().includes(search) || s.email?.toLowerCase().includes(search));
             const disabled = (isSunday || isHoliday);
             const effectiveStatus = (disabled) ? "off" : null;
+            
             container.innerHTML = filtered.map(s => {
                 let status = effectiveStatus ? effectiveStatus : (currentAttendance[s.uid] === 'present' ? 'present' : 'absent');
                 let displayText = "", dotClass = "";
                 if (status === 'present') { displayText = "Present"; dotClass = "dot-present"; if (!disabled) pCount++; }
                 else if (status === 'absent') { displayText = "Absent"; dotClass = "dot-absent"; if (!disabled) aCount++; }
                 else { displayText = "OFF / Holiday"; dotClass = "dot-off"; }
-                return `<div class="student-card p-5 md:p-6"><div class="flex justify-between items-start mb-5"><div class="flex items-center gap-3 md:gap-4"><div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-slate-800 flex items-center justify-center text-[#f1c40f] font-black border border-white/5 text-sm md:text-base">${s.fullName.charAt(0)}</div><div><h4 class="font-bold text-white text-sm md:text-base">${s.fullName}</h4><p class="text-[9px] text-slate-500 font-mono">${s.email}</p></div></div><span class="text-[8px] font-black uppercase ${status === 'present' ? 'text-emerald-500' : (status === 'absent' ? 'text-rose-500' : 'text-amber-400')}"><span class="status-dot ${dotClass}"></span>${displayText}</span></div><div class="grid grid-cols-2 gap-2"><button onclick="window.markSingle('${s.uid}', 'present')" ${disabled ? 'disabled' : ''} class="py-2.5 rounded-xl ${status === 'present' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase transition-all ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-emerald-600 hover:text-white'}">Present</button><button onclick="window.markSingle('${s.uid}', 'absent')" ${disabled ? 'disabled' : ''} class="py-2.5 rounded-xl ${status === 'absent' ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase transition-all ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-rose-600 hover:text-white'}">Absent</button></div></div>`;
+                return `
+                    <div class="student-card p-5 md:p-6">
+                        <div class="flex justify-between items-start mb-5">
+                            <div class="flex items-center gap-3 md:gap-4">
+                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-slate-800 flex items-center justify-center text-[#f1c40f] font-black border border-white/5 text-sm md:text-base">${s.fullName?.charAt(0) || 'S'}</div>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm md:text-base">${escapeHtml(s.fullName || 'Unknown')}</h4>
+                                    <p class="text-[9px] text-slate-500 font-mono">${escapeHtml(s.email || '')}</p>
+                                </div>
+                            </div>
+                            <span class="text-[8px] font-black uppercase ${status === 'present' ? 'text-emerald-500' : (status === 'absent' ? 'text-rose-500' : 'text-amber-400')}">
+                                <span class="status-dot ${dotClass}"></span>${displayText}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="window.markSingle('${s.uid}', 'present')" ${disabled ? 'disabled' : ''} 
+                                class="py-2.5 rounded-xl ${status === 'present' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase transition-all ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-emerald-600 hover:text-white'}">
+                                <i class="fas fa-check-circle mr-1 text-[8px]"></i> Present
+                            </button>
+                            <button onclick="window.markSingle('${s.uid}', 'absent')" ${disabled ? 'disabled' : ''} 
+                                class="py-2.5 rounded-xl ${status === 'absent' ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase transition-all ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-rose-600 hover:text-white'}">
+                                <i class="fas fa-times-circle mr-1 text-[8px]"></i> Absent
+                            </button>
+                        </div>
+                    </div>
+                `;
             }).join('');
-            if (disabled) { document.getElementById('presentCount').innerText = "0"; document.getElementById('absentCount').innerText = "0"; document.getElementById('attPercent').innerText = "0%"; }
-            else { document.getElementById('presentCount').innerText = pCount; document.getElementById('absentCount').innerText = aCount; const total = allStudents.length; document.getElementById('attPercent').innerText = total ? Math.round((pCount/total)*100) + '%' : '0%'; }
+            
+            if (disabled) { 
+                document.getElementById('presentCount').innerText = "0"; 
+                document.getElementById('absentCount').innerText = "0"; 
+                document.getElementById('attPercent').innerText = "0%"; 
+            } else { 
+                document.getElementById('presentCount').innerText = pCount; 
+                document.getElementById('absentCount').innerText = aCount; 
+                const total = allStudents.length; 
+                document.getElementById('attPercent').innerText = total ? Math.round((pCount/total)*100) + '%' : '0%'; 
+            }
         }
+        
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
 
-        window.markSingle = (uid, status) => { if (isSunday || isHoliday) { showToast("Attendance marking is disabled today", true); return; } currentAttendance[uid] = status; renderUI(); };
-        async function changeDate(delta) { const d = new Date(selectedDate); d.setDate(d.getDate() + delta); selectedDate = d.toISOString().split('T')[0]; await loadAttendance(); await loadHolidayStatus(); renderUI(); }
-        async function toggleHoliday() {
-            if (isSunday) { showToast("Cannot set holiday on Sunday", true); return; }
-            const holidayRef = doc(db, "holidays", selectedDate);
-            if (isHoliday) { await setDoc(holidayRef, { isHoliday: false, date: selectedDate }, { merge: true }); showToast(`Holiday removed for ${formatToDMY(selectedDate)}`); }
-            else { let reason = prompt("Enter reason for holiday:", "Institute Off"); if (reason === null) return; reason = reason.trim(); if (reason === "") reason = "Institute Off"; await setDoc(holidayRef, { isHoliday: true, date: selectedDate, reason: reason, setBy: "admin", timestamp: new Date().toISOString() }, { merge: true }); showToast(`✅ Marked as Holiday: ${reason}`); }
-            await loadHolidayStatus(); renderUI();
+        window.markSingle = (uid, status) => { 
+            if (isSunday || isHoliday) { 
+                showToast("Attendance marking is disabled today (Holiday or Sunday)", true); 
+                return; 
+            } 
+            currentAttendance[uid] = status; 
+            renderUI(); 
+        };
+        
+        async function changeDate(delta) { 
+            const d = new Date(selectedDate); 
+            d.setDate(d.getDate() + delta); 
+            selectedDate = d.toISOString().split('T')[0]; 
+            await loadAttendance(); 
+            await loadHolidayStatus(); 
+            renderUI(); 
         }
-        function downloadCSV(content, filename) { const blob = new Blob(["\uFEFF" + content], { type: "text/csv;charset=utf-8;" }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = filename; link.click(); URL.revokeObjectURL(link.href); }
+        
+        async function toggleHoliday() {
+            if (isSunday) { 
+                showToast("Cannot set holiday on Sunday (Weekly Off already active)", true); 
+                return; 
+            }
+            const holidayRef = doc(db, "holidays", selectedDate);
+            if (isHoliday) { 
+                await setDoc(holidayRef, { isHoliday: false, date: selectedDate }, { merge: true }); 
+                showToast(`Holiday removed for ${formatToDMY(selectedDate)}`); 
+            } else { 
+                let reason = prompt("Enter reason for holiday:", "Institute Off"); 
+                if (reason === null) return; 
+                reason = reason.trim(); 
+                if (reason === "") reason = "Institute Off"; 
+                await setDoc(holidayRef, { isHoliday: true, date: selectedDate, reason: reason, setBy: "admin", timestamp: new Date().toISOString() }, { merge: true }); 
+                showToast(`✅ Marked as Holiday: ${reason}`); 
+            }
+            await loadHolidayStatus(); 
+            await loadAttendance();
+            renderUI();
+        }
+        
+        function downloadCSV(content, filename) { 
+            const blob = new Blob(["\uFEFF" + content], { type: "text/csv;charset=utf-8;" }); 
+            const link = document.createElement("a"); 
+            link.href = URL.createObjectURL(blob); 
+            link.download = filename; 
+            link.click(); 
+            URL.revokeObjectURL(link.href); 
+        }
+        
         async function exportDailyCSV() {
             let rows = [["Student Name", "Email", "Status", "Date", "Day", "Holiday/Reason"]];
             const disabled = (isSunday || isHoliday);
             let dayNote = isSunday ? "Sunday Off" : (isHoliday ? `Holiday: ${holidayReason}` : "Working Day");
-            for (const s of allStudents) { let status = disabled ? "OFF / Holiday" : (currentAttendance[s.uid] === 'present' ? "PRESENT" : "ABSENT"); rows.push([s.fullName, s.email, status, formatToDMY(selectedDate), getDayName(selectedDate), dayNote]); }
-            downloadCSV(rows.map(r => r.map(c => `"${c.replace(/"/g, '""')}"`).join(",")).join("\n"), `UCC_Attendance_${selectedDate}.csv`);
+            for (const s of allStudents) { 
+                let status = disabled ? "OFF / Holiday" : (currentAttendance[s.uid] === 'present' ? "PRESENT" : "ABSENT"); 
+                rows.push([s.fullName, s.email, status, formatToDMY(selectedDate), getDayName(selectedDate), dayNote]); 
+            }
+            downloadCSV(rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n"), `UCC_Attendance_${selectedDate}.csv`);
             showToast("Daily CSV exported");
         }
+        
         async function exportMonthlyCSV() {
             showToast("Fetching monthly data...");
-            const thirtyDaysAgo = new Date(); thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            const thirtyDaysAgo = new Date(); 
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
             const startStr = thirtyDaysAgo.toISOString().split('T')[0];
             const q = query(collection(db, "attendance"), where("date", ">=", startStr));
             const snap = await getDocs(q);
@@ -312,43 +425,100 @@
             const holidaySnap = await getDocs(holidayQuery);
             const holidayMap = {};
             holidaySnap.forEach(d => { if (d.data().isHoliday) holidayMap[d.id] = d.data().reason || "Holiday"; });
+            
             let rows = [["Date","Day","Student Name","Status","Recorded At","Holiday Flag"]];
             for (const docSnap of snap.docs) {
                 const data = docSnap.data();
                 const dayOfWeek = getDayName(data.date);
                 let holidayFlag = "", status = data.status.toUpperCase();
-                if (holidayMap[data.date]) { holidayFlag = `Holiday (${holidayMap[data.date]})`; status = "OFF / Holiday"; }
-                else if (dayOfWeek === 'Sunday') { holidayFlag = "Sunday Off"; status = "OFF / Holiday"; }
-                rows.push([formatToDMY(data.date), dayOfWeek, data.studentName, status, data.timestamp || "", holidayFlag]);
+                if (holidayMap[data.date]) { 
+                    holidayFlag = `Holiday (${holidayMap[data.date]})`; 
+                    status = "OFF / Holiday"; 
+                } else if (dayOfWeek === 'Sunday') { 
+                    holidayFlag = "Sunday Off"; 
+                    status = "OFF / Holiday"; 
+                }
+                rows.push([formatToDMY(data.date), dayOfWeek, data.studentName || "Unknown", status, data.timestamp || "", holidayFlag]);
             }
-            if (rows.length === 1) rows.push(["No attendance records found in the last 30 days"]);
-            downloadCSV(rows.map(r => r.map(c => `"${c.replace(/"/g, '""')}"`).join(",")).join("\n"), `UCC_Monthly_Report.csv`);
+            if (rows.length === 1) rows.push(["No attendance records found in the last 30 days", "", "", "", "", ""]);
+            downloadCSV(rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n"), `UCC_Monthly_Report_${new Date().toISOString().slice(0,10)}.csv`);
             showToast("Monthly report exported");
         }
 
+        // Event Listeners
         document.getElementById('saveAllBtn').onclick = async () => {
-            if (isSunday || isHoliday) { showToast("Cannot sync attendance: Holiday or Sunday", true); return; }
+            if (isSunday || isHoliday) { 
+                showToast("Cannot sync attendance: Holiday or Sunday", true); 
+                return; 
+            }
             const btn = document.getElementById('saveAllBtn');
-            const originalText = btn.innerText; btn.innerText = "Syncing...";
+            const originalText = btn.innerText; 
+            btn.innerText = "Syncing...";
             try {
-                const promises = allStudents.map(s => setDoc(doc(db, "attendance", `${s.uid}_${selectedDate}`), { studentId: s.uid, studentName: s.fullName, date: selectedDate, status: currentAttendance[s.uid], timestamp: new Date().toISOString() }, { merge: true }));
-                await Promise.all(promises); showToast("All records synced");
-            } catch(err) { showToast("Sync failed: " + err.message, true); }
-            finally { btn.innerText = originalText; }
+                const batch = writeBatch(db);
+                for (const s of allStudents) {
+                    const docRef = doc(db, "attendance", `${s.uid}_${selectedDate}`);
+                    batch.set(docRef, { 
+                        studentId: s.uid, 
+                        studentName: s.fullName, 
+                        date: selectedDate, 
+                        status: currentAttendance[s.uid],
+                        timestamp: new Date().toISOString(),
+                        updatedBy: auth.currentUser?.uid
+                    }, { merge: true });
+                }
+                await batch.commit();
+                showToast("All records synced to cloud");
+            } catch(err) { 
+                showToast("Sync failed: " + err.message, true); 
+            } finally { 
+                btn.innerText = originalText; 
+            }
         };
-        document.getElementById('markAllPresentBtn').onclick = () => { if (isSunday || isHoliday) { showToast("Action blocked: Holiday or Sunday", true); return; } allStudents.forEach(s => currentAttendance[s.uid] = 'present'); renderUI(); showToast("All marked present (local only)"); };
+        
+        document.getElementById('markAllPresentBtn').onclick = () => { 
+            if (isSunday || isHoliday) { 
+                showToast("Action blocked: Holiday or Sunday", true); 
+                return; 
+            } 
+            allStudents.forEach(s => currentAttendance[s.uid] = 'present'); 
+            renderUI(); 
+            showToast("All marked present (local only). Click Sync to save."); 
+        };
+        
         document.getElementById('toggleHolidayBtn').onclick = () => toggleHoliday();
         document.getElementById('searchStudentInput').addEventListener('input', () => renderUI());
         document.getElementById('prevDateBtn').onclick = () => changeDate(-1);
         document.getElementById('nextDateBtn').onclick = () => changeDate(1);
         document.getElementById('exportDailyBtn').onclick = () => exportDailyCSV();
         document.getElementById('exportMonthlyBtn').onclick = () => exportMonthlyCSV();
-        window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
-        document.getElementById('mobileMenuButton').onclick = () => { document.getElementById('mainSidebar').classList.remove('-translate-x-full'); document.getElementById('mobileSidebarOverlay').classList.remove('hidden'); };
-        document.getElementById('mobileSidebarOverlay').onclick = () => { document.getElementById('mainSidebar').classList.add('-translate-x-full'); document.getElementById('mobileSidebarOverlay').classList.add('hidden'); };
+        
+        window.logout = async () => { 
+            await signOut(auth); 
+            window.location.href = "../index.html"; 
+        };
+        
+        document.getElementById('mobileMenuButton').onclick = () => { 
+            document.getElementById('mainSidebar').classList.remove('-translate-x-full'); 
+            document.getElementById('mobileSidebarOverlay').classList.remove('hidden'); 
+        };
+        document.getElementById('mobileSidebarOverlay').onclick = () => { 
+            document.getElementById('mainSidebar').classList.add('-translate-x-full'); 
+            document.getElementById('mobileSidebarOverlay').classList.add('hidden'); 
+        };
+        
         onAuthStateChanged(auth, async (user) => {
-            if (user) { const userDoc = await getDoc(doc(db, "users", user.uid)); if (userDoc.exists() && userDoc.data().role === 'admin') initPage(); else { await signOut(auth); window.location.href = "../auth/login.html"; } }
-            else window.location.href = "../auth/login.html";
+            if (user) { 
+                const userDoc = await getDoc(doc(db, "users", user.uid)); 
+                if (userDoc.exists() && userDoc.data().role === 'admin') {
+                    initPage(); 
+                } else { 
+                    await signOut(auth); 
+                    window.location.href = "../auth/login.html"; 
+                }
+            } else { 
+                window.location.href = "../auth/login.html"; 
+            }
         });
     </script>
 </body>

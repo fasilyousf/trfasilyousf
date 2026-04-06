@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>UCC Admin | Student Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Outfit', sans-serif; }
+        body { background: #0b1120; color: #ecf3f2; }
+        .glass-panel { background: rgba(15, 23, 42, 0.68); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.06); }
+        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%); backdrop-filter: blur(4px); border-right: 1px solid rgba(241,196,15,0.12); }
+        .active-link { background: rgba(241,196,15,0.1); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
+        .stat-card { transition: transform 0.2s ease; }
+        .stat-card:hover { transform: translateY(-3px); }
+        .progress-bar { height: 6px; background: #1e293b; border-radius: 10px; overflow: hidden; }
+        .progress-fill { background: #f1c40f; height: 100%; border-radius: 10px; transition: width 0.3s ease; }
+        .status-badge { padding: 4px 12px; border-radius: 40px; font-size: 10px; font-weight: 800; text-transform: uppercase; display: inline-block; }
+        .status-paid { background: rgba(16,185,129,0.2); color: #34d399; }
+        .status-partial { background: rgba(245,158,11,0.2); color: #fbbf24; }
+        .status-due { background: rgba(239,68,68,0.2); color: #f87171; }
+        @media (max-width: 640px) {
+            .student-detail-card { padding: 1rem; }
+            .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="mobileSidebarOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+    
+    <!-- Sidebar (same as other pages) -->
+    <aside id="mainSidebar" class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
+        <div class="p-6 border-b border-white/5">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
+                    <i class="fas fa-crown text-slate-900 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-tight text-white">UCC <span class="text-[#f1c40f]">ADMIN</span></h1>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Control Core</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 p-5 space-y-2 mt-4">
+            <a href="dashboard.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+                <i class="fas fa-users text-lg w-6"></i> Directory
+            </a>
+            <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+                <i class="fas fa-rupee-sign w-6"></i> Fee Management
+            </a>
+            <a href="attendance.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+                <i class="fas fa-calendar-check w-6"></i> Attendance
+            </a>
+        </nav>
+
+        <div class="p-5 border-t border-white/10">
+            <button onclick="logout()" class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase">
+                <i class="fas fa-sign-out-alt w-6"></i> Exit Panel
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 w-full p-4 md:p-8 lg:p-10 overflow-x-hidden">
+        <!-- Header with Profile on Right, Hamburger Left -->
+        <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8 border border-white/5">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
+                    <a href="dashboard.html" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i> Back to Directory
+                    </a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg" id="adminInitial">?</div>
+                    <div>
+                        <h2 class="text-xl md:text-3xl font-black text-white tracking-tight" id="adminName">Authenticating...</h2>
+                        <p class="text-slate-400 text-xs md:text-sm font-medium" id="adminEmail">Secure session</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-20">
+            <i class="fas fa-spinner fa-pulse text-4xl text-[#f1c40f]"></i>
+            <p class="mt-4 text-slate-400">Loading student details...</p>
+        </div>
+
+        <!-- Student Details Content (hidden initially) -->
+        <div id="studentContent" class="hidden">
+            <!-- Student Header with Name & Actions -->
+            <div class="glass-panel rounded-2xl p-6 mb-8 flex flex-wrap justify-between items-center gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center text-3xl font-black text-slate-900" id="studentAvatar">?</div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-black text-white" id="studentName">Loading...</h1>
+                        <p class="text-slate-400 text-sm" id="studentEmail">student@example.com</p>
+                        <p class="text-[10px] text-slate-500 font-mono" id="studentId">ID: --</p>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="exportStudentReport()" class="bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-white px-5 py-3 rounded-xl font-black text-xs uppercase transition-all flex items-center gap-2">
+                        <i class="fas fa-download"></i> Export Report
+                    </button>
+                    <button onclick="window.print()" class="bg-sky-500/10 hover:bg-sky-500 text-sky-500 hover:text-white px-5 py-3 rounded-xl font-black text-xs uppercase transition-all flex items-center gap-2">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Row (Fee Summary) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div class="glass-panel rounded-2xl p-5 border-l-4 border-emerald-500 stat-card">
+                    <p class="text-slate-400 text-xs font-black uppercase">Total Fee</p>
+                    <p class="text-2xl font-black text-white" id="statTotalFee">₹0</p>
+                </div>
+                <div class="glass-panel rounded-2xl p-5 border-l-4 border-amber-500 stat-card">
+                    <p class="text-slate-400 text-xs font-black uppercase">Paid Amount</p>
+                    <p class="text-2xl font-black text-white" id="statPaid">₹0</p>
+                </div>
+                <div class="glass-panel rounded-2xl p-5 border-l-4 border-rose-500 stat-card">
+                    <p class="text-slate-400 text-xs font-black uppercase">Due Amount</p>
+                    <p class="text-2xl font-black text-white" id="statDue">₹0</p>
+                </div>
+            </div>
+
+            <!-- Two Column Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Left Column: Courses & Fee Breakdown -->
+                <div class="space-y-6">
+                    <div class="glass-panel rounded-2xl p-6">
+                        <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2"><i class="fas fa-book-open text-[#f1c40f]"></i> Enrolled Courses</h3>
+                        <div id="coursesList" class="space-y-2">
+                            <div class="text-slate-400 text-sm">Loading courses...</div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-white/10">
+                            <div class="flex justify-between font-black">
+                                <span>Total Course Fee</span>
+                                <span class="text-[#f1c40f]" id="coursesTotal">₹0</span>
+                            </div>
+                            <div id="customOverrideNote" class="text-xs text-amber-400 mt-2 hidden">⚠️ Custom fee override applied</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-6">
+                        <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2"><i class="fas fa-history text-[#f1c40f]"></i> Payment History</h3>
+                        <div id="paymentHistory" class="max-h-80 overflow-y-auto custom-scroll space-y-2">
+                            <div class="text-slate-400 text-sm">Loading payments...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Attendance & Quick Actions -->
+                <div class="space-y-6">
+                    <div class="glass-panel rounded-2xl p-6">
+                        <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2"><i class="fas fa-calendar-check text-[#f1c40f]"></i> Attendance Overview</h3>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Overall Attendance Rate</span>
+                                <span id="attendancePercent" class="font-bold text-[#f1c40f]">0%</span>
+                            </div>
+                            <div class="progress-bar"><div id="attendanceProgress" class="progress-fill" style="width: 0%"></div></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-center">
+                            <div class="bg-slate-800/50 rounded-xl p-3">
+                                <p class="text-[10px] text-slate-400 uppercase">Present Days</p>
+                                <p class="text-2xl font-black text-white" id="presentDays">0</p>
+                            </div>
+                            <div class="bg-slate-800/50 rounded-xl p-3">
+                                <p class="text-[10px] text-slate-400 uppercase">Total Days (Enrolled)</p>
+                                <p class="text-2xl font-black text-white" id="totalDays">0</p>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <h4 class="text-sm font-bold text-white mb-2">Recent Attendance (Last 7 days)</h4>
+                            <div id="recentAttendance" class="flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-6">
+                        <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2"><i class="fas fa-bolt text-[#f1c40f]"></i> Quick Actions</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <button onclick="openPaymentModal()" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white py-3 rounded-xl font-bold text-xs uppercase transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-rupee-sign"></i> Record Payment
+                            </button>
+                            <button onclick="markTodayAttendance()" class="bg-[#f1c40f]/20 hover:bg-[#f1c40f] text-[#f1c40f] hover:text-slate-900 py-3 rounded-xl font-bold text-xs uppercase transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-calendar-check"></i> Mark Today Present
+                            </button>
+                            <button onclick="viewFullAttendance()" class="bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-xl font-bold text-xs uppercase transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-chart-line"></i> View Full Attendance
+                            </button>
+                            <button onclick="window.location.href='fees.html'" class="bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-xl font-bold text-xs uppercase transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-wallet"></i> Fee Management
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 shadow-2xl border border-white/20 modal-card">
+            <div class="flex justify-between items-start mb-5">
+                <div><h3 class="text-2xl font-black text-white">Record Payment</h3><p id="modalStudentName" class="text-slate-400 text-sm mt-1">Student</p></div>
+                <button onclick="closePaymentModal()" class="text-slate-500 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button>
+            </div>
+            <form id="paymentForm">
+                <div class="mb-4"><label class="text-[11px] font-black uppercase text-slate-500">Amount (₹)</label><input type="number" id="paymentAmount" required class="w-full mt-1 px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none"></div>
+                <div class="mb-4"><label class="text-[11px] font-black uppercase text-slate-500">Payment Date</label><input type="date" id="paymentDate" required class="w-full mt-1 px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none"></div>
+                <div class="mb-4"><label class="text-[11px] font-black uppercase text-slate-500">Method</label><select id="paymentMethod" class="w-full mt-1 px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white"><option>Cash</option><option>Bank Transfer</option><option>Online (UPI/Card)</option><option>Cheque</option></select></div>
+                <div class="mb-6"><label class="text-[11px] font-black uppercase text-slate-500">Notes</label><textarea id="paymentNotes" rows="2" class="w-full mt-1 px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white"></textarea></div>
+                <button type="submit" class="w-full py-3 bg-emerald-500 text-slate-900 font-black uppercase rounded-xl hover:bg-emerald-400 transition">Add Payment</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="fixed bottom-6 right-6 flex flex-col gap-2 z-[200]"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, getDocs, collection, addDoc, query, where, orderBy, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
+            authDomain: "trfasilyousf1.firebaseapp.com",
+            projectId: "trfasilyousf1",
+            storageBucket: "trfasilyousf1.firebasestorage.app",
+            messagingSenderId: "158147210589",
+            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentStudentId = null;
+        let studentData = null;
+        let allCoursesMap = new Map();
+        let payments = [];
+        let attendanceRecords = [];
+
+        function showToast(msg, isError = false) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `bg-slate-800 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-sm font-bold border border-white/10`;
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle text-rose-500' : 'fa-check-circle text-[#f1c40f]'}"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        async function loadCourses() {
+            const snap = await getDocs(collection(db, "courses"));
+            allCoursesMap.clear();
+            snap.forEach(docSnap => {
+                const data = docSnap.data();
+                allCoursesMap.set(docSnap.id, {
+                    courseName: data.courseName || "Course",
+                    courseFee: data.courseFee || 0,
+                    courseCode: data.courseCode || docSnap.id
+                });
+            });
+            if (allCoursesMap.size === 0) {
+                allCoursesMap.set("default1", { courseName: "English Proficiency", courseFee: 12000, courseCode: "ELP101" });
+                allCoursesMap.set("default2", { courseName: "Academic Writing", courseFee: 8000, courseCode: "AW102" });
+            }
+        }
+
+        function computeTotalFromCourses(enrolledCourses) {
+            if (!enrolledCourses) return 0;
+            let total = 0;
+            for (let cid of enrolledCourses) if (allCoursesMap.has(cid)) total += allCoursesMap.get(cid).courseFee;
+            return total;
+        }
+
+        async function loadStudentDetails(studentId) {
+            const studentRef = doc(db, "users", studentId);
+            const studentSnap = await getDoc(studentRef);
+            if (!studentSnap.exists() || studentSnap.data().role !== 'student') throw new Error("Student not found");
+            studentData = { id: studentId, ...studentSnap.data() };
+            
+            // Load payments
+            const paymentsSnap = await getDocs(query(collection(db, "users", studentId, "payments"), orderBy("date", "desc")));
+            payments = [];
+            paymentsSnap.forEach(d => payments.push({ id: d.id, ...d.data() }));
+            
+            // Load attendance records
+            const attendanceSnap = await getDocs(query(collection(db, "attendance"), where("studentId", "==", studentId), orderBy("date", "desc")));
+            attendanceRecords = [];
+            attendanceSnap.forEach(d => attendanceRecords.push({ ...d.data() }));
+            
+            renderStudentDetails();
+        }
+
+        function renderStudentDetails() {
+            if (!studentData) return;
+            
+            // Basic info
+            document.getElementById('studentName').innerText = studentData.fullName || "Unknown";
+            document.getElementById('studentEmail').innerText = studentData.email || "";
+            document.getElementById('studentId').innerHTML = `ID: UCC-${studentData.id.slice(-8)}`;
+            document.getElementById('studentAvatar').innerText = (studentData.fullName?.charAt(0) || "S").toUpperCase();
+            
+            // Fee calculations
+            let enrolledCourses = studentData.enrolledCourses || [];
+            let totalFeeFromCourses = computeTotalFromCourses(enrolledCourses);
+            let totalFee = studentData.customTotalFee ? studentData.customTotalFee : (studentData.feeTotal || totalFeeFromCourses);
+            let paid = payments.reduce((sum, p) => sum + (p.amount || 0), 0);
+            let due = totalFee - paid;
+            
+            document.getElementById('statTotalFee').innerHTML = `₹${totalFee.toLocaleString()}`;
+            document.getElementById('statPaid').innerHTML = `₹${paid.toLocaleString()}`;
+            document.getElementById('statDue').innerHTML = `₹${due.toLocaleString()}`;
+            
+            // Courses list
+            const coursesContainer = document.getElementById('coursesList');
+            if (enrolledCourses.length === 0) {
+                coursesContainer.innerHTML = '<div class="text-slate-400 text-sm italic">No courses enrolled.</div>';
+                document.getElementById('coursesTotal').innerHTML = '₹0';
+            } else {
+                let html = '';
+                let courseTotal = 0;
+                for (let cid of enrolledCourses) {
+                    const c = allCoursesMap.get(cid);
+                    if (c) {
+                        html += `<div class="bg-slate-800/50 rounded-xl p-3 flex justify-between items-center">
+                                    <div><span class="font-bold text-white text-sm">${c.courseName}</span><br><span class="text-[9px] text-slate-400">${c.courseCode || cid}</span></div>
+                                    <span class="font-mono text-emerald-400">₹${c.courseFee.toLocaleString()}</span>
+                                </div>`;
+                        courseTotal += c.courseFee;
+                    }
+                }
+                coursesContainer.innerHTML = html;
+                document.getElementById('coursesTotal').innerHTML = `₹${courseTotal.toLocaleString()}`;
+            }
+            
+            if (studentData.customTotalFee) {
+                document.getElementById('customOverrideNote').classList.remove('hidden');
+            } else {
+                document.getElementById('customOverrideNote').classList.add('hidden');
+            }
+            
+            // Payment History
+            const historyContainer = document.getElementById('paymentHistory');
+            if (payments.length === 0) {
+                historyContainer.innerHTML = '<div class="text-slate-400 text-sm italic">No payment records.</div>';
+            } else {
+                historyContainer.innerHTML = payments.map(p => `
+                    <div class="bg-slate-800/50 rounded-xl p-3">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="font-bold text-white">₹${(p.amount || 0).toLocaleString()}</div>
+                                <div class="text-[10px] text-slate-400">${p.method || 'Cash'} • ${p.date ? new Date(p.date).toLocaleDateString() : '—'}</div>
+                                ${p.notes ? `<div class="text-[10px] text-slate-500 mt-1">${escapeHtml(p.notes)}</div>` : ''}
+                            </div>
+                            <i class="fas fa-receipt text-slate-500"></i>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Attendance Overview
+            const presentCount = attendanceRecords.filter(a => a.status === 'present').length;
+            const totalDays = attendanceRecords.length;
+            const percent = totalDays > 0 ? (presentCount / totalDays) * 100 : 0;
+            document.getElementById('attendancePercent').innerText = `${Math.round(percent)}%`;
+            document.getElementById('attendanceProgress').style.width = `${percent}%`;
+            document.getElementById('presentDays').innerText = presentCount;
+            document.getElementById('totalDays').innerText = totalDays;
+            
+            // Recent attendance (last 7 days)
+            const last7Days = attendanceRecords.slice(0, 7);
+            const recentContainer = document.getElementById('recentAttendance');
+            if (last7Days.length === 0) {
+                recentContainer.innerHTML = '<div class="text-slate-400 text-sm">No attendance records yet.</div>';
+            } else {
+                recentContainer.innerHTML = last7Days.map(a => `
+                    <div class="bg-slate-800/70 rounded-xl px-3 py-2 text-center min-w-[70px]">
+                        <div class="text-[9px] text-slate-400">${new Date(a.date).toLocaleDateString(undefined, {month:'short', day:'numeric'})}</div>
+                        <div class="text-xs font-bold ${a.status === 'present' ? 'text-emerald-400' : 'text-rose-400'}">${a.status === 'present' ? 'P' : 'A'}</div>
+                    </div>
+                `).join('');
+            }
+            
+            // Hide loading, show content
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('studentContent').classList.remove('hidden');
+        }
+        
+        // Quick Actions
+        window.openPaymentModal = () => {
+            document.getElementById('modalStudentName').innerText = studentData.fullName;
+            document.getElementById('paymentAmount').value = '';
+            document.getElementById('paymentDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('paymentMethod').value = 'Cash';
+            document.getElementById('paymentNotes').value = '';
+            document.getElementById('paymentModal').classList.remove('hidden');
+        };
+        window.closePaymentModal = () => document.getElementById('paymentModal').classList.add('hidden');
+        
+        document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('paymentAmount').value);
+            if (!amount || amount <= 0) { showToast("Enter valid amount", true); return; }
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true; btn.innerText = "Processing...";
+            try {
+                await addDoc(collection(db, "users", currentStudentId, "payments"), {
+                    amount, date: document.getElementById('paymentDate').value,
+                    method: document.getElementById('paymentMethod').value,
+                    notes: document.getElementById('paymentNotes').value,
+                    timestamp: new Date().toISOString()
+                });
+                showToast("Payment recorded");
+                closePaymentModal();
+                await loadStudentDetails(currentStudentId);
+            } catch (err) { showToast(err.message, true); }
+            finally { btn.disabled = false; btn.innerText = "Add Payment"; }
+        });
+        
+        window.markTodayAttendance = async () => {
+            const today = new Date().toISOString().split('T')[0];
+            const existing = attendanceRecords.find(a => a.date === today);
+            if (existing) {
+                if (existing.status === 'present') showToast("Already marked present today", true);
+                else showToast("Attendance already recorded for today", true);
+                return;
+            }
+            try {
+                await setDoc(doc(db, "attendance", `${currentStudentId}_${today}`), {
+                    studentId: currentStudentId, studentName: studentData.fullName, date: today, status: 'present', timestamp: new Date().toISOString()
+                });
+                showToast("Marked present for today");
+                await loadStudentDetails(currentStudentId);
+            } catch (err) { showToast(err.message, true); }
+        };
+        
+        window.viewFullAttendance = () => {
+            window.location.href = `attendance.html?student=${currentStudentId}`;
+        };
+        
+        window.exportStudentReport = () => {
+            let report = `Student Report\n`;
+            report += `Name: ${studentData.fullName}\n`;
+            report += `Email: ${studentData.email}\n`;
+            report += `Student ID: UCC-${studentData.id.slice(-8)}\n`;
+            report += `\n--- Fee Summary ---\n`;
+            report += `Total Fee: ₹${(studentData.customTotalFee || studentData.feeTotal || 0).toLocaleString()}\n`;
+            report += `Paid: ₹${payments.reduce((s,p)=>s+(p.amount||0),0).toLocaleString()}\n`;
+            report += `Due: ₹${((studentData.customTotalFee || studentData.feeTotal || 0) - payments.reduce((s,p)=>s+(p.amount||0),0)).toLocaleString()}\n`;
+            report += `\n--- Enrolled Courses ---\n`;
+            (studentData.enrolledCourses || []).forEach(cid => {
+                const c = allCoursesMap.get(cid);
+                if (c) report += `- ${c.courseName} (${c.courseCode || cid}): ₹${c.courseFee.toLocaleString()}\n`;
+            });
+            report += `\n--- Attendance ---\n`;
+            report += `Present Days: ${attendanceRecords.filter(a=>a.status==='present').length}\n`;
+            report += `Total Days: ${attendanceRecords.length}\n`;
+            report += `Rate: ${Math.round((attendanceRecords.filter(a=>a.status==='present').length/attendanceRecords.length)*100)}%\n`;
+            const blob = new Blob([report], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Student_Report_${studentData.fullName.replace(/\s/g,'_')}.txt`;
+            link.click();
+            showToast("Report exported");
+        };
+        
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+        
+        // Initialization
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentId = urlParams.get('id');
+        if (!studentId) {
+            document.getElementById('loadingState').innerHTML = '<div class="text-center py-20 text-rose-400"><i class="fas fa-exclamation-triangle text-2xl"></i><p class="mt-2">No student selected. <a href="dashboard.html" class="underline">Go back</a></p></div>';
+        } else {
+            currentStudentId = studentId;
+            await loadCourses();
+            await loadStudentDetails(studentId);
+        }
+        
+        // Auth & Sidebar
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().role === 'admin') {
+                    const data = userDoc.data();
+                    document.getElementById('adminName').innerText = "Salam, " + (data.fullName || "Admin");
+                    document.getElementById('adminEmail').innerText = data.email;
+                    document.getElementById('adminInitial').innerText = (data.fullName || "A").charAt(0).toUpperCase();
+                } else { await signOut(auth); window.location.href = "../auth/login.html"; }
+            } else { window.location.href = "../auth/login.html"; }
+        });
+        window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
+        document.getElementById('mobileMenuButton').onclick = () => {
+            document.getElementById('mainSidebar').classList.remove('-translate-x-full');
+            document.getElementById('mobileSidebarOverlay').classList.remove('hidden');
+        };
+        document.getElementById('mobileSidebarOverlay').onclick = () => {
+            document.getElementById('mainSidebar').classList.add('-translate-x-full');
+            document.getElementById('mobileSidebarOverlay').classList.add('hidden');
+        };
+    </script>
+</body>
+</html>

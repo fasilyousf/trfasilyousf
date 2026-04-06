@@ -26,21 +26,16 @@
         .active-link { background: rgba(241,196,15,0.1); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
         .stat-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
         .stat-card:hover { transform: translateY(-3px); box-shadow: 0 20px 25px -12px rgba(0,0,0,0.4); }
-        /* Mobile table adjustments */
         @media (max-width: 640px) {
             td, th { padding: 12px 8px !important; }
-            .table-action-buttons { display: flex; gap: 8px; justify-content: flex-end; }
             .student-name-cell { min-width: 140px; }
-            .email-cell { word-break: break-all; max-width: 160px; }
         }
     </style>
 </head>
 <body class="flex min-h-screen">
 
-    <!-- Mobile sidebar overlay -->
     <div id="mobileSidebarOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden transition-all duration-300"></div>
     
-    <!-- Sidebar - always left aligned -->
     <aside id="mainSidebar" class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
         <div class="p-6 border-b border-white/5">
             <div class="flex items-center gap-3">
@@ -55,15 +50,18 @@
         </div>
 
         <nav class="flex-1 p-5 space-y-2 mt-4">
-            <a href="#" id="btn-directory" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
+            <a href="#" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
                 <i class="fas fa-users text-lg w-6"></i> Directory
+            </a>
+            <a href="profile.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+                <i class="fas fa-user-circle w-6"></i> My Profile
+            </a>
+            <a href="edairy.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+                <i class="fas fa-book-open w-6"></i> eDairy
             </a>
             <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-rupee-sign w-6"></i> Fee Management
             </a>
-            <!-- <button onclick="openAddModal()" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase group">
-                <i class="fas fa-user-plus text-emerald-400 w-6 group-hover:scale-110 transition"></i> Register
-            </button> -->
             <a href="attendance.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-calendar-check w-6"></i> Attendance
             </a>
@@ -78,10 +76,10 @@
 
     <main class="flex-1 w-full p-4 md:p-8 lg:p-10 overflow-x-hidden">
         
-        <!-- Enhanced Header with Stats Cards -->
         <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8 border border-white/5">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
+                    <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg" id="adminInitial">?</div>
                     <div>
                         <h2 class="text-xl md:text-3xl font-black text-white tracking-tight" id="adminName">Authenticating...</h2>
@@ -93,13 +91,11 @@
                         <i class="fas fa-sync-alt"></i> <span class="hidden sm:inline">Refresh</span>
                     </button>
                     <button onclick="openAddModal()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-900 px-4 md:px-6 py-2.5 md:py-3.5 rounded-xl md:rounded-2xl font-black uppercase text-xs transition-all shadow-xl hover:scale-105 flex items-center gap-2">
-                        <i class="fas fa-plus"></i> <span class="hidden xs:inline">Enroll</span>
+                        <i class="fas fa-plus"></i> <span>Enroll</span>
                     </button>
-                    <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
                 </div>
             </div>
 
-            <!-- Stats Row (New) -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
                 <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10 stat-card">
                     <div class="flex items-center justify-between">
@@ -131,7 +127,6 @@
             </div>
         </div>
 
-        <!-- Search and Export -->
         <div class="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center mb-6">
             <div class="relative w-full sm:w-96">
                 <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"></i>
@@ -142,7 +137,6 @@
             </button>
         </div>
 
-        <!-- Student Directory Table (Enhanced with Course count column) -->
         <div class="glass-panel rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
             <div class="overflow-x-auto custom-scroll">
                 <table class="w-full text-left min-w-[750px] md:min-w-full">
@@ -164,63 +158,19 @@
         </div>
     </main>
 
-    <!-- ADD STUDENT MODAL (Enhanced) -->
     <div id="addModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
         <div class="glass-panel w-full max-w-xl rounded-3xl md:rounded-[3rem] p-6 md:p-10 shadow-2xl border border-white/20 modal-card">
             <div class="flex justify-between items-start mb-6">
-                <div>
-                    <h3 class="text-2xl md:text-3xl font-black text-white">Enroll Scholar</h3>
-                    <p class="text-slate-400 text-xs md:text-sm mt-1">Issue secure digital credentials</p>
-                </div>
-                <button onclick="closeAddModal()" class="text-slate-500 hover:text-white text-2xl md:text-3xl"><i class="fas fa-times-circle"></i></button>
+                <div><h3 class="text-2xl md:text-3xl font-black text-white">Enroll Scholar</h3></div>
+                <button onclick="closeAddModal()" class="text-slate-500 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button>
             </div>
             <form id="addStudentForm" class="space-y-5">
-                <div>
-                    <label class="text-[10px] md:text-[11px] font-black uppercase text-slate-500 ml-2">Full Name</label>
-                    <input type="text" id="addName" class="w-full mt-1 px-5 py-3.5 md:py-4 bg-slate-900 border border-slate-700 rounded-xl md:rounded-2xl text-white focus:border-[#f1c40f] outline-none transition" required>
-                </div>
-                <div>
-                    <label class="text-[10px] md:text-[11px] font-black uppercase text-slate-500 ml-2">Email Address</label>
-                    <input type="email" id="addEmail" class="w-full mt-1 px-5 py-3.5 md:py-4 bg-slate-900 border border-slate-700 rounded-xl md:rounded-2xl text-white focus:border-[#f1c40f] outline-none transition" required>
-                </div>
-                <div>
-                    <label class="text-[10px] md:text-[11px] font-black uppercase text-slate-500 ml-2">Secure Password</label>
-                    <input type="text" id="addPass" class="w-full mt-1 px-5 py-3.5 md:py-4 bg-slate-900 border border-slate-700 rounded-xl md:rounded-2xl text-white focus:border-[#f1c40f] outline-none transition" value="UCC@2026" required>
-                </div>
-                <div>
-                    <label class="text-[10px] md:text-[11px] font-black uppercase text-slate-500 ml-2">Total Fee (₹)</label>
-                    <input type="number" id="addFeeTotal" class="w-full mt-1 px-5 py-3.5 md:py-4 bg-slate-900 border border-slate-700 rounded-xl md:rounded-2xl text-white focus:border-[#f1c40f] outline-none transition" value="25000" required>
-                </div>
-                <button type="submit" id="createBtn" class="w-full py-4 md:py-5 bg-emerald-500 text-slate-900 font-black uppercase rounded-xl md:rounded-2xl hover:bg-white transition-all shadow-xl text-sm">
-                    Create Account & Enroll
-                </button>
+                <input type="text" id="addName" placeholder="Full Name" class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none" required>
+                <input type="email" id="addEmail" placeholder="Email Address" class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none" required>
+                <input type="text" id="addPass" class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none" value="UCC@2026" required>
+                <input type="number" id="addFeeTotal" class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none" value="25000" required>
+                <button type="submit" id="createBtn" class="w-full py-4 bg-emerald-500 text-slate-900 font-black uppercase rounded-xl shadow-xl">Create Account</button>
             </form>
-        </div>
-    </div>
-
-    <!-- ASSIGN COURSES MODAL (Enhanced) -->
-    <div id="courseModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
-        <div class="glass-panel w-full max-w-4xl rounded-3xl md:rounded-[3rem] p-5 md:p-10 shadow-2xl border border-white/20 modal-card max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-start mb-5">
-                <div>
-                    <h3 class="text-2xl md:text-3xl font-black text-white"><i class="fas fa-book-open mr-3 text-[#f1c40f]"></i> Assign Courses</h3>
-                    <p class="text-slate-400 text-xs md:text-sm mt-1" id="modalStudentName">Loading...</p>
-                </div>
-                <button onclick="closeCourseModal()" class="text-slate-500 hover:text-white text-2xl md:text-3xl"><i class="fas fa-times-circle"></i></button>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                <div>
-                    <h4 class="text-base md:text-lg font-bold text-white mb-3 flex items-center gap-2"><i class="fas fa-check-circle text-emerald-400"></i> Currently Enrolled</h4>
-                    <div id="enrolledCoursesList" class="bg-slate-900/50 rounded-2xl p-4 min-h-[200px] max-h-[280px] overflow-y-auto custom-scroll"></div>
-                </div>
-                <div>
-                    <h4 class="text-base md:text-lg font-bold text-white mb-3 flex items-center gap-2"><i class="fas fa-plus-circle text-[#f1c40f]"></i> Available Courses</h4>
-                    <div id="availableCoursesList" class="bg-slate-900/50 rounded-2xl p-4 min-h-[200px] max-h-[280px] overflow-y-auto custom-scroll space-y-2"></div>
-                </div>
-            </div>
-            <div class="flex justify-end mt-6 pt-4 border-t border-white/10">
-                <button onclick="closeCourseModal()" class="px-6 md:px-8 py-2.5 md:py-3 bg-slate-700 text-white rounded-xl font-bold uppercase text-xs hover:bg-slate-600 transition">Close</button>
-            </div>
         </div>
     </div>
 
@@ -247,10 +197,7 @@
         let studentsData = [];
         let allCourses = [];
 
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
-        }
+        function escapeHtml(str) { return str ? str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])) : ''; }
 
         function updateStats() {
             const totalStudents = studentsData.length;
@@ -258,215 +205,68 @@
             document.getElementById('statTotalStudents').innerText = totalStudents;
             document.getElementById('statTotalRevenue').innerHTML = `₹${totalRevenue.toLocaleString('en-IN')}`;
             document.getElementById('statTotalCourses').innerText = allCourses.length;
-            const countEl = document.getElementById('studentCount') || document.getElementById('statTotalStudents');
-if (countEl) countEl.innerText = totalStudents;
         }
 
-        // Load students
         async function loadStudents() {
             const tbody = document.getElementById('studentTableBody');
-            tbody.innerHTML = `<tr><td colspan="6" class="p-8"><div class="skeleton h-12 w-full rounded-xl"></div></td></tr>`;
             try {
                 const snap = await getDocs(collection(db, "users"));
                 studentsData = [];
                 snap.forEach(d => { if(d.data().role === 'student') studentsData.push({ id: d.id, ...d.data() }); });
                 renderTable(studentsData);
                 updateStats();
-            } catch (e) { 
-                console.error(e);
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-rose-400">Failed to load data. <button onclick="refreshDashboard()" class="underline">Retry</button></td></tr>`;
-            }
+            } catch (e) { console.error(e); }
         }
 
         function renderTable(data) {
             const tbody = document.getElementById('studentTableBody');
-            if (!data.length) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 italic">No students enrolled yet.<br><button onclick="openAddModal()" class="mt-2 text-[#f1c40f] underline">+ Enroll first student</button></td></tr>`;
-                return;
-            }
             tbody.innerHTML = data.map(s => {
                 const enrolledCount = (s.enrolledCourses || []).length;
-                const feeAmt = s.feeTotal || 0;
+                // --- Updated profilePic logic ---
+                const photo = s.profilePic || `https://ui-avatars.com/api/?background=f1c40f&color=1a2233&bold=true&name=${encodeURIComponent(s.fullName || 'S')}`;
+                
                 return `
                 <tr class="hover:bg-white/[0.03] transition-all">
                     <td class="px-4 md:px-6 py-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-[#f1c40f]/10 text-[#f1c40f] flex items-center justify-center font-bold text-sm">${(s.fullName?.charAt(0) || 'S').toUpperCase()}</div>
+                            <img src="${photo}" class="w-10 h-10 md:w-12 md:h-12 rounded-xl object-cover border border-white/10 shadow-lg">
                             <div>
                                 <div class="font-bold text-white text-sm md:text-base">${s.fullName || 'Unknown'}</div>
-                                <div class="text-[9px] md:text-[10px] text-slate-500 font-mono uppercase tracking-tighter">UCC-${s.id.slice(-6)}</div>
+                                <div class="text-[9px] md:text-[10px] text-[#f1c40f] font-mono uppercase tracking-tighter">UCC-${s.id.slice(-6).toUpperCase()}</div>
                             </div>
                         </div>
                     </td>
                     <td class="px-4 md:px-6 py-4 text-slate-300 text-xs md:text-sm break-all">${s.email || '—'}</td>
                     <td class="px-4 md:px-6 py-4 text-slate-400 text-[10px] md:text-xs font-mono">${s.createdAt ? new Date(s.createdAt).toLocaleDateString() : '—'}</td>
-                    <td class="px-4 md:px-6 py-4 text-white font-bold text-sm">₹${feeAmt.toLocaleString('en-IN')}</td>
-                    <td class="px-4 md:px-6 py-4">
-                        <span class="bg-slate-700/50 text-[#f1c40f] px-2 py-1 rounded-full text-[10px] font-bold">${enrolledCount} enrolled</span>
-                    </td>
+                    <td class="px-4 md:px-6 py-4 text-white font-bold text-sm">₹${(s.feeTotal || 0).toLocaleString('en-IN')}</td>
+                    <td class="px-4 md:px-6 py-4"><span class="bg-slate-700/50 text-[#f1c40f] px-2 py-1 rounded-full text-[10px] font-bold">${enrolledCount} enrolled</span></td>
                     <td class="px-4 md:px-6 py-4 text-right whitespace-nowrap">
                         <div class="flex gap-2 justify-end">
-                            <button onclick="openCourseModal('${s.id}', '${escapeHtml(s.fullName)}')" class="text-[#f1c40f] bg-[#f1c40f]/10 p-2 md:p-3 rounded-xl hover:bg-[#f1c40f] hover:text-slate-900 transition shadow-md text-sm"><i class="fas fa-book-open"></i></button>
-                            <button onclick="deleteStudent('${s.id}', '${escapeHtml(s.fullName)}')" class="text-rose-500 bg-rose-500/10 p-2 md:p-3 rounded-xl hover:bg-rose-500 hover:text-white transition shadow-md text-sm"><i class="fas fa-trash-alt"></i></button>
+                             <a href="student-details.html?id=${s.id}" class="text-blue-400 bg-blue-400/10 p-2 md:p-3 rounded-xl hover:bg-blue-400 transition shadow-md text-sm"><i class="fas fa-id-card"></i></a>
+                             <button onclick="deleteStudent('${s.id}', '${escapeHtml(s.fullName)}')" class="text-rose-500 bg-rose-500/10 p-2 md:p-3 rounded-xl hover:bg-rose-500 transition shadow-md text-sm"><i class="fas fa-trash-alt"></i></button>
                         </div>
                     </td>
                 </tr>`;
             }).join('');
         }
 
-        // Load courses
         async function loadAllCourses() {
-            try {
-                const coursesSnap = await getDocs(collection(db, "courses"));
-                allCourses = [];
-                coursesSnap.forEach(doc => { allCourses.push({ id: doc.id, ...doc.data() }); });
-                if (allCourses.length === 0) {
-                    allCourses = [
-                        { id: "course1", courseName: "English Language Proficiency", courseCode: "ELP101", credits: 4 },
-                        { id: "course2", courseName: "Academic Writing", courseCode: "AW102", credits: 3 },
-                        { id: "course3", courseName: "Public Speaking", courseCode: "PS103", credits: 3 },
-                        { id: "course4", courseName: "Critical Reading", courseCode: "CR104", credits: 3 }
-                    ];
-                }
-                updateStats();
-            } catch (err) { console.error(err); }
+            const coursesSnap = await getDocs(collection(db, "courses"));
+            allCourses = [];
+            coursesSnap.forEach(doc => { allCourses.push({ id: doc.id, ...doc.data() }); });
+            updateStats();
         }
 
-        // Course modal handlers
-        window.openCourseModal = async (studentId, studentName) => {
-            const studentDoc = await getDoc(doc(db, "users", studentId));
-            if (!studentDoc.exists()) return;
-            const studentData = studentDoc.data();
-            document.getElementById('modalStudentName').innerHTML = `<i class="fas fa-user-graduate mr-2"></i> ${studentName} (${studentData.email})`;
-            const enrolledIds = studentData.enrolledCourses || [];
-            const enrolledCourses = allCourses.filter(c => enrolledIds.includes(c.id));
-            const enrolledContainer = document.getElementById('enrolledCoursesList');
-            if (enrolledCourses.length === 0) enrolledContainer.innerHTML = '<div class="text-slate-400 text-sm italic p-3">No courses enrolled yet.</div>';
-            else {
-                enrolledContainer.innerHTML = enrolledCourses.map(c => `
-                    <div class="course-tag mb-2 justify-between w-full flex-wrap">
-                        <span><strong>${c.courseName}</strong> (${c.courseCode || c.id})</span>
-                        <i class="fas fa-trash-alt remove-course" onclick="removeCourseFromStudent('${studentId}', '${c.id}')"></i>
-                    </div>
-                `).join('');
-            }
-            const availableCourses = allCourses.filter(c => !enrolledIds.includes(c.id));
-            const availableContainer = document.getElementById('availableCoursesList');
-            if (availableCourses.length === 0) availableContainer.innerHTML = '<div class="text-slate-400 text-sm italic p-3">All courses already enrolled.</div>';
-            else {
-                availableContainer.innerHTML = availableCourses.map(c => `
-                    <div class="bg-slate-800/50 p-3 rounded-xl flex flex-wrap justify-between items-center gap-2 hover:bg-slate-700/50 transition">
-                        <div><span class="font-bold text-white text-sm">${c.courseName}</span><span class="text-[10px] text-slate-400 ml-2">${c.courseCode || c.id}</span></div>
-                        <button onclick="addCourseToStudent('${studentId}', '${c.id}')" class="bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-full text-xs font-bold hover:bg-emerald-500 hover:text-white transition">+ Assign</button>
-                    </div>
-                `).join('');
-            }
-            document.getElementById('courseModal').classList.remove('hidden');
-        };
-        window.closeCourseModal = () => { document.getElementById('courseModal').classList.add('hidden'); };
-        window.addCourseToStudent = async (studentId, courseId) => {
-            try {
-                const studentRef = doc(db, "users", studentId);
-                await updateDoc(studentRef, { enrolledCourses: arrayUnion(courseId) });
-                const studentDoc = await getDoc(studentRef);
-                if (studentDoc.exists()) await openCourseModal(studentId, studentDoc.data().fullName);
-                await loadStudents();
-            } catch (err) { alert("Error assigning course: " + err.message); }
-        };
-        window.removeCourseFromStudent = async (studentId, courseId) => {
-            if (!confirm("Remove this course?")) return;
-            try {
-                const studentRef = doc(db, "users", studentId);
-                await updateDoc(studentRef, { enrolledCourses: arrayRemove(courseId) });
-                const studentDoc = await getDoc(studentRef);
-                if (studentDoc.exists()) await openCourseModal(studentId, studentDoc.data().fullName);
-                await loadStudents();
-            } catch (err) { alert("Error removing course: " + err.message); }
-        };
-
-        // Add student
-        document.getElementById('addStudentForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('createBtn');
-            const name = document.getElementById('addName').value.trim();
-            const email = document.getElementById('addEmail').value.trim();
-            const pass = document.getElementById('addPass').value;
-            const feeTotal = parseFloat(document.getElementById('addFeeTotal').value) || 0;
-            if (!name || !email) return alert("Name & Email required");
-            btn.disabled = true; btn.innerText = "Provisioning...";
-            try {
-                const cred = await createUserWithEmailAndPassword(secAuth, email, pass);
-                await setDoc(doc(db, "users", cred.user.uid), {
-                    fullName: name, email, role: 'student', createdAt: new Date().toISOString(),
-                    enrolledCourses: [], feeTotal: feeTotal
-                });
-                await signOut(secAuth);
-                alert(`✅ Student Registered: ${name}`);
-                closeAddModal();
-                await loadStudents();
-                document.getElementById('addStudentForm').reset();
-                document.getElementById('addPass').value = "UCC@2026";
-                document.getElementById('addFeeTotal').value = "25000";
-            } catch (err) { alert("Failed: " + err.message); }
-            finally { btn.disabled = false; btn.innerText = "Create Account & Enroll"; }
-        });
-
-        // Delete student
-        window.deleteStudent = async (id, name) => {
-            if(confirm(`⚠️ Permanently delete student: ${name}?`)) {
-                await deleteDoc(doc(db, "users", id));
-                await loadStudents();
-            }
-        };
-
-        // Search
-        document.getElementById('searchBar').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const filtered = studentsData.filter(s => s.fullName?.toLowerCase().includes(term) || s.email?.toLowerCase().includes(term));
-            renderTable(filtered);
-        });
-
-        // Export CSV
-        window.exportToCSV = () => {
-            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
-            const dataToExport = searchTerm ? studentsData.filter(s => s.fullName?.toLowerCase().includes(searchTerm) || s.email?.toLowerCase().includes(searchTerm)) : studentsData;
-            if (!dataToExport.length) return alert("No data to export.");
-            const headers = ["Full Name", "Email", "Enrolled Courses Count", "Total Fee (₹)", "Student ID", "Enrolled Courses IDs"];
-            const rows = dataToExport.map(s => [
-                s.fullName || "", s.email || "", (s.enrolledCourses?.length || 0), s.feeTotal || 0, s.id, (s.enrolledCourses || []).join("; ")
-            ]);
-            const csvContent = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
-            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.href = url;
-            link.setAttribute("download", `ucc_students_${new Date().toISOString().slice(0,19)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-        };
-
-        window.refreshDashboard = async () => {
-            await loadAllCourses();
-            await loadStudents();
-        };
-
+        window.refreshDashboard = async () => { await loadAllCourses(); await loadStudents(); };
         window.openAddModal = () => document.getElementById('addModal').classList.remove('hidden');
         window.closeAddModal = () => document.getElementById('addModal').classList.add('hidden');
         window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
 
-        // Mobile sidebar: open from left
         document.getElementById('mobileMenuButton').onclick = () => {
             document.getElementById('mainSidebar').classList.remove('-translate-x-full');
             document.getElementById('mobileSidebarOverlay').classList.remove('hidden');
         };
-        document.getElementById('mobileSidebarOverlay').onclick = () => {
-            document.getElementById('mainSidebar').classList.add('-translate-x-full');
-            document.getElementById('mobileSidebarOverlay').classList.add('hidden');
-        };
 
-        // Auth
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -477,13 +277,8 @@ if (countEl) countEl.innerText = totalStudents;
                     document.getElementById('adminInitial').innerText = (data.fullName || "A").charAt(0).toUpperCase();
                     await loadAllCourses();
                     await loadStudents();
-                } else { 
-                    await signOut(auth); 
-                    window.location.href = "../auth/login.html"; 
-                }
-            } else { 
-                window.location.href = "../auth/login.html"; 
-            }
+                } else { await signOut(auth); window.location.href = "../auth/login.html"; }
+            } else { window.location.href = "../auth/login.html"; }
         });
     </script>
 </body>
