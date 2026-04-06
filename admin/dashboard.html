@@ -26,6 +26,7 @@
         .active-link { background: rgba(241,196,15,0.1); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
         .stat-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
         .stat-card:hover { transform: translateY(-3px); box-shadow: 0 20px 25px -12px rgba(0,0,0,0.4); }
+        /* Mobile table adjustments */
         @media (max-width: 640px) {
             td, th { padding: 12px 8px !important; }
             .table-action-buttons { display: flex; gap: 8px; justify-content: flex-end; }
@@ -60,7 +61,9 @@
             <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-rupee-sign w-6"></i> Fee Management
             </a>
-            <!-- Register option removed as requested -->
+            <!-- <button onclick="openAddModal()" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase group">
+                <i class="fas fa-user-plus text-emerald-400 w-6 group-hover:scale-110 transition"></i> Register
+            </button> -->
             <a href="attendance.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-calendar-check w-6"></i> Attendance
             </a>
@@ -75,15 +78,9 @@
 
     <main class="flex-1 w-full p-4 md:p-8 lg:p-10 overflow-x-hidden">
         
-        <!-- Header with Profile on Right, Hamburger on Left -->
+        <!-- Enhanced Header with Stats Cards -->
         <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8 border border-white/5">
             <div class="flex flex-wrap items-center justify-between gap-4">
-                <!-- Left side: mobile menu button (hamburger) -->
-                <div class="flex items-center gap-4">
-                    <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
-                </div>
-
-                <!-- Right side: Admin Profile -->
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg" id="adminInitial">?</div>
                     <div>
@@ -91,9 +88,18 @@
                         <p class="text-slate-400 text-xs md:text-sm font-medium" id="adminEmail">Secure session verifying</p>
                     </div>
                 </div>
+                <div class="flex gap-3 items-center">
+                    <button onclick="refreshDashboard()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-md flex items-center gap-2">
+                        <i class="fas fa-sync-alt"></i> <span class="hidden sm:inline">Refresh</span>
+                    </button>
+                    <button onclick="openAddModal()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-900 px-4 md:px-6 py-2.5 md:py-3.5 rounded-xl md:rounded-2xl font-black uppercase text-xs transition-all shadow-xl hover:scale-105 flex items-center gap-2">
+                        <i class="fas fa-plus"></i> <span class="hidden xs:inline">Enroll</span>
+                    </button>
+                    <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
+                </div>
             </div>
 
-            <!-- Stats Row -->
+            <!-- Stats Row (New) -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
                 <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10 stat-card">
                     <div class="flex items-center justify-between">
@@ -136,7 +142,7 @@
             </button>
         </div>
 
-        <!-- Student Directory Table -->
+        <!-- Student Directory Table (Enhanced with Course count column) -->
         <div class="glass-panel rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
             <div class="overflow-x-auto custom-scroll">
                 <table class="w-full text-left min-w-[750px] md:min-w-full">
@@ -158,7 +164,7 @@
         </div>
     </main>
 
-    <!-- ADD STUDENT MODAL -->
+    <!-- ADD STUDENT MODAL (Enhanced) -->
     <div id="addModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
         <div class="glass-panel w-full max-w-xl rounded-3xl md:rounded-[3rem] p-6 md:p-10 shadow-2xl border border-white/20 modal-card">
             <div class="flex justify-between items-start mb-6">
@@ -192,7 +198,7 @@
         </div>
     </div>
 
-    <!-- ASSIGN COURSES MODAL -->
+    <!-- ASSIGN COURSES MODAL (Enhanced) -->
     <div id="courseModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
         <div class="glass-panel w-full max-w-4xl rounded-3xl md:rounded-[3rem] p-5 md:p-10 shadow-2xl border border-white/20 modal-card max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-start mb-5">
@@ -253,9 +259,10 @@
             document.getElementById('statTotalRevenue').innerHTML = `₹${totalRevenue.toLocaleString('en-IN')}`;
             document.getElementById('statTotalCourses').innerText = allCourses.length;
             const countEl = document.getElementById('studentCount') || document.getElementById('statTotalStudents');
-            if (countEl) countEl.innerText = totalStudents;
+if (countEl) countEl.innerText = totalStudents;
         }
 
+        // Load students
         async function loadStudents() {
             const tbody = document.getElementById('studentTableBody');
             tbody.innerHTML = `<tr><td colspan="6" class="p-8"><div class="skeleton h-12 w-full rounded-xl"></div></td></tr>`;
@@ -307,6 +314,7 @@
             }).join('');
         }
 
+        // Load courses
         async function loadAllCourses() {
             try {
                 const coursesSnap = await getDocs(collection(db, "courses"));
@@ -324,6 +332,7 @@
             } catch (err) { console.error(err); }
         }
 
+        // Course modal handlers
         window.openCourseModal = async (studentId, studentName) => {
             const studentDoc = await getDoc(doc(db, "users", studentId));
             if (!studentDoc.exists()) return;
@@ -375,6 +384,7 @@
             } catch (err) { alert("Error removing course: " + err.message); }
         };
 
+        // Add student
         document.getElementById('addStudentForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('createBtn');
@@ -401,6 +411,7 @@
             finally { btn.disabled = false; btn.innerText = "Create Account & Enroll"; }
         });
 
+        // Delete student
         window.deleteStudent = async (id, name) => {
             if(confirm(`⚠️ Permanently delete student: ${name}?`)) {
                 await deleteDoc(doc(db, "users", id));
@@ -408,12 +419,14 @@
             }
         };
 
+        // Search
         document.getElementById('searchBar').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const filtered = studentsData.filter(s => s.fullName?.toLowerCase().includes(term) || s.email?.toLowerCase().includes(term));
             renderTable(filtered);
         });
 
+        // Export CSV
         window.exportToCSV = () => {
             const searchTerm = document.getElementById('searchBar').value.toLowerCase();
             const dataToExport = searchTerm ? studentsData.filter(s => s.fullName?.toLowerCase().includes(searchTerm) || s.email?.toLowerCase().includes(searchTerm)) : studentsData;
@@ -443,7 +456,7 @@
         window.closeAddModal = () => document.getElementById('addModal').classList.add('hidden');
         window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
 
-        // Mobile sidebar toggle (opens from left)
+        // Mobile sidebar: open from left
         document.getElementById('mobileMenuButton').onclick = () => {
             document.getElementById('mainSidebar').classList.remove('-translate-x-full');
             document.getElementById('mobileSidebarOverlay').classList.remove('hidden');
@@ -453,6 +466,7 @@
             document.getElementById('mobileSidebarOverlay').classList.add('hidden');
         };
 
+        // Auth
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));

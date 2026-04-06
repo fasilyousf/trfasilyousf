@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,16 +29,13 @@
         .custom-scroll::-webkit-scrollbar-thumb { background: #f1c40f; border-radius: 10px; }
         @media (max-width: 640px) {
             .student-card { padding: 1rem; }
-            .action-buttons { gap: 6px; }
         }
     </style>
 </head>
 <body class="flex min-h-screen">
 
-    <!-- Mobile Sidebar Overlay -->
     <div id="mobileSidebarOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden"></div>
     
-    <!-- Sidebar - Left aligned (identical to reference style) -->
     <aside id="mainSidebar" class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
         <div class="p-6 border-b border-white/5">
             <div class="flex items-center gap-3">
@@ -54,10 +50,10 @@
         </div>
 
         <nav class="flex-1 p-5 space-y-2 mt-4">
-            <a href="dashboard.html" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase text-slate-300 hover:bg-white/5 transition">
+            <a href="dashboard.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-users text-lg w-6"></i> Directory
             </a>
-            <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase text-slate-300 hover:bg-white/5 transition">
+            <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-rupee-sign w-6"></i> Fee Management
             </a>
             <a href="#" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
@@ -73,15 +69,12 @@
     </aside>
 
     <main class="flex-1 w-full p-4 md:p-8 lg:p-10 overflow-x-hidden">
-        <!-- Header with Admin Profile on RIGHT side and Hamburger on LEFT (reference style) -->
+        <!-- Header with Profile on Right, Hamburger Left -->
         <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8 border border-white/5">
             <div class="flex flex-wrap items-center justify-between gap-4">
-                <!-- Left side: mobile menu button (hamburger) -->
                 <div class="flex items-center gap-4">
                     <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
                 </div>
-
-                <!-- Right side: Admin Profile -->
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg" id="adminInitial">?</div>
                     <div>
@@ -92,7 +85,7 @@
             </div>
         </div>
 
-        <!-- Attendance Controls & Stats -->
+        <!-- Attendance Controls -->
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
             <div>
                 <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">Attendance Intelligence</h2>
@@ -159,7 +152,6 @@
         <div id="studentsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
     </main>
 
-    <!-- Toast Container -->
     <div id="toastContainer" class="fixed bottom-6 right-6 flex flex-col gap-2 z-[200]"></div>
 
     <script type="module">
@@ -187,22 +179,13 @@
         let holidayReason = "";
         let isSunday = false;
 
-        function formatToDMY(isoDate) {
-            const [y, m, d] = isoDate.split('-');
-            return `${d}/${m}/${y}`;
-        }
-
-        function getDayName(dateStr) {
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const d = new Date(dateStr);
-            return days[d.getDay()];
-        }
-
+        function formatToDMY(isoDate) { const [y,m,d] = isoDate.split('-'); return `${d}/${m}/${y}`; }
+        function getDayName(dateStr) { const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; return days[new Date(dateStr).getDay()]; }
         function showToast(msg, isError = false) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `bg-slate-800 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-sm font-bold border border-white/10 transform transition-all duration-300`;
-            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle text-rose-500' : 'fa-check-circle text-[#f1c40f]'}"></i> <span>${msg}</span>`;
+            toast.className = `bg-slate-800 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-sm font-bold border border-white/10`;
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle text-rose-500' : 'fa-check-circle text-[#f1c40f]'}"></i> ${msg}`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
@@ -214,24 +197,16 @@
             const warningDiv = document.getElementById('holidayWarning');
             const warningMsgSpan = document.getElementById('holidayMsg');
             const reasonBadge = document.getElementById('holidayReasonBadge');
-
             const disabled = (isSunday || isHoliday);
-            
             if (disabled) {
-                if(container) container.classList.add('disabled-attendance');
+                container.classList.add('disabled-attendance');
                 markAllBtn.classList.add('btn-disabled');
                 saveBtn.classList.add('btn-disabled');
                 warningDiv.classList.remove('hidden');
-                if (isSunday) {
-                    warningMsgSpan.innerHTML = `<i class="fas fa-calendar-week mr-1"></i> SUNDAY (Weekly Off) – Attendance disabled, marked as OFF/Holiday`;
-                    reasonBadge.classList.add('hidden');
-                } else if (isHoliday) {
-                    warningMsgSpan.innerHTML = `<i class="fas fa-gift mr-1"></i> HOLIDAY: ${holidayReason || 'Institute Closed'} – Attendance disabled, marked as OFF/Holiday`;
-                    reasonBadge.classList.remove('hidden');
-                    reasonBadge.innerHTML = `<i class="fas fa-info-circle"></i> ${holidayReason}`;
-                }
+                if (isSunday) warningMsgSpan.innerHTML = `<i class="fas fa-calendar-week mr-1"></i> SUNDAY (Weekly Off) – Attendance disabled, marked as OFF/Holiday`;
+                else if (isHoliday) warningMsgSpan.innerHTML = `<i class="fas fa-gift mr-1"></i> HOLIDAY: ${holidayReason || 'Institute Closed'} – Attendance disabled, marked as OFF/Holiday`;
             } else {
-                if(container) container.classList.remove('disabled-attendance');
+                container.classList.remove('disabled-attendance');
                 markAllBtn.classList.remove('btn-disabled');
                 saveBtn.classList.remove('btn-disabled');
                 warningDiv.classList.add('hidden');
@@ -243,44 +218,24 @@
             try {
                 const holidayRef = doc(db, "holidays", selectedDate);
                 const snap = await getDoc(holidayRef);
-                if (snap.exists() && snap.data().isHoliday === true) {
-                    isHoliday = true;
-                    holidayReason = snap.data().reason || "Institute Off";
-                } else {
-                    isHoliday = false;
-                    holidayReason = "";
-                }
-                const holidayBtn = document.getElementById('toggleHolidayBtn');
+                if (snap.exists() && snap.data().isHoliday === true) { isHoliday = true; holidayReason = snap.data().reason || "Institute Off"; }
+                else { isHoliday = false; holidayReason = ""; }
                 const btnSpan = document.getElementById('holidayBtnText');
-                if (isHoliday) {
-                    btnSpan.innerText = "Remove Holiday";
-                    holidayBtn.classList.add('border-amber-500', 'text-amber-400');
-                    holidayBtn.classList.remove('border-slate-700', 'text-slate-400');
-                } else {
-                    btnSpan.innerText = "Set as Holiday";
-                    holidayBtn.classList.remove('border-amber-500', 'text-amber-400');
-                    holidayBtn.classList.add('border-slate-700', 'text-slate-400');
-                }
+                if (isHoliday) btnSpan.innerText = "Remove Holiday";
+                else btnSpan.innerText = "Set as Holiday";
                 updateAttendanceBlocker();
-            } catch (err) {
-                console.error("Holiday load error:", err);
-                isHoliday = false;
-                holidayReason = "";
-            }
+            } catch (err) { console.error(err); isHoliday = false; }
         }
 
         async function initPage() {
             try {
                 const snap = await getDocs(collection(db, "users"));
                 allStudents = [];
-                snap.forEach(d => {
-                    if(d.data().role === 'student') allStudents.push({ uid: d.id, ...d.data() });
-                });
+                snap.forEach(d => { if(d.data().role === 'student') allStudents.push({ uid: d.id, ...d.data() }); });
                 document.getElementById('totalCount').innerText = allStudents.length;
                 await loadAttendance();
                 await loadHolidayStatus();
                 renderUI();
-                // Load admin info for profile
                 const user = auth.currentUser;
                 if (user) {
                     const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -291,10 +246,7 @@
                         document.getElementById('adminInitial').innerText = (data.fullName || "A").charAt(0).toUpperCase();
                     }
                 }
-            } catch(err) {
-                console.error("Init error:", err);
-                showToast("Failed to load data. Check console.", true);
-            }
+            } catch(err) { console.error(err); showToast("Failed to load data", true); }
         }
 
         async function loadAttendance() {
@@ -304,299 +256,99 @@
                 const statusMap = {};
                 snap.forEach(d => { statusMap[d.data().studentId] = d.data().status; });
                 allStudents.forEach(s => { currentAttendance[s.uid] = statusMap[s.uid] || "absent"; });
-            } catch(err) {
-                console.error("Attendance load error:", err);
-            }
+            } catch(err) { console.error(err); }
         }
 
         function renderUI() {
-            if (!allStudents.length) {
-                document.getElementById('studentsGrid').innerHTML = `<div class="col-span-full text-center py-20 text-slate-400">No students found</div>`;
-                return;
-            }
+            if (!allStudents.length) { document.getElementById('studentsGrid').innerHTML = `<div class="col-span-full text-center py-20 text-slate-400">No students found</div>`; return; }
             const container = document.getElementById('studentsGrid');
             document.getElementById('displayDate').innerText = formatToDMY(selectedDate);
             const day = getDayName(selectedDate);
             document.getElementById('dayName').innerHTML = day + (day === 'Sunday' ? ' <span class="text-amber-400">(Weekly Off)</span>' : '');
-            
             isSunday = (day === 'Sunday');
             updateAttendanceBlocker(); 
-            
-            let pCount = 0;
-            let aCount = 0;
+            let pCount = 0, aCount = 0;
             const search = document.getElementById('searchStudentInput').value.toLowerCase();
             const filtered = allStudents.filter(s => s.fullName.toLowerCase().includes(search));
             const disabled = (isSunday || isHoliday);
-
             const effectiveStatus = (disabled) ? "off" : null;
-
             container.innerHTML = filtered.map(s => {
                 let status = effectiveStatus ? effectiveStatus : (currentAttendance[s.uid] === 'present' ? 'present' : 'absent');
-                let displayText = "";
-                let dotClass = "";
-                if (status === 'present') {
-                    displayText = "Present";
-                    dotClass = "dot-present";
-                    if (!disabled) pCount++;
-                } else if (status === 'absent') {
-                    displayText = "Absent";
-                    dotClass = "dot-absent";
-                    if (!disabled) aCount++;
-                } else {
-                    displayText = "OFF / Holiday";
-                    dotClass = "dot-off";
-                }
-                
-                return `
-                    <div class="student-card p-5 md:p-6">
-                        <div class="flex justify-between items-start mb-5">
-                            <div class="flex items-center gap-3 md:gap-4">
-                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-slate-800 flex items-center justify-center text-[#f1c40f] font-black border border-white/5 text-sm md:text-base">${s.fullName.charAt(0)}</div>
-                                <div><h4 class="font-bold text-white text-sm md:text-base">${escapeHtml(s.fullName)}</h4><p class="text-[9px] text-slate-500 font-mono">${escapeHtml(s.email)}</p></div>
-                            </div>
-                            <span class="text-[8px] font-black uppercase ${status === 'present' ? 'text-emerald-500' : (status === 'absent' ? 'text-rose-500' : 'text-amber-400')}"><span class="status-dot ${dotClass}"></span>${displayText}</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="window.markSingle('${s.uid}', 'present')" ${disabled ? 'disabled' : ''} class="py-2.5 rounded-xl ${status === 'present' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase transition-all ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-emerald-600 hover:text-white'}">Present</button>
-                            <button onclick="window.markSingle('${s.uid}', 'absent')" ${disabled ? 'disabled' : ''} class="py-2.5 rounded-xl ${status === 'absent' ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase transition-all ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-rose-600 hover:text-white'}">Absent</button>
-                        </div>
-                    </div>`;
+                let displayText = "", dotClass = "";
+                if (status === 'present') { displayText = "Present"; dotClass = "dot-present"; if (!disabled) pCount++; }
+                else if (status === 'absent') { displayText = "Absent"; dotClass = "dot-absent"; if (!disabled) aCount++; }
+                else { displayText = "OFF / Holiday"; dotClass = "dot-off"; }
+                return `<div class="student-card p-5 md:p-6"><div class="flex justify-between items-start mb-5"><div class="flex items-center gap-3 md:gap-4"><div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-slate-800 flex items-center justify-center text-[#f1c40f] font-black border border-white/5 text-sm md:text-base">${s.fullName.charAt(0)}</div><div><h4 class="font-bold text-white text-sm md:text-base">${s.fullName}</h4><p class="text-[9px] text-slate-500 font-mono">${s.email}</p></div></div><span class="text-[8px] font-black uppercase ${status === 'present' ? 'text-emerald-500' : (status === 'absent' ? 'text-rose-500' : 'text-amber-400')}"><span class="status-dot ${dotClass}"></span>${displayText}</span></div><div class="grid grid-cols-2 gap-2"><button onclick="window.markSingle('${s.uid}', 'present')" ${disabled ? 'disabled' : ''} class="py-2.5 rounded-xl ${status === 'present' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase transition-all ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-emerald-600 hover:text-white'}">Present</button><button onclick="window.markSingle('${s.uid}', 'absent')" ${disabled ? 'disabled' : ''} class="py-2.5 rounded-xl ${status === 'absent' ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase transition-all ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-rose-600 hover:text-white'}">Absent</button></div></div>`;
             }).join('');
-            
-            if (disabled) {
-                document.getElementById('presentCount').innerText = "0";
-                document.getElementById('absentCount').innerText = "0";
-                document.getElementById('attPercent').innerText = "0%";
-            } else {
-                document.getElementById('presentCount').innerText = pCount;
-                document.getElementById('absentCount').innerText = aCount;
-                const total = allStudents.length;
-                document.getElementById('attPercent').innerText = total ? Math.round((pCount/total)*100) + '%' : '0%';
-            }
+            if (disabled) { document.getElementById('presentCount').innerText = "0"; document.getElementById('absentCount').innerText = "0"; document.getElementById('attPercent').innerText = "0%"; }
+            else { document.getElementById('presentCount').innerText = pCount; document.getElementById('absentCount').innerText = aCount; const total = allStudents.length; document.getElementById('attPercent').innerText = total ? Math.round((pCount/total)*100) + '%' : '0%'; }
         }
 
-        window.markSingle = (uid, status) => {
-            if (isSunday || isHoliday) {
-                showToast("Attendance marking is disabled today (Holiday/Sunday)", true);
-                return;
-            }
-            currentAttendance[uid] = status;
-            renderUI();
-        };
-        
-        async function changeDate(delta) {
-            const d = new Date(selectedDate);
-            d.setDate(d.getDate() + delta);
-            selectedDate = d.toISOString().split('T')[0];
-            await loadAttendance();
-            await loadHolidayStatus();
-            renderUI();
-        }
-
+        window.markSingle = (uid, status) => { if (isSunday || isHoliday) { showToast("Attendance marking is disabled today", true); return; } currentAttendance[uid] = status; renderUI(); };
+        async function changeDate(delta) { const d = new Date(selectedDate); d.setDate(d.getDate() + delta); selectedDate = d.toISOString().split('T')[0]; await loadAttendance(); await loadHolidayStatus(); renderUI(); }
         async function toggleHoliday() {
-            if (isSunday) {
-                showToast("Cannot set holiday on Sunday (weekly off already)", true);
-                return;
-            }
+            if (isSunday) { showToast("Cannot set holiday on Sunday", true); return; }
             const holidayRef = doc(db, "holidays", selectedDate);
-            if (isHoliday) {
-                await setDoc(holidayRef, { isHoliday: false, date: selectedDate }, { merge: true });
-                isHoliday = false;
-                holidayReason = "";
-                showToast(`Holiday removed for ${formatToDMY(selectedDate)}`);
-            } else {
-                let reason = prompt("Enter reason for holiday (e.g., Eid, Republic Day, Annual Function):", "Institute Off");
-                if (reason === null) return;
-                reason = reason.trim();
-                if (reason === "") reason = "Institute Off";
-                await setDoc(holidayRef, { 
-                    isHoliday: true, 
-                    date: selectedDate, 
-                    reason: reason,
-                    setBy: "admin", 
-                    timestamp: new Date().toISOString() 
-                }, { merge: true });
-                isHoliday = true;
-                holidayReason = reason;
-                showToast(`✅ Marked as Holiday: ${reason}`);
-            }
-            await loadHolidayStatus();
-            renderUI();
+            if (isHoliday) { await setDoc(holidayRef, { isHoliday: false, date: selectedDate }, { merge: true }); showToast(`Holiday removed for ${formatToDMY(selectedDate)}`); }
+            else { let reason = prompt("Enter reason for holiday:", "Institute Off"); if (reason === null) return; reason = reason.trim(); if (reason === "") reason = "Institute Off"; await setDoc(holidayRef, { isHoliday: true, date: selectedDate, reason: reason, setBy: "admin", timestamp: new Date().toISOString() }, { merge: true }); showToast(`✅ Marked as Holiday: ${reason}`); }
+            await loadHolidayStatus(); renderUI();
         }
-
-        function downloadCSV(content, filename) {
-            const blob = new Blob(["\uFEFF" + content], { type: "text/csv;charset=utf-8;" });
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.href = url;
-            link.setAttribute("download", filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-        }
-
+        function downloadCSV(content, filename) { const blob = new Blob(["\uFEFF" + content], { type: "text/csv;charset=utf-8;" }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = filename; link.click(); URL.revokeObjectURL(link.href); }
         async function exportDailyCSV() {
-            try {
-                let rows = [["Student Name", "Email", "Status", "Date", "Day", "Holiday/Reason"]];
-                const disabled = (isSunday || isHoliday);
-                let dayNote = "";
-                if (isSunday) dayNote = "Sunday Off";
-                else if (isHoliday) dayNote = `Holiday: ${holidayReason}`;
-                else dayNote = "Working Day";
-                
-                for (const s of allStudents) {
-                    let status;
-                    if (disabled) {
-                        status = "OFF / Holiday";
-                    } else {
-                        status = (currentAttendance[s.uid] === 'present') ? "PRESENT" : "ABSENT";
-                    }
-                    rows.push([
-                        s.fullName,
-                        s.email,
-                        status,
-                        formatToDMY(selectedDate),
-                        getDayName(selectedDate),
-                        dayNote
-                    ]);
-                }
-                const csvContent = rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
-                downloadCSV(csvContent, `UCC_Attendance_${selectedDate}.csv`);
-                showToast("Daily CSV exported successfully");
-            } catch (err) {
-                console.error("Daily export error:", err);
-                showToast("Export failed: " + err.message, true);
-            }
+            let rows = [["Student Name", "Email", "Status", "Date", "Day", "Holiday/Reason"]];
+            const disabled = (isSunday || isHoliday);
+            let dayNote = isSunday ? "Sunday Off" : (isHoliday ? `Holiday: ${holidayReason}` : "Working Day");
+            for (const s of allStudents) { let status = disabled ? "OFF / Holiday" : (currentAttendance[s.uid] === 'present' ? "PRESENT" : "ABSENT"); rows.push([s.fullName, s.email, status, formatToDMY(selectedDate), getDayName(selectedDate), dayNote]); }
+            downloadCSV(rows.map(r => r.map(c => `"${c.replace(/"/g, '""')}"`).join(",")).join("\n"), `UCC_Attendance_${selectedDate}.csv`);
+            showToast("Daily CSV exported");
         }
-
         async function exportMonthlyCSV() {
-            try {
-                showToast("Fetching monthly data...");
-                const thirtyDaysAgo = new Date();
-                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-                const startStr = thirtyDaysAgo.toISOString().split('T')[0];
-                
-                const q = query(collection(db, "attendance"), where("date", ">=", startStr));
-                const snap = await getDocs(q);
-                
-                const holidayQuery = query(collection(db, "holidays"), where("date", ">=", startStr));
-                const holidaySnap = await getDocs(holidayQuery);
-                const holidayMap = {};
-                holidaySnap.forEach(d => { 
-                    if (d.data().isHoliday) holidayMap[d.id] = d.data().reason || "Holiday"; 
-                });
-                
-                let rows = [["Date", "Day", "Student Name", "Status", "Recorded At", "Holiday Flag"]];
-                for (const docSnap of snap.docs) {
-                    const data = docSnap.data();
-                    const dayOfWeek = getDayName(data.date);
-                    let holidayFlag = "";
-                    let status = data.status.toUpperCase();
-                    if (holidayMap[data.date]) {
-                        holidayFlag = `Holiday (${holidayMap[data.date]})`;
-                        status = "OFF / Holiday";
-                    } else if (dayOfWeek === 'Sunday') {
-                        holidayFlag = "Sunday Off";
-                        status = "OFF / Holiday";
-                    }
-                    rows.push([
-                        formatToDMY(data.date),
-                        dayOfWeek,
-                        data.studentName || "Unknown",
-                        status,
-                        data.timestamp || "",
-                        holidayFlag
-                    ]);
-                }
-                if (rows.length === 1) {
-                    rows.push(["No attendance records found in the last 30 days"]);
-                }
-                const csvContent = rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
-                downloadCSV(csvContent, `UCC_Monthly_Report.csv`);
-                showToast("Monthly report exported");
-            } catch (err) {
-                console.error("Monthly export error:", err);
-                showToast("Monthly export failed: " + err.message, true);
+            showToast("Fetching monthly data...");
+            const thirtyDaysAgo = new Date(); thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            const startStr = thirtyDaysAgo.toISOString().split('T')[0];
+            const q = query(collection(db, "attendance"), where("date", ">=", startStr));
+            const snap = await getDocs(q);
+            const holidayQuery = query(collection(db, "holidays"), where("date", ">=", startStr));
+            const holidaySnap = await getDocs(holidayQuery);
+            const holidayMap = {};
+            holidaySnap.forEach(d => { if (d.data().isHoliday) holidayMap[d.id] = d.data().reason || "Holiday"; });
+            let rows = [["Date","Day","Student Name","Status","Recorded At","Holiday Flag"]];
+            for (const docSnap of snap.docs) {
+                const data = docSnap.data();
+                const dayOfWeek = getDayName(data.date);
+                let holidayFlag = "", status = data.status.toUpperCase();
+                if (holidayMap[data.date]) { holidayFlag = `Holiday (${holidayMap[data.date]})`; status = "OFF / Holiday"; }
+                else if (dayOfWeek === 'Sunday') { holidayFlag = "Sunday Off"; status = "OFF / Holiday"; }
+                rows.push([formatToDMY(data.date), dayOfWeek, data.studentName, status, data.timestamp || "", holidayFlag]);
             }
+            if (rows.length === 1) rows.push(["No attendance records found in the last 30 days"]);
+            downloadCSV(rows.map(r => r.map(c => `"${c.replace(/"/g, '""')}"`).join(",")).join("\n"), `UCC_Monthly_Report.csv`);
+            showToast("Monthly report exported");
         }
 
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m]));
-        }
-
-        // Event Listeners
         document.getElementById('saveAllBtn').onclick = async () => {
-            if (isSunday || isHoliday) {
-                showToast("Cannot sync attendance: Today is a holiday or Sunday", true);
-                return;
-            }
+            if (isSunday || isHoliday) { showToast("Cannot sync attendance: Holiday or Sunday", true); return; }
             const btn = document.getElementById('saveAllBtn');
-            const originalText = btn.innerText;
-            btn.innerText = "Syncing...";
+            const originalText = btn.innerText; btn.innerText = "Syncing...";
             try {
-                const promises = allStudents.map(s => {
-                    return setDoc(doc(db, "attendance", `${s.uid}_${selectedDate}`), {
-                        studentId: s.uid, studentName: s.fullName, date: selectedDate, status: currentAttendance[s.uid], timestamp: new Date().toISOString()
-                    }, { merge: true });
-                });
-                await Promise.all(promises);
-                showToast("All records synced successfully");
-            } catch(err) {
-                showToast("Sync failed: " + err.message, true);
-            } finally {
-                btn.innerText = originalText;
-            }
+                const promises = allStudents.map(s => setDoc(doc(db, "attendance", `${s.uid}_${selectedDate}`), { studentId: s.uid, studentName: s.fullName, date: selectedDate, status: currentAttendance[s.uid], timestamp: new Date().toISOString() }, { merge: true }));
+                await Promise.all(promises); showToast("All records synced");
+            } catch(err) { showToast("Sync failed: " + err.message, true); }
+            finally { btn.innerText = originalText; }
         };
-
-        document.getElementById('markAllPresentBtn').onclick = () => {
-            if (isSunday || isHoliday) {
-                showToast("Action blocked: Holiday or Sunday", true);
-                return;
-            }
-            allStudents.forEach(s => currentAttendance[s.uid] = 'present');
-            renderUI();
-            showToast("All marked present (local only)");
-        };
-
+        document.getElementById('markAllPresentBtn').onclick = () => { if (isSunday || isHoliday) { showToast("Action blocked: Holiday or Sunday", true); return; } allStudents.forEach(s => currentAttendance[s.uid] = 'present'); renderUI(); showToast("All marked present (local only)"); };
         document.getElementById('toggleHolidayBtn').onclick = () => toggleHoliday();
         document.getElementById('searchStudentInput').addEventListener('input', () => renderUI());
         document.getElementById('prevDateBtn').onclick = () => changeDate(-1);
         document.getElementById('nextDateBtn').onclick = () => changeDate(1);
         document.getElementById('exportDailyBtn').onclick = () => exportDailyCSV();
         document.getElementById('exportMonthlyBtn').onclick = () => exportMonthlyCSV();
-        
         window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
-
-        // Mobile sidebar toggle (opens from left)
-        document.getElementById('mobileMenuButton').onclick = () => {
-            document.getElementById('mainSidebar').classList.remove('-translate-x-full');
-            document.getElementById('mobileSidebarOverlay').classList.remove('hidden');
-        };
-        document.getElementById('mobileSidebarOverlay').onclick = () => {
-            document.getElementById('mainSidebar').classList.add('-translate-x-full');
-            document.getElementById('mobileSidebarOverlay').classList.add('hidden');
-        };
-
-        // Auth guard
+        document.getElementById('mobileMenuButton').onclick = () => { document.getElementById('mainSidebar').classList.remove('-translate-x-full'); document.getElementById('mobileSidebarOverlay').classList.remove('hidden'); };
+        document.getElementById('mobileSidebarOverlay').onclick = () => { document.getElementById('mainSidebar').classList.add('-translate-x-full'); document.getElementById('mobileSidebarOverlay').classList.add('hidden'); };
         onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                try {
-                    const userDoc = await getDoc(doc(db, "users", user.uid));
-                    if (userDoc.exists() && userDoc.data().role === 'admin') {
-                        initPage();
-                    } else {
-                        await signOut(auth);
-                        window.location.href = "../auth/login.html";
-                    }
-                } catch(e) {
-                    console.error("Auth error:", e);
-                    window.location.href = "../auth/login.html";
-                }
-            } else {
-                window.location.href = "../auth/login.html";
-            }
+            if (user) { const userDoc = await getDoc(doc(db, "users", user.uid)); if (userDoc.exists() && userDoc.data().role === 'admin') initPage(); else { await signOut(auth); window.location.href = "../auth/login.html"; } }
+            else window.location.href = "../auth/login.html";
         });
     </script>
 </body>
