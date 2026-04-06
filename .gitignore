@@ -1,3 +1,26 @@
+# 🔐 SENSITIVE DATA (Never Upload!)
 .env
-node_modules/
 serviceAccountKey.json
+*.pem
+
+# 📦 DEPENDENCIES
+node_modules/
+.pnp
+.pnp.js
+
+# 🔥 FIREBASE LOGS & CACHE
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# 🏗️ BUILD OUTPUTS
+dist/
+build/
+out/
+
+# 💻 OS & IDE SPECIFIC
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,58 +1,101 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Tr Fasil Yousf | Attendance & Exports</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>UCC Admin | Attendance Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Outfit', sans-serif; box-sizing: border-box; }
-        body { background: #060912; color: #f8fafc; overflow-x: hidden; }
-        .glass-panel { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #060912 100%); border-right: 1px solid rgba(241,196,15,0.1); }
-        .student-card { background: rgba(30, 41, 59, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease; }
+        * { font-family: 'Outfit', sans-serif; }
+        body { background: #0b1120; color: #ecf3f2; }
+        .glass-panel { background: rgba(15, 23, 42, 0.68); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.06); }
+        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%); backdrop-filter: blur(4px); border-right: 1px solid rgba(241,196,15,0.12); }
+        .active-link { background: rgba(241,196,15,0.1); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
+        .student-card { background: rgba(30, 41, 59, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease; border-radius: 2rem; }
         .student-card:hover { border-color: rgba(241, 196, 15, 0.3); transform: translateY(-4px); }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
         .dot-present { background: #10b981; box-shadow: 0 0 10px #10b981; }
         .dot-absent { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
         .dot-off { background: #f1c40f; box-shadow: 0 0 10px #f1c40f; }
-        .date-badge { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid rgba(241,196,15,0.2); }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #f1c40f; border-radius: 10px; }
+        .date-badge { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid rgba(241,196,15,0.2); border-radius: 2rem; }
         .disabled-attendance { opacity: 0.6; pointer-events: none; filter: grayscale(0.1); }
-        .holiday-badge { background: #f1c40f20; border: 1px solid #f1c40f40; color: #f1c40f; }
         .btn-disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
-        .reason-tag { background: rgba(241,196,15,0.15); border-radius: 20px; padding: 2px 10px; font-size: 9px; font-weight: bold; }
+        .reason-tag { background: rgba(241,196,15,0.15); border-radius: 20px; padding: 2px 10px; font-size: 9px; font-weight: bold; display: inline-block; }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-card { animation: slideUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #f1c40f; border-radius: 10px; }
+        @media (max-width: 640px) {
+            .student-card { padding: 1rem; }
+            .action-buttons { gap: 6px; }
+        }
     </style>
 </head>
 <body class="flex min-h-screen">
 
-    <aside class="fixed lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300">
-        <div class="p-8 pb-6 text-center lg:text-left">
-            <h1 class="text-xl font-black tracking-tighter text-white">UCC <span class="text-[#f1c40f]">NEXUS</span></h1>
-            <p class="text-[9px] text-slate-500 font-bold uppercase tracking-[0.3em]">Command Center</p>
+    <!-- Mobile Sidebar Overlay -->
+    <div id="mobileSidebarOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+    
+    <!-- Sidebar - Left aligned (identical to reference style) -->
+    <aside id="mainSidebar" class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
+        <div class="p-6 border-b border-white/5">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
+                    <i class="fas fa-crown text-slate-900 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-tight text-white">UCC <span class="text-[#f1c40f]">ADMIN</span></h1>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Control Core</p>
+                </div>
+            </div>
         </div>
-        <nav class="flex-1 px-6 py-4 space-y-2">
-            <a href="dashboard.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-2xl transition-all font-semibold text-sm">
-                <i class="fas fa-th-large w-5"></i> Dashboard
+
+        <nav class="flex-1 p-5 space-y-2 mt-4">
+            <a href="dashboard.html" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase text-slate-300 hover:bg-white/5 transition">
+                <i class="fas fa-users text-lg w-6"></i> Directory
             </a>
-            <a href="#" class="flex items-center gap-4 px-5 py-3.5 bg-[#f1c40f]/10 text-[#f1c40f] rounded-2xl font-bold text-sm border-l-4 border-[#f1c40f]">
-                <i class="fas fa-calendar-check w-5"></i> Attendance
+            <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase text-slate-300 hover:bg-white/5 transition">
+                <i class="fas fa-rupee-sign w-6"></i> Fee Management
+            </a>
+            <a href="#" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
+                <i class="fas fa-calendar-check w-6"></i> Attendance
             </a>
         </nav>
-        <div class="p-6 mt-auto">
-            <button id="logoutBtn" class="w-full px-6 py-4 bg-rose-500/10 text-rose-500 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-rose-500 hover:text-white transition-all">
-                <i class="fas fa-power-off mr-2"></i> Exit
+
+        <div class="p-5 border-t border-white/10">
+            <button onclick="logout()" class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase">
+                <i class="fas fa-sign-out-alt w-6"></i> Exit Panel
             </button>
         </div>
     </aside>
 
-    <main class="flex-1 w-full p-4 md:p-8 lg:p-10">
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-10">
+    <main class="flex-1 w-full p-4 md:p-8 lg:p-10 overflow-x-hidden">
+        <!-- Header with Admin Profile on RIGHT side and Hamburger on LEFT (reference style) -->
+        <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8 border border-white/5">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <!-- Left side: mobile menu button (hamburger) -->
+                <div class="flex items-center gap-4">
+                    <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
+                </div>
+
+                <!-- Right side: Admin Profile -->
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg" id="adminInitial">?</div>
+                    <div>
+                        <h2 class="text-xl md:text-3xl font-black text-white tracking-tight" id="adminName">Authenticating...</h2>
+                        <p class="text-slate-400 text-xs md:text-sm font-medium" id="adminEmail">Secure session</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance Controls & Stats -->
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
             <div>
-                <h2 class="text-3xl font-black text-white tracking-tight">Attendance Intelligence</h2>
+                <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">Attendance Intelligence</h2>
                 <div class="flex gap-3 mt-4">
                     <button id="exportDailyBtn" class="bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-slate-900 px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest border border-emerald-500/20 transition-all">
                         <i class="fas fa-file-export mr-2"></i> Daily CSV
@@ -83,37 +126,41 @@
             </div>
         </div>
 
+        <!-- Stats Cards -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            <div class="glass-panel p-6 rounded-[2.5rem] border-b-4 border-emerald-500">
+            <div class="glass-panel p-6 rounded-2xl md:rounded-[2.5rem] border-b-4 border-emerald-500">
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Present</p>
-                <h3 id="presentCount" class="text-4xl font-black text-white">0</h3>
+                <h3 id="presentCount" class="text-3xl md:text-4xl font-black text-white">0</h3>
             </div>
-            <div class="glass-panel p-6 rounded-[2.5rem] border-b-4 border-rose-500">
+            <div class="glass-panel p-6 rounded-2xl md:rounded-[2.5rem] border-b-4 border-rose-500">
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Absent</p>
-                <h3 id="absentCount" class="text-4xl font-black text-white">0</h3>
+                <h3 id="absentCount" class="text-3xl md:text-4xl font-black text-white">0</h3>
             </div>
-            <div class="glass-panel p-6 rounded-[2.5rem] border-b-4 border-[#f1c40f]">
+            <div class="glass-panel p-6 rounded-2xl md:rounded-[2.5rem] border-b-4 border-[#f1c40f]">
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Enrollment</p>
-                <h3 id="totalCount" class="text-4xl font-black text-white">0</h3>
+                <h3 id="totalCount" class="text-3xl md:text-4xl font-black text-white">0</h3>
             </div>
-            <div class="glass-panel p-6 rounded-[2.5rem] border-b-4 border-sky-500">
+            <div class="glass-panel p-6 rounded-2xl md:rounded-[2.5rem] border-b-4 border-sky-500">
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Rate</p>
-                <h3 id="attPercent" class="text-4xl font-black text-white">0%</h3>
+                <h3 id="attPercent" class="text-3xl md:text-4xl font-black text-white">0%</h3>
             </div>
         </div>
 
+        <!-- Search & Bulk Actions -->
         <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 bg-slate-900/50 p-4 rounded-3xl border border-white/5">
-            <input type="text" id="searchStudentInput" placeholder="Quick search scholar..." class="w-full md:w-96 bg-slate-800 border border-slate-700 rounded-2xl py-3.5 px-6 text-white focus:border-[#f1c40f] outline-none transition">
+            <input type="text" id="searchStudentInput" placeholder="Quick search scholar..." class="w-full md:w-96 bg-slate-800 border border-slate-700 rounded-2xl py-3.5 px-6 text-white focus:border-[#f1c40f] outline-none transition text-sm">
             <div class="flex gap-3 w-full md:w-auto">
                 <button id="markAllPresentBtn" class="flex-1 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-white px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase transition-all">Mark All Present</button>
                 <button id="saveAllBtn" class="flex-1 bg-[#f1c40f] text-slate-900 px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase shadow-xl hover:bg-white transition-all">Sync to Cloud</button>
             </div>
         </div>
 
+        <!-- Students Grid -->
         <div id="studentsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
     </main>
 
-    <div id="toastContainer" class="fixed bottom-10 right-10 flex flex-col gap-3 z-[200]"></div>
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 flex flex-col gap-2 z-[200]"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -154,8 +201,8 @@
         function showToast(msg, isError = false) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `bg-slate-800 text-white px-8 py-4 rounded-3xl shadow-2xl flex items-center gap-4 text-sm font-bold border border-white/10`;
-            toast.innerHTML = `<i class="fas fa-${isError ? 'exclamation-triangle' : 'check-circle'} text-[#f1c40f]"></i> <span>${msg}</span>`;
+            toast.className = `bg-slate-800 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-sm font-bold border border-white/10 transform transition-all duration-300`;
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle text-rose-500' : 'fa-check-circle text-[#f1c40f]'}"></i> <span>${msg}</span>`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
@@ -171,7 +218,7 @@
             const disabled = (isSunday || isHoliday);
             
             if (disabled) {
-                container.classList.add('disabled-attendance');
+                if(container) container.classList.add('disabled-attendance');
                 markAllBtn.classList.add('btn-disabled');
                 saveBtn.classList.add('btn-disabled');
                 warningDiv.classList.remove('hidden');
@@ -184,7 +231,7 @@
                     reasonBadge.innerHTML = `<i class="fas fa-info-circle"></i> ${holidayReason}`;
                 }
             } else {
-                container.classList.remove('disabled-attendance');
+                if(container) container.classList.remove('disabled-attendance');
                 markAllBtn.classList.remove('btn-disabled');
                 saveBtn.classList.remove('btn-disabled');
                 warningDiv.classList.add('hidden');
@@ -207,11 +254,11 @@
                 const btnSpan = document.getElementById('holidayBtnText');
                 if (isHoliday) {
                     btnSpan.innerText = "Remove Holiday";
-                    holidayBtn.classList.add('holiday-badge');
+                    holidayBtn.classList.add('border-amber-500', 'text-amber-400');
                     holidayBtn.classList.remove('border-slate-700', 'text-slate-400');
                 } else {
                     btnSpan.innerText = "Set as Holiday";
-                    holidayBtn.classList.remove('holiday-badge');
+                    holidayBtn.classList.remove('border-amber-500', 'text-amber-400');
                     holidayBtn.classList.add('border-slate-700', 'text-slate-400');
                 }
                 updateAttendanceBlocker();
@@ -233,7 +280,17 @@
                 await loadAttendance();
                 await loadHolidayStatus();
                 renderUI();
-                console.log("Page initialized with", allStudents.length, "students");
+                // Load admin info for profile
+                const user = auth.currentUser;
+                if (user) {
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    if (userDoc.exists()) {
+                        const data = userDoc.data();
+                        document.getElementById('adminName').innerText = "Salam, " + (data.fullName || "Admin");
+                        document.getElementById('adminEmail').innerText = data.email;
+                        document.getElementById('adminInitial').innerText = (data.fullName || "A").charAt(0).toUpperCase();
+                    }
+                }
             } catch(err) {
                 console.error("Init error:", err);
                 showToast("Failed to load data. Check console.", true);
@@ -271,7 +328,6 @@
             const filtered = allStudents.filter(s => s.fullName.toLowerCase().includes(search));
             const disabled = (isSunday || isHoliday);
 
-            // On holiday or Sunday, force all statuses to "off/holiday"
             const effectiveStatus = (disabled) ? "off" : null;
 
             container.innerHTML = filtered.map(s => {
@@ -289,26 +345,24 @@
                 } else {
                     displayText = "OFF / Holiday";
                     dotClass = "dot-off";
-                    // Off days do not count toward present/absent
                 }
                 
                 return `
-                    <div class="student-card rounded-[2.5rem] p-6">
-                        <div class="flex justify-between items-start mb-6">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-[#f1c40f] font-black border border-white/5">${s.fullName.charAt(0)}</div>
-                                <div><h4 class="font-bold text-white text-sm">${s.fullName}</h4><p class="text-[9px] text-slate-500 font-mono">${s.email}</p></div>
+                    <div class="student-card p-5 md:p-6">
+                        <div class="flex justify-between items-start mb-5">
+                            <div class="flex items-center gap-3 md:gap-4">
+                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-slate-800 flex items-center justify-center text-[#f1c40f] font-black border border-white/5 text-sm md:text-base">${s.fullName.charAt(0)}</div>
+                                <div><h4 class="font-bold text-white text-sm md:text-base">${escapeHtml(s.fullName)}</h4><p class="text-[9px] text-slate-500 font-mono">${escapeHtml(s.email)}</p></div>
                             </div>
                             <span class="text-[8px] font-black uppercase ${status === 'present' ? 'text-emerald-500' : (status === 'absent' ? 'text-rose-500' : 'text-amber-400')}"><span class="status-dot ${dotClass}"></span>${displayText}</span>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
-                            <button onclick="window.markSingle('${s.uid}', 'present')" ${disabled ? 'disabled' : ''} class="py-2.5 rounded-xl ${status === 'present' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase transition-all ${disabled ? 'opacity-40 cursor-not-allowed' : ''}">Present</button>
-                            <button onclick="window.markSingle('${s.uid}', 'absent')" ${disabled ? 'disabled' : ''} class="py-2.5 rounded-xl ${status === 'absent' ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase transition-all ${disabled ? 'opacity-40 cursor-not-allowed' : ''}">Absent</button>
+                            <button onclick="window.markSingle('${s.uid}', 'present')" ${disabled ? 'disabled' : ''} class="py-2.5 rounded-xl ${status === 'present' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase transition-all ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-emerald-600 hover:text-white'}">Present</button>
+                            <button onclick="window.markSingle('${s.uid}', 'absent')" ${disabled ? 'disabled' : ''} class="py-2.5 rounded-xl ${status === 'absent' ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-500'} text-[9px] font-black uppercase transition-all ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-rose-600 hover:text-white'}">Absent</button>
                         </div>
                     </div>`;
             }).join('');
             
-            // On holiday/Sunday, present/absent counts are forced to 0
             if (disabled) {
                 document.getElementById('presentCount').innerText = "0";
                 document.getElementById('absentCount').innerText = "0";
@@ -370,7 +424,6 @@
             renderUI();
         }
 
-        // =============== EXPORT FUNCTIONS ===============
         function downloadCSV(content, filename) {
             const blob = new Blob(["\uFEFF" + content], { type: "text/csv;charset=utf-8;" });
             const link = document.createElement("a");
@@ -450,7 +503,7 @@
                     rows.push([
                         formatToDMY(data.date),
                         dayOfWeek,
-                        data.studentName,
+                        data.studentName || "Unknown",
                         status,
                         data.timestamp || "",
                         holidayFlag
@@ -468,7 +521,12 @@
             }
         }
 
-        // =============== EVENT LISTENERS ===============
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m]));
+        }
+
+        // Event Listeners
         document.getElementById('saveAllBtn').onclick = async () => {
             if (isSunday || isHoliday) {
                 showToast("Cannot sync attendance: Today is a holiday or Sunday", true);
@@ -508,16 +566,28 @@
         document.getElementById('nextDateBtn').onclick = () => changeDate(1);
         document.getElementById('exportDailyBtn').onclick = () => exportDailyCSV();
         document.getElementById('exportMonthlyBtn').onclick = () => exportMonthlyCSV();
-        document.getElementById('logoutBtn').onclick = async () => { await signOut(auth); window.location.href = "../index.html"; };
+        
+        window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
 
-        // Authentication
+        // Mobile sidebar toggle (opens from left)
+        document.getElementById('mobileMenuButton').onclick = () => {
+            document.getElementById('mainSidebar').classList.remove('-translate-x-full');
+            document.getElementById('mobileSidebarOverlay').classList.remove('hidden');
+        };
+        document.getElementById('mobileSidebarOverlay').onclick = () => {
+            document.getElementById('mainSidebar').classList.add('-translate-x-full');
+            document.getElementById('mobileSidebarOverlay').classList.add('hidden');
+        };
+
+        // Auth guard
         onAuthStateChanged(auth, async (user) => {
-            if(user) {
+            if (user) {
                 try {
                     const userDoc = await getDoc(doc(db, "users", user.uid));
                     if (userDoc.exists() && userDoc.data().role === 'admin') {
                         initPage();
                     } else {
+                        await signOut(auth);
                         window.location.href = "../auth/login.html";
                     }
                 } catch(e) {
