@@ -1,0 +1,23 @@
+{
+  "name": "UCC Handwara Portal",
+  "short_name": "UCC Portal",
+  "description": "Empowering Your Digital Future with Tr Fasil Yousf",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#1a2233",
+  "theme_color": "#1a2233",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/img/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/img/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
