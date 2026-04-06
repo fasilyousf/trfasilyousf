@@ -1,229 +1,427 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>My Profile | UCC Admin Nexus</title>
+    <title>UCC Admin Nexus | Enhanced Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <style>
-        * { font-family: 'Outfit', sans-serif; }
-        body { background: #0b1120; color: #ecf3f2; }
-        .glass-panel { background: rgba(15, 23, 42, 0.68); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.06); }
-        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%); backdrop-filter: blur(4px); border-right: 1px solid rgba(241,196,15,0.12); }
-        .active-link { background: rgba(241,196,15,0.1); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
-        .profile-avatar { background: linear-gradient(135deg, #f1c40f 0%, #e67e22 100%); box-shadow: 0 20px 35px -10px rgba(241,196,15,0.3); }
-        .info-card { transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.05); }
-        .info-card:hover { background: rgba(241,196,15,0.03); border-color: rgba(241,196,15,0.2); transform: translateY(-2px); }
-        .edit-input { background: #0f172a; border: 1px solid #334155; transition: all 0.2s; }
-        .edit-input:focus { border-color: #f1c40f; outline: none; box-shadow: 0 0 0 2px rgba(241,196,15,0.2); }
-        .btn-gold { background: rgba(241,196,15,0.12); border: 1px solid rgba(241,196,15,0.3); transition: all 0.2s; }
-        .btn-gold:hover { background: #f1c40f; color: #0f172a; border-color: #f1c40f; }
-        .modal-backdrop { animation: fadeIn 0.2s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .modal-card { animation: slideUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
-        @media (max-width: 640px) {
-            .profile-header { flex-direction: column; align-items: flex-start !important; gap: 1rem; }
+        * {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at 10% 20%, #0a0f1c, #05070f);
+            min-height: 100vh;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeSlideUp {
+            animation: fadeSlideUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.35);
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-3px);
+            background: rgba(15, 23, 42, 0.8);
+            border-color: rgba(241, 196, 15, 0.25);
+        }
+
+        .sidebar-modern {
+            background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%);
+            border-right: 1px solid rgba(241, 196, 15, 0.12);
+        }
+
+        .active-link {
+            background: rgba(241, 196, 15, 0.12);
+            border-left: 4px solid #f1c40f;
+            color: #f1c40f !important;
+        }
+
+        .nav-item {
+            transition: all 0.2s ease;
+            border-radius: 1rem;
+        }
+
+        .nav-item:hover:not(.active-link) {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(6px);
+        }
+
+        .input-elegant {
+            transition: all 0.2s ease;
+            background: #0f172a;
+            border: 1px solid #334155;
+            width: 100%;
+            padding: 0.85rem 1.25rem;
+            border-radius: 1.25rem;
+            font-weight: 500;
+            color: #f1f5f9;
+            font-size: 0.95rem;
+        }
+
+        .input-elegant:focus {
+            border-color: #f1c40f;
+            box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.2);
+            transform: scale(1.01);
+            outline: none;
+        }
+
+        .btn-gold {
+            background: rgba(241, 196, 15, 0.12);
+            border: 1px solid rgba(241, 196, 15, 0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-gold:hover {
+            background: #f1c40f;
+            color: #0f172a;
+            border-color: #f1c40f;
+        }
+
+        /* Avatar upload styles - fully clickable */
+        .avatar-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .avatar-img {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(241, 196, 15, 0.5);
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s;
+            background: linear-gradient(135deg, #f1c40f, #e67e22);
+        }
+
+        .camera-badge {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: #0f172a;
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(241, 196, 15, 0.8);
+            color: #f1c40f;
+            font-size: 1.3rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .camera-badge:hover {
+            background: #f1c40f;
+            color: #0f172a;
+            transform: scale(1.05);
+        }
+
+        .small-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 1.5rem;
+            object-fit: cover;
+            border: 2px solid rgba(241, 196, 15, 0.4);
+            background: linear-gradient(135deg, #f1c40f, #e67e22);
+        }
+
+        .stat-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            padding: 1rem 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            background: rgba(241, 196, 15, 0.08);
+            border-color: rgba(241, 196, 15, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .avatar-img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .camera-badge {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+                bottom: 8px;
+                right: 8px;
+            }
+
+            .small-avatar {
+                width: 48px;
+                height: 48px;
+            }
+        }
+
+        /* Hidden file input but accessible */
+        #photoUploadInput {
+            position: absolute;
+            width: 0;
+            height: 0;
+            opacity: 0;
+            z-index: -1;
         }
     </style>
 </head>
+
 <body class="flex min-h-screen">
 
-    <!-- Mobile sidebar overlay -->
-    <div id="mobileSidebarOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden transition-all duration-300"></div>
-    
-    <!-- Sidebar - identical structure as main dashboard -->
-    <aside id="mainSidebar" class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
+    <div id="mobileSidebarOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+
+    <aside id="mainSidebar"
+        class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-modern z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
         <div class="p-6 border-b border-white/5">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
+                <div
+                    class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
                     <i class="fas fa-crown text-slate-900 text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-black tracking-tight text-white">UCC <span class="text-[#f1c40f]">ADMIN</span></h1>
+                    <h1 class="text-xl font-black tracking-tight text-white">UCC <span
+                            class="text-[#f1c40f]">ADMIN</span></h1>
                     <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Control Core</p>
                 </div>
             </div>
         </div>
-
         <nav class="flex-1 p-5 space-y-2 mt-4">
-            <!-- Directory (Dashboard) link -->
-            <a href="dashboard.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
-                <i class="fas fa-users text-lg w-6"></i> Directory
-            </a>
-            <!-- My Profile - Active state -->
-            <a href="profile.html" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
-                <i class="fas fa-user-circle w-6"></i> My Profile
-            </a>
-            <!-- eDairy -->
-            <a href="edairy.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
-                <i class="fas fa-book-open w-6"></i> eDairy
-            </a>
-            <!-- Fee Management -->
-            <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
-                <i class="fas fa-rupee-sign w-6"></i> Fee Management
-            </a>
-            <!-- Attendance -->
-            <a href="attendance.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
-                <i class="fas fa-calendar-check w-6"></i> Attendance
+            <a href="dashboard.html"
+                class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i
+                    class="fas fa-users text-lg w-6"></i> Directory</a>
+            <a href="profile.html"
+                class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase"><i
+                    class="fas fa-user-circle w-6"></i> My Profile</a>
+            <a href="edairy.html"
+                class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i
+                    class="fas fa-book-open w-6"></i> eDairy</a>
+            <a href="fees.html"
+                class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i
+                    class="fas fa-rupee-sign w-6"></i> Fee Management</a>
+            <a href="attendance.html"
+                class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i
+                    class="fas fa-calendar-check w-6"></i> Attendance</a>
+            <a href="communication.html"
+                class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-2xl transition text-slate-400 hover:text-white group">
+                <i class="fas fa-comments"></i>
+                <span class="font-bold text-sm uppercase">Communication</span>
             </a>
         </nav>
-
         <div class="p-5 border-t border-white/10">
-            <button onclick="logout()" class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase">
-                <i class="fas fa-sign-out-alt w-6"></i> Exit Panel
-            </button>
+            <button onclick="logout()"
+                class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase"><i
+                    class="fas fa-sign-out-alt w-6"></i> Exit Panel</button>
         </div>
     </aside>
 
     <main class="flex-1 w-full p-4 md:p-8 lg:p-10 overflow-x-hidden">
-        <!-- Header with mobile menu + admin greeting -->
-        <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8 border border-white/5">
+        <div class="glass-panel rounded-3xl p-5 md:p-7 mb-6 md:mb-8 animate-fadeSlideUp">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                    <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl">
-                        <i class="fas fa-bars"></i>
-                    </button>
+                    <button id="mobileMenuButton"
+                        class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i
+                            class="fas fa-bars"></i></button>
                     <div>
-                        <h2 class="text-xl md:text-2xl font-black text-white tracking-tight">
-                            <i class="fas fa-user-edit text-[#f1c40f] mr-2"></i> My Profile
-                        </h2>
-                        <p class="text-slate-400 text-xs md:text-sm font-medium">Manage your admin credentials & personal information</p>
+                        <div class="flex items-center gap-2 text-[#f1c40f] text-sm font-bold mb-1"><i
+                                class="fas fa-shield-alt"></i> <span>ADMIN DASHBOARD</span></div>
+                        <h2 class="text-xl md:text-3xl font-black text-white tracking-tight">My Profile</h2>
+                        <p class="text-slate-400 text-xs md:text-sm font-medium">Manage credentials & personal details
+                        </p>
                     </div>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg" id="adminInitial">?</div>
+                <div class="flex items-center gap-4 bg-slate-900/40 rounded-2xl px-4 py-2 backdrop-blur-sm">
+                    <img id="headerAvatar" class="small-avatar" src="https://via.placeholder.com/150" alt="avatar">
                     <div>
-                        <h2 class="text-xl md:text-3xl font-black text-white tracking-tight" id="adminName">Authenticating...</h2>
-                        <p class="text-slate-400 text-xs md:text-sm font-medium" id="adminEmail">Secure session</p>
+                        <h3 id="adminName" class="text-xl md:text-2xl font-black text-white tracking-tight">
+                            Authenticating...</h3>
+                        <p id="adminEmail" class="text-slate-400 text-xs font-medium">Secure session</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Profile Details Card -->
-        <div class="glass-panel rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-2xl border border-white/10">
-            <div class="flex flex-col lg:flex-row gap-8">
-                <!-- Left Column: Avatar & Role -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8 animate-fadeSlideUp" style="animation-delay: 0.05s">
+            <div class="stat-card flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-[#f1c40f]/15 flex items-center justify-center"><i
+                        class="fas fa-envelope text-[#f1c40f] text-xl"></i></div>
+                <div>
+                    <p class="text-[10px] font-black uppercase text-slate-400">Email (verified)</p>
+                    <p id="statEmail" class="font-bold text-white text-sm truncate">---</p>
+                </div>
+            </div>
+            <div class="stat-card flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-[#f1c40f]/15 flex items-center justify-center"><i
+                        class="fas fa-calendar-alt text-[#f1c40f] text-xl"></i></div>
+                <div>
+                    <p class="text-[10px] font-black uppercase text-slate-400">Admin Since</p>
+                    <p id="adminSinceStat" class="font-bold text-white text-sm">---</p>
+                </div>
+            </div>
+            <div class="stat-card flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-[#f1c40f]/15 flex items-center justify-center"><i
+                        class="fas fa-id-card text-[#f1c40f] text-xl"></i></div>
+                <div>
+                    <p class="text-[10px] font-black uppercase text-slate-400">User ID</p>
+                    <p id="userIdDisplay" class="font-mono text-white text-xs">---</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl animate-fadeSlideUp" style="animation-delay: 0.1s">
+            <div class="flex flex-col lg:flex-row gap-10">
                 <div class="lg:w-1/3 flex flex-col items-center text-center">
-                    <div class="profile-avatar w-36 h-36 md:w-44 md:h-44 rounded-full flex items-center justify-center text-5xl md:text-7xl font-black text-slate-900 border-4 border-white/20 shadow-2xl" id="profileAvatarIcon">
-                        A
-                    </div>
-                    <div class="mt-6">
-                        <div class="bg-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-black uppercase inline-flex items-center gap-2">
-                            <i class="fas fa-shield-alt"></i> Administrator Access
+                    <!-- Avatar with clickable area -->
+                    <div class="avatar-wrapper" id="avatarClickArea">
+                        <img id="profileAvatarImg" class="avatar-img" src="https://via.placeholder.com/160"
+                            alt="Profile">
+                        <div class="camera-badge" id="cameraButton">
+                            <i class="fas fa-camera"></i>
                         </div>
+                    </div>
+                    <!-- Hidden file input - explicitly placed and referenced -->
+                    <input type="file" id="photoUploadInput" accept="image/jpeg,image/png,image/webp">
+                    <div class="mt-6">
+                        <div
+                            class="bg-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-black uppercase inline-flex items-center gap-2">
+                            <i class="fas fa-shield-alt"></i> Administrator Access</div>
                         <p class="text-slate-400 text-sm mt-3">Role: <strong class="text-white">Super Admin</strong></p>
-                        <p class="text-slate-500 text-xs mt-2">User ID: <span id="userIdDisplay" class="font-mono">—</span></p>
+                        <p class="text-slate-500 text-[11px] mt-2"><i
+                                class="fas fa-cloud-upload-alt mr-1 text-[#f1c40f]"></i> Click avatar or camera to
+                            update photo</p>
                     </div>
                 </div>
 
-                <!-- Right Column: Editable Info -->
-                <div class="lg:w-2/3 space-y-6">
+                <div class="lg:w-2/3 space-y-7">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Full Name Field -->
-                        <div class="info-card rounded-2xl p-5 bg-slate-900/30">
-                            <label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2">
-                                <i class="fas fa-user-graduate"></i> Full Name
-                            </label>
+                        <div class="rounded-2xl p-5 bg-slate-800/40 border border-white/5">
+                            <label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i
+                                    class="fas fa-user-graduate"></i> Full Name</label>
                             <div class="mt-2 flex items-center justify-between gap-3">
                                 <span id="displayFullName" class="text-white font-bold text-lg">—</span>
-                                <button onclick="enableEdit('fullName')" class="text-[#f1c40f] hover:bg-[#f1c40f]/10 p-2 rounded-xl transition text-sm">
-                                    <i class="fas fa-pen"></i>
-                                </button>
+                                <button onclick="enableEdit('fullName')"
+                                    class="text-[#f1c40f] hover:bg-[#f1c40f]/10 p-2 rounded-xl transition text-sm"><i
+                                        class="fas fa-pen"></i></button>
                             </div>
                             <div id="editFullNameContainer" class="hidden mt-3">
-                                <input type="text" id="editFullNameInput" class="edit-input w-full rounded-xl px-4 py-2 text-white text-sm">
-                                <div class="flex gap-2 mt-3">
-                                    <button onclick="saveField('fullName')" class="bg-emerald-500 text-slate-900 text-xs font-black px-4 py-1.5 rounded-lg">Save</button>
-                                    <button onclick="cancelEdit('fullName')" class="bg-slate-700 text-white text-xs px-4 py-1.5 rounded-lg">Cancel</button>
+                                <input type="text" id="editFullNameInput" class="input-elegant text-sm">
+                                <div class="flex gap-2 mt-3"><button onclick="saveField('fullName')"
+                                        class="bg-emerald-500 text-slate-900 text-xs font-black px-4 py-1.5 rounded-lg">Save</button><button
+                                        onclick="cancelEdit('fullName')"
+                                        class="bg-slate-700 text-white text-xs px-4 py-1.5 rounded-lg">Cancel</button>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Email Field (Read-only for security, but display) -->
-                        <div class="info-card rounded-2xl p-5 bg-slate-900/30">
-                            <label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2">
-                                <i class="fas fa-envelope"></i> Email Address
-                            </label>
-                            <div class="mt-2 flex items-center justify-between">
-                                <span id="displayEmail" class="text-white font-mono text-sm break-all">—</span>
-                                <span class="text-slate-500 text-[10px] bg-slate-800 px-2 py-1 rounded-full">verified</span>
+                        <div class="rounded-2xl p-5 bg-slate-800/40 border border-white/5">
+                            <label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i
+                                    class="fas fa-envelope"></i> Email Address</label>
+                            <div class="mt-2 flex items-center justify-between"><span id="displayEmail"
+                                    class="text-white font-mono text-sm break-all">—</span><span
+                                    class="text-slate-500 text-[10px] bg-slate-700 px-2 py-1 rounded-full">verified</span>
                             </div>
-                            <p class="text-[10px] text-slate-500 mt-2">Email cannot be changed. Contact support for updates.</p>
+                            <p class="text-[10px] text-slate-500 mt-2">Email cannot be changed. Contact support.</p>
                         </div>
-
-                        <!-- Admin Since -->
-                        <div class="info-card rounded-2xl p-5 bg-slate-900/30">
-                            <label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2">
-                                <i class="fas fa-calendar-alt"></i> Admin Since
-                            </label>
-                            <p id="adminSince" class="text-white font-semibold text-md mt-2">—</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="rounded-2xl p-5 bg-slate-800/40 border border-white/5"><label
+                                class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i
+                                    class="fas fa-history"></i> Admin Since</label>
+                            <p id="adminSinceDetail" class="text-white font-semibold text-md mt-2">—</p>
                         </div>
-
-                        <!-- Last Login (from session) -->
-                        <div class="info-card rounded-2xl p-5 bg-slate-900/30">
-                            <label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2">
-                                <i class="fas fa-clock"></i> Session Last Refresh
-                            </label>
+                        <div class="rounded-2xl p-5 bg-slate-800/40 border border-white/5"><label
+                                class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i
+                                    class="fas fa-clock"></i> Last Session</label>
                             <p id="lastLoginDisplay" class="text-white font-semibold text-md mt-2">—</p>
                         </div>
                     </div>
-
-                    <!-- Password Reset Section -->
-                    <div class="info-card rounded-2xl p-5 bg-slate-900/40 border border-amber-500/20 mt-2">
+                    <div class="rounded-2xl p-5 bg-slate-800/40 border border-amber-500/20">
                         <div class="flex flex-wrap items-center justify-between gap-4">
                             <div>
-                                <h3 class="text-white font-bold flex items-center gap-2"><i class="fas fa-key text-[#f1c40f]"></i> Security Credentials</h3>
-                                <p class="text-slate-400 text-xs mt-1">Update your password regularly to maintain security.</p>
-                            </div>
-                            <button onclick="openPasswordModal()" class="btn-gold px-5 py-2.5 rounded-xl font-bold text-sm uppercase flex items-center gap-2">
-                                <i class="fas fa-lock"></i> Change Password
-                            </button>
+                                <h3 class="text-white font-bold flex items-center gap-2"><i
+                                        class="fas fa-key text-[#f1c40f]"></i> Security Credentials</h3>
+                                <p class="text-slate-400 text-xs mt-1">Update your password regularly.</p>
+                            </div><button onclick="openPasswordModal()"
+                                class="btn-gold px-5 py-2.5 rounded-xl font-bold text-sm uppercase flex items-center gap-2"><i
+                                    class="fas fa-lock"></i> Change Password</button>
                         </div>
                     </div>
-
-                    <!-- Activity Hint -->
-                    <div class="text-center text-slate-500 text-xs border-t border-white/5 pt-6 mt-2">
-                        <i class="fas fa-database mr-1"></i> Profile data synchronized with Firebase
-                    </div>
+                    <div class="text-center text-slate-500 text-[11px] border-t border-white/10 pt-5"><i
+                            class="fas fa-database mr-1"></i> Profile data synchronized with Firebase & Cloudinary</div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- CHANGE PASSWORD MODAL -->
-    <div id="passwordModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
-        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 shadow-2xl border border-white/20 modal-card">
+    <div id="passwordModal"
+        class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 border border-white/20">
             <div class="flex justify-between items-start mb-5">
                 <div>
-                    <h3 class="text-2xl font-black text-white"><i class="fas fa-key text-[#f1c40f] mr-2"></i> Change Password</h3>
-                    <p class="text-slate-400 text-xs mt-1">Enter new credentials for admin account</p>
-                </div>
-                <button onclick="closePasswordModal()" class="text-slate-500 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button>
+                    <h3 class="text-2xl font-black text-white"><i class="fas fa-key text-[#f1c40f] mr-2"></i> Change
+                        Password</h3>
+                    <p class="text-slate-400 text-xs mt-1">New credentials for admin account</p>
+                </div><button onclick="closePasswordModal()" class="text-slate-500 hover:text-white text-2xl"><i
+                        class="fas fa-times-circle"></i></button>
             </div>
             <form id="passwordForm" class="space-y-5">
-                <div>
-                    <label class="text-[10px] font-black uppercase text-slate-500 ml-2">New Password</label>
-                    <input type="password" id="newPassword" class="w-full mt-1 px-5 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none" required minlength="6">
-                </div>
-                <div>
-                    <label class="text-[10px] font-black uppercase text-slate-500 ml-2">Confirm Password</label>
-                    <input type="password" id="confirmPassword" class="w-full mt-1 px-5 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none" required>
-                </div>
-                <button type="submit" id="updatePasswordBtn" class="w-full py-3.5 bg-[#f1c40f] text-slate-900 font-black uppercase rounded-xl hover:bg-white transition-all shadow-xl text-sm">
-                    Update Password
-                </button>
+                <div><label class="text-[10px] font-black uppercase text-slate-500 ml-2">New Password (min 6
+                        chars)</label><input type="password" id="newPassword"
+                        class="w-full mt-1 px-5 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none"
+                        required minlength="6"></div>
+                <div><label class="text-[10px] font-black uppercase text-slate-500 ml-2">Confirm Password</label><input
+                        type="password" id="confirmPassword"
+                        class="w-full mt-1 px-5 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none"
+                        required></div>
+                <button type="submit" id="updatePasswordBtn"
+                    class="w-full py-3.5 bg-[#f1c40f] text-slate-900 font-black uppercase rounded-xl hover:bg-white transition-all shadow-xl text-sm">Update
+                    Password</button>
             </form>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, updatePassword, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut, updatePassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
@@ -238,17 +436,34 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        const CLOUD_NAME = "dholrawub";
+        const UPLOAD_PRESET = "portal_profile";
+
         let currentAdminUser = null;
         let currentAdminData = null;
-        let editFieldActive = null; // track active edit field
+        let editFieldActive = null;
 
-        // Helper: Escape HTML
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-6 right-6 px-5 py-3 rounded-xl shadow-2xl z-[200] text-sm font-bold backdrop-blur-md ${isError ? 'bg-rose-500 text-white' : 'bg-emerald-500 text-slate-900'}`;
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-2"></i> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
         }
 
-        // Load and display profile data
+        function updateAvatarUI(photoURL, fullName) {
+            const largeImg = document.getElementById('profileAvatarImg');
+            const headerImg = document.getElementById('headerAvatar');
+            if (photoURL && photoURL.trim() !== "") {
+                largeImg.src = photoURL;
+                headerImg.src = photoURL;
+            } else {
+                const fallbackUrl = `https://ui-avatars.com/api/?background=f1c40f&color=0f172a&bold=true&name=${encodeURIComponent(fullName || "Admin")}&size=160&rounded=true`;
+                largeImg.src = fallbackUrl;
+                headerImg.src = fallbackUrl;
+            }
+        }
+
         async function loadProfile(user) {
             if (!user) return;
             const userDocRef = doc(db, "users", user.uid);
@@ -256,48 +471,121 @@
             if (docSnap.exists() && docSnap.data().role === 'admin') {
                 currentAdminData = docSnap.data();
                 currentAdminUser = user;
-                
-                // Update UI
                 const fullName = currentAdminData.fullName || "Administrator";
-                const email = user.email || currentAdminData.email || "admin@ucc.edu";
+                const email = user.email || currentAdminData.email;
                 const createdAt = currentAdminData.createdAt ? new Date(currentAdminData.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : "January 2025";
-                
+                const photoURL = currentAdminData.photoURL || null;
                 document.getElementById('adminName').innerText = `Salam, ${fullName}`;
                 document.getElementById('adminEmail').innerText = email;
-                const initial = fullName.charAt(0).toUpperCase();
-                document.getElementById('adminInitial').innerText = initial;
-                document.getElementById('profileAvatarIcon').innerText = initial;
                 document.getElementById('displayFullName').innerText = fullName;
                 document.getElementById('displayEmail').innerText = email;
-                document.getElementById('adminSince').innerText = createdAt;
-                document.getElementById('userIdDisplay').innerText = user.uid.slice(0, 8) + "...";
-                
-                // Last login placeholder (auth current time)
-                const lastLogin = new Date().toLocaleString();
-                document.getElementById('lastLoginDisplay').innerText = lastLogin;
-                
-                // Reset edit field if any
-                if (editFieldActive) cancelEdit(editFieldActive);
+                document.getElementById('adminSinceDetail').innerText = createdAt;
+                document.getElementById('adminSinceStat').innerText = createdAt;
+                document.getElementById('statEmail').innerText = email;
+                document.getElementById('userIdDisplay').innerText = user.uid.slice(0, 10) + "...";
+                document.getElementById('lastLoginDisplay').innerText = new Date().toLocaleString();
+                updateAvatarUI(photoURL, fullName);
+                if (editFieldActive) cancelEdit('fullName');
             } else {
-                // Not admin -> force logout
                 await signOut(auth);
                 window.location.href = "../auth/login.html";
             }
         }
 
-        // Edit handlers
+        // RELIABLE FILE PICKER TRIGGER - with debug logs
+        function openFilePicker() {
+            console.log("openFilePicker called");
+            const fileInput = document.getElementById('photoUploadInput');
+            if (fileInput) {
+                console.log("File input found, triggering click");
+                fileInput.click();
+            } else {
+                console.error("File input element not found!");
+                showToast("System error: upload input missing", true);
+            }
+        }
+
+        // Attach event listeners to both camera badge and avatar wrapper
+        const cameraBtn = document.getElementById('cameraButton');
+        const avatarArea = document.getElementById('avatarClickArea');
+
+        if (cameraBtn) {
+            cameraBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log("Camera button clicked");
+                openFilePicker();
+            });
+        } else {
+            console.error("Camera button not found");
+        }
+
+        if (avatarArea) {
+            avatarArea.addEventListener('click', (e) => {
+                // If the click came from the camera button, we already handled it.
+                if (e.target.closest('#cameraButton')) return;
+                e.preventDefault();
+                console.log("Avatar area clicked");
+                openFilePicker();
+            });
+        } else {
+            console.error("Avatar area not found");
+        }
+
+        // File input change handler (Cloudinary upload)
+        const photoInput = document.getElementById('photoUploadInput');
+        if (photoInput) {
+            photoInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file || !currentAdminUser) {
+                    console.log("No file or no user");
+                    return;
+                }
+                console.log("File selected:", file.name);
+
+                const cameraIcon = document.querySelector('#cameraButton i');
+                if (cameraIcon) cameraIcon.className = "fas fa-spinner fa-spin";
+
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', UPLOAD_PRESET);
+
+                try {
+                    const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+                    if (data.secure_url) {
+                        const imageUrl = data.secure_url;
+                        await updateDoc(doc(db, "users", currentAdminUser.uid), { photoURL: imageUrl });
+                        await updateProfile(currentAdminUser, { photoURL: imageUrl });
+                        if (currentAdminData) currentAdminData.photoURL = imageUrl;
+                        updateAvatarUI(imageUrl, currentAdminData?.fullName || "Admin");
+                        showToast("Profile photo updated successfully!");
+                    } else {
+                        throw new Error(data.error?.message || "Upload failed");
+                    }
+                } catch (err) {
+                    console.error("Cloudinary error:", err);
+                    showToast("Cloudinary upload failed. Please ensure unsigned preset 'portal_profile' exists.", true);
+                } finally {
+                    if (cameraIcon) cameraIcon.className = "fas fa-camera";
+                    e.target.value = ''; // allow re-upload same file
+                }
+            });
+        } else {
+            console.error("Photo input element not found");
+        }
+
         window.enableEdit = (field) => {
             if (field === 'fullName') {
-                const container = document.getElementById('editFullNameContainer');
-                const input = document.getElementById('editFullNameInput');
-                const currentName = document.getElementById('displayFullName').innerText;
-                input.value = currentName;
+                document.getElementById('editFullNameContainer').classList.remove('hidden');
+                document.getElementById('editFullNameInput').value = document.getElementById('displayFullName').innerText;
                 document.getElementById('displayFullName').parentElement.classList.add('hidden');
-                container.classList.remove('hidden');
                 editFieldActive = 'fullName';
             }
         };
-        
         window.cancelEdit = (field) => {
             if (field === 'fullName') {
                 document.getElementById('editFullNameContainer').classList.add('hidden');
@@ -305,115 +593,59 @@
                 editFieldActive = null;
             }
         };
-        
         window.saveField = async (field) => {
             if (field === 'fullName') {
                 const newName = document.getElementById('editFullNameInput').value.trim();
-                if (!newName) {
-                    alert("Name cannot be empty");
-                    return;
-                }
+                if (!newName) return showToast("Name cannot be empty", true);
                 try {
-                    // Update Firestore
-                    const userRef = doc(db, "users", currentAdminUser.uid);
-                    await updateDoc(userRef, { fullName: newName });
-                    // Optionally update display name in Auth profile
-                    if (currentAdminUser) {
-                        await updateProfile(currentAdminUser, { displayName: newName });
-                    }
-                    // Refresh local data
+                    await updateDoc(doc(db, "users", currentAdminUser.uid), { fullName: newName });
+                    await updateProfile(currentAdminUser, { displayName: newName });
                     currentAdminData.fullName = newName;
                     document.getElementById('displayFullName').innerText = newName;
                     document.getElementById('adminName').innerText = `Salam, ${newName}`;
-                    const newInitial = newName.charAt(0).toUpperCase();
-                    document.getElementById('adminInitial').innerText = newInitial;
-                    document.getElementById('profileAvatarIcon').innerText = newInitial;
+                    updateAvatarUI(currentAdminData.photoURL, newName);
                     cancelEdit('fullName');
-                    // Show success message
-                    const toast = document.createElement('div');
-                    toast.className = 'fixed bottom-5 right-5 bg-emerald-500 text-slate-900 px-5 py-3 rounded-xl font-bold text-sm shadow-xl z-[200]';
-                    toast.innerText = '✓ Profile updated successfully';
-                    document.body.appendChild(toast);
-                    setTimeout(() => toast.remove(), 2500);
-                } catch (err) {
-                    alert("Update failed: " + err.message);
-                }
+                    showToast("Name updated");
+                } catch (err) { showToast(err.message, true); }
             }
         };
-        
-        // Password modal logic with Firebase updatePassword
-        window.openPasswordModal = () => {
-            document.getElementById('passwordModal').classList.remove('hidden');
-            document.getElementById('newPassword').value = '';
-            document.getElementById('confirmPassword').value = '';
-        };
-        
-        window.closePasswordModal = () => {
-            document.getElementById('passwordModal').classList.add('hidden');
-        };
-        
+
+        window.openPasswordModal = () => document.getElementById('passwordModal').classList.remove('hidden');
+        window.closePasswordModal = () => document.getElementById('passwordModal').classList.add('hidden');
         document.getElementById('passwordForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const newPass = document.getElementById('newPassword').value;
             const confirmPass = document.getElementById('confirmPassword').value;
-            if (newPass.length < 6) {
-                alert("Password must be at least 6 characters");
-                return;
-            }
-            if (newPass !== confirmPass) {
-                alert("Passwords do not match");
-                return;
-            }
+            if (newPass.length < 6) return showToast("Min 6 characters", true);
+            if (newPass !== confirmPass) return showToast("Passwords mismatch", true);
             const btn = document.getElementById('updatePasswordBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Updating...';
+            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Updating...';
             try {
                 await updatePassword(currentAdminUser, newPass);
-                alert("✅ Password updated successfully! Please use new password next login.");
+                showToast("Password updated! Use new password next login.");
                 closePasswordModal();
             } catch (err) {
-                console.error(err);
                 if (err.code === 'auth/requires-recent-login') {
-                    alert("For security reasons, please re-authenticate. You'll be redirected to login.");
+                    showToast("Re-authenticate required. Redirecting...", true);
                     await signOut(auth);
                     window.location.href = "../auth/login.html";
-                } else {
-                    alert("Error: " + err.message);
-                }
+                } else showToast(err.message, true);
             } finally {
-                btn.disabled = false;
-                btn.innerHTML = 'Update Password';
+                btn.disabled = false; btn.innerHTML = 'Update Password';
             }
         });
-        
-        // Logout function
-        window.logout = async () => {
-            await signOut(auth);
-            window.location.href = "../index.html";
-        };
-        
-        // Refresh dashboard function (compatibility)
-        window.refreshDashboard = () => {
-            if (currentAdminUser) loadProfile(currentAdminUser);
-        };
-        
-        // Authentication State Listener
+
+        window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Check if user is admin from Firestore
                 const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists() && userDoc.data().role === 'admin') {
-                    await loadProfile(user);
-                } else {
-                    await signOut(auth);
-                    window.location.href = "../auth/login.html";
-                }
-            } else {
-                window.location.href = "../auth/login.html";
-            }
+                if (userDoc.exists() && userDoc.data().role === 'admin') await loadProfile(user);
+                else { await signOut(auth); window.location.href = "../auth/login.html"; }
+            } else window.location.href = "../auth/login.html";
         });
-        
-        // Mobile sidebar interactions (consistent with main dashboard)
+
+        // Mobile sidebar
         document.getElementById('mobileMenuButton').onclick = () => {
             document.getElementById('mainSidebar').classList.remove('-translate-x-full');
             document.getElementById('mobileSidebarOverlay').classList.remove('hidden');
@@ -422,21 +654,13 @@
             document.getElementById('mainSidebar').classList.add('-translate-x-full');
             document.getElementById('mobileSidebarOverlay').classList.add('hidden');
         };
-        
-        // Optional: handle window resize to auto-close mobile sidebar if needed
         window.addEventListener('resize', () => {
             if (window.innerWidth >= 1024) {
                 document.getElementById('mainSidebar').classList.remove('-translate-x-full');
                 document.getElementById('mobileSidebarOverlay').classList.add('hidden');
-            } else {
-                // if open on mobile and resizing, keep overlay logic; no forced close
             }
-        });
-        
-        // Gracefully handle any uncaught errors in edit fields
-        window.addEventListener('click', (e) => {
-            // prevent accidental closing of modal if background clicked
         });
     </script>
 </body>
+
 </html>

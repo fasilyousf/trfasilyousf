@@ -1,96 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>UCC Admin Nexus | TR Fasil Yousf</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <style>
-        * { font-family: 'Outfit', sans-serif; }
-        body { background: #0b1120; color: #ecf3f2; }
-        .glass-panel { background: rgba(15, 23, 42, 0.68); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.06); }
-        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%); backdrop-filter: blur(4px); border-right: 1px solid rgba(241,196,15,0.12); }
-        .modal-backdrop { animation: fadeIn 0.2s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .modal-card { animation: slideUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #f1c40f; border-radius: 10px; }
-        .skeleton { background: linear-gradient(90deg, #1e293b 25%, #2d3a4e 50%, #1e293b 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .course-tag { background: rgba(241,196,15,0.15); border: 1px solid rgba(241,196,15,0.3); padding: 6px 14px; border-radius: 40px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; }
-        .remove-course { cursor: pointer; color: #ef4444; font-size: 12px; transition: 0.2s; }
-        .remove-course:hover { color: #ff6666; transform: scale(1.1); }
-        .active-link { background: rgba(241,196,15,0.1); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
-        .stat-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 20px 25px -12px rgba(0,0,0,0.4); }
+        * {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: #0b1120;
+            color: #ecf3f2;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.68);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .sidebar-glass {
+            background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%);
+            backdrop-filter: blur(4px);
+            border-right: 1px solid rgba(241, 196, 15, 0.12);
+        }
+
+        .modal-backdrop {
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-card {
+            animation: slideUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #f1c40f;
+            border-radius: 10px;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #1e293b 25%, #2d3a4e 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .course-tag {
+            background: rgba(241, 196, 15, 0.15);
+            border: 1px solid rgba(241, 196, 15, 0.3);
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .remove-course {
+            cursor: pointer;
+            color: #ef4444;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .remove-course:hover {
+            color: #ff6666;
+            transform: scale(1.1);
+        }
+
+        .active-link {
+            background: rgba(241, 196, 15, 0.1);
+            border-left: 4px solid #f1c40f;
+            color: #f1c40f !important;
+        }
+
+        .stat-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.4);
+        }
+
         @media (max-width: 640px) {
-            td, th { padding: 12px 8px !important; }
-            .student-name-cell { min-width: 140px; }
+
+            td,
+            th {
+                padding: 12px 8px !important;
+            }
+
+            .student-name-cell {
+                min-width: 140px;
+            }
         }
     </style>
 </head>
+
 <body class="flex min-h-screen">
 
-    <div id="mobileSidebarOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden transition-all duration-300"></div>
-    
-    <aside id="mainSidebar" class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
+    <div id="mobileSidebarOverlay"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden transition-all duration-300"></div>
+
+    <aside id="mainSidebar"
+        class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
         <div class="p-6 border-b border-white/5">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
+                <div
+                    class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
                     <i class="fas fa-crown text-slate-900 text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-black tracking-tight text-white">UCC <span class="text-[#f1c40f]">ADMIN</span></h1>
+                    <h1 class="text-xl font-black tracking-tight text-white">UCC <span
+                            class="text-[#f1c40f]">ADMIN</span></h1>
                     <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Control Core</p>
                 </div>
             </div>
         </div>
 
         <nav class="flex-1 p-5 space-y-2 mt-4">
-            <a href="#" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
+            <a href="#"
+                class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
                 <i class="fas fa-users text-lg w-6"></i> Directory
             </a>
-            <a href="profile.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+            <a href="profile.html"
+                class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-user-circle w-6"></i> My Profile
             </a>
-            <a href="edairy.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+            <a href="edairy.html"
+                class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-book-open w-6"></i> eDairy
             </a>
-            <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+            <a href="fees.html"
+                class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-rupee-sign w-6"></i> Fee Management
             </a>
-            <a href="attendance.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+            <a href="attendance.html"
+                class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-calendar-check w-6"></i> Attendance
+            </a>
+            <a href="communication.html"
+                class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-2xl transition text-slate-400 hover:text-white group">
+                <i class="fas fa-comments"></i>
+                <span class="font-bold text-sm uppercase">Communication</span>
             </a>
         </nav>
 
         <div class="p-5 border-t border-white/10">
-            <button onclick="logout()" class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase">
+            <button onclick="logout()"
+                class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase">
                 <i class="fas fa-sign-out-alt w-6"></i> Exit Panel
             </button>
         </div>
     </aside>
 
     <main class="flex-1 w-full p-4 md:p-8 lg:p-10 overflow-x-hidden">
-        
+
         <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8 border border-white/5">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                    <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
-                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg" id="adminInitial">?</div>
+                    <button id="mobileMenuButton"
+                        class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i
+                            class="fas fa-bars"></i></button>
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg"
+                        id="adminInitial">?</div>
                     <div>
-                        <h2 class="text-xl md:text-3xl font-black text-white tracking-tight" id="adminName">Authenticating...</h2>
-                        <p class="text-slate-400 text-xs md:text-sm font-medium" id="adminEmail">Secure session verifying</p>
+                        <h2 class="text-xl md:text-3xl font-black text-white tracking-tight" id="adminName">
+                            Authenticating...</h2>
+                        <p class="text-slate-400 text-xs md:text-sm font-medium" id="adminEmail">Secure session
+                            verifying</p>
                     </div>
                 </div>
                 <div class="flex gap-3 items-center">
-                    <button onclick="refreshDashboard()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-md flex items-center gap-2">
+                    <button onclick="refreshDashboard()"
+                        class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-md flex items-center gap-2">
                         <i class="fas fa-sync-alt"></i> <span class="hidden sm:inline">Refresh</span>
                     </button>
-                    <button onclick="openAddModal()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-900 px-4 md:px-6 py-2.5 md:py-3.5 rounded-xl md:rounded-2xl font-black uppercase text-xs transition-all shadow-xl hover:scale-105 flex items-center gap-2">
+                    <button onclick="openAddModal()"
+                        class="bg-emerald-500 hover:bg-emerald-400 text-slate-900 px-4 md:px-6 py-2.5 md:py-3.5 rounded-xl md:rounded-2xl font-black uppercase text-xs transition-all shadow-xl hover:scale-105 flex items-center gap-2">
                         <i class="fas fa-plus"></i> <span>Enroll</span>
                     </button>
                 </div>
@@ -109,7 +238,8 @@
                 <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10 stat-card">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Available Courses</p>
+                            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Available Courses
+                            </p>
                             <p class="text-3xl font-black text-white mt-1" id="statTotalCourses">0</p>
                         </div>
                         <i class="fas fa-book-open text-4xl text-emerald-400/40"></i>
@@ -118,7 +248,8 @@
                 <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10 stat-card">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Total Fee Revenue</p>
+                            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Total Fee Revenue
+                            </p>
                             <p class="text-2xl md:text-3xl font-black text-[#f1c40f] mt-1" id="statTotalRevenue">₹0</p>
                         </div>
                         <i class="fas fa-chart-line text-4xl text-[#f1c40f]/40"></i>
@@ -130,9 +261,11 @@
         <div class="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center mb-6">
             <div class="relative w-full sm:w-96">
                 <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"></i>
-                <input type="text" id="searchBar" placeholder="Search by name or email..." class="w-full bg-slate-800/60 border border-slate-700 rounded-2xl py-3.5 pl-12 pr-5 text-white focus:border-[#f1c40f] transition outline-none text-sm">
+                <input type="text" id="searchBar" placeholder="Search by name or email..."
+                    class="w-full bg-slate-800/60 border border-slate-700 rounded-2xl py-3.5 pl-12 pr-5 text-white focus:border-[#f1c40f] transition outline-none text-sm">
             </div>
-            <button onclick="exportToCSV()" class="bg-[#f1c40f]/10 hover:bg-[#f1c40f]/20 text-[#f1c40f] border border-[#f1c40f]/30 px-5 py-3 rounded-xl font-bold text-xs uppercase transition-all flex items-center justify-center gap-2">
+            <button onclick="exportToCSV()"
+                class="bg-[#f1c40f]/10 hover:bg-[#f1c40f]/20 text-[#f1c40f] border border-[#f1c40f]/30 px-5 py-3 rounded-xl font-bold text-xs uppercase transition-all flex items-center justify-center gap-2">
                 <i class="fas fa-download"></i> Export CSV
             </button>
         </div>
@@ -140,7 +273,8 @@
         <div class="glass-panel rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
             <div class="overflow-x-auto custom-scroll">
                 <table class="w-full text-left min-w-[750px] md:min-w-full">
-                    <thead class="bg-slate-900/80 text-[10px] md:text-[11px] font-black uppercase tracking-widest text-slate-400 border-b border-white/10">
+                    <thead
+                        class="bg-slate-900/80 text-[10px] md:text-[11px] font-black uppercase tracking-widest text-slate-400 border-b border-white/10">
                         <tr>
                             <th class="px-4 md:px-6 py-4 md:py-5">Scholar Identity</th>
                             <th class="px-4 md:px-6 py-4 md:py-5">Login ID</th>
@@ -151,25 +285,44 @@
                         </tr>
                     </thead>
                     <tbody id="studentTableBody" class="divide-y divide-white/5">
-                        <tr><td colspan="6" class="p-8 text-center"><div class="skeleton h-12 w-full rounded-xl"></div></td></tr>
+                        <tr>
+                            <td colspan="6" class="p-8 text-center">
+                                <div class="skeleton h-12 w-full rounded-xl"></div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
 
-    <div id="addModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
-        <div class="glass-panel w-full max-w-xl rounded-3xl md:rounded-[3rem] p-6 md:p-10 shadow-2xl border border-white/20 modal-card">
+    <div id="addModal"
+        class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
+        <div
+            class="glass-panel w-full max-w-xl rounded-3xl md:rounded-[3rem] p-6 md:p-10 shadow-2xl border border-white/20 modal-card">
             <div class="flex justify-between items-start mb-6">
-                <div><h3 class="text-2xl md:text-3xl font-black text-white">Enroll Scholar</h3></div>
-                <button onclick="closeAddModal()" class="text-slate-500 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button>
+                <div>
+                    <h3 class="text-2xl md:text-3xl font-black text-white">Enroll Scholar</h3>
+                </div>
+                <button onclick="closeAddModal()" class="text-slate-500 hover:text-white text-2xl"><i
+                        class="fas fa-times-circle"></i></button>
             </div>
             <form id="addStudentForm" class="space-y-5">
-                <input type="text" id="addName" placeholder="Full Name" class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none" required>
-                <input type="email" id="addEmail" placeholder="Email Address" class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none" required>
-                <input type="text" id="addPass" class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none" value="UCC@2026" required>
-                <input type="number" id="addFeeTotal" class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none" value="25000" required>
-                <button type="submit" id="createBtn" class="w-full py-4 bg-emerald-500 text-slate-900 font-black uppercase rounded-xl shadow-xl">Create Account</button>
+                <input type="text" id="addName" placeholder="Full Name"
+                    class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none"
+                    required>
+                <input type="email" id="addEmail" placeholder="Email Address"
+                    class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none"
+                    required>
+                <input type="text" id="addPass"
+                    class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none"
+                    value="UCC@2026" required>
+                <input type="number" id="addFeeTotal"
+                    class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none"
+                    value="25000" required>
+                <button type="submit" id="createBtn"
+                    class="w-full py-4 bg-emerald-500 text-slate-900 font-black uppercase rounded-xl shadow-xl">Create
+                    Account</button>
             </form>
         </div>
     </div>
@@ -197,7 +350,7 @@
         let studentsData = [];
         let allCourses = [];
 
-        function escapeHtml(str) { return str ? str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])) : ''; }
+        function escapeHtml(str) { return str ? str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])) : ''; }
 
         function updateStats() {
             const totalStudents = studentsData.length;
@@ -212,7 +365,7 @@
             try {
                 const snap = await getDocs(collection(db, "users"));
                 studentsData = [];
-                snap.forEach(d => { if(d.data().role === 'student') studentsData.push({ id: d.id, ...d.data() }); });
+                snap.forEach(d => { if (d.data().role === 'student') studentsData.push({ id: d.id, ...d.data() }); });
                 renderTable(studentsData);
                 updateStats();
             } catch (e) { console.error(e); }
@@ -224,7 +377,7 @@
                 const enrolledCount = (s.enrolledCourses || []).length;
                 // --- Updated profilePic logic ---
                 const photo = s.profilePic || `https://ui-avatars.com/api/?background=f1c40f&color=1a2233&bold=true&name=${encodeURIComponent(s.fullName || 'S')}`;
-                
+
                 return `
                 <tr class="hover:bg-white/[0.03] transition-all">
                     <td class="px-4 md:px-6 py-4">
@@ -282,4 +435,5 @@
         });
     </script>
 </body>
+
 </html>

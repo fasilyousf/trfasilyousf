@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>UCC Nexus | Student Profile — My Learning Identity</title>
+    <title>My Profile | UCC Handwara</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -11,51 +11,11 @@
         * { font-family: 'Outfit', sans-serif; }
         body { background: linear-gradient(135deg, #f0f4fa 0%, #e6ecf3 100%); }
         
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        .animate-fadeSlideUp {
-            animation: fadeSlideUp 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-        }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.85);
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        .glass-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.15);
-        }
-        .sidebar-modern {
-            background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%);
-            backdrop-filter: blur(8px);
-            border-right: 1px solid rgba(241, 196, 15, 0.15);
-        }
-        .active-link {
-            background: rgba(241, 196, 15, 0.12);
-            border-left: 3px solid #f1c40f;
-            color: #f1c40f !important;
-        }
-        .nav-item {
-            transition: all 0.2s ease;
-            border-radius: 1rem;
-        }
-        .nav-item:hover:not(.active-link) {
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateX(6px);
-        }
+        .glass-card { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.7); }
+        .sidebar-gradient { background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%); }
+        .active-link { background: rgba(241, 196, 15, 0.12); border-left: 3px solid #f1c40f; color: #f1c40f !important; }
+        .ucc-gold { color: #f1c40f; }
+        
         .input-elegant {
             transition: all 0.2s ease;
             background: white;
@@ -84,116 +44,114 @@
             background: linear-gradient(120deg, #fef9e6, #fff6e0);
             border-left: 3px solid #f1c40f;
         }
-        .skeleton {
-            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        .animate-fadeSlideUp {
+            animation: fadeSlideUp 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+        }
+
+        /* Mobile sidebar – same as attendance page */
         @media (max-width: 768px) {
             .sidebar-mobile {
                 position: fixed;
                 top: 0;
                 left: 0;
                 transform: translateX(-100%);
-                transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+                transition: transform 0.3s ease;
                 z-index: 1000;
                 width: 280px;
                 height: 100vh;
+                overflow-y: auto;
             }
-            .sidebar-mobile.active { transform: translateX(0); }
+            .sidebar-mobile.active {
+                transform: translateX(0);
+            }
             .sidebar-overlay {
                 position: fixed;
                 inset: 0;
-                background: rgba(0,0,0,0.6);
-                backdrop-filter: blur(4px);
+                background: rgba(0,0,0,0.5);
                 z-index: 999;
                 display: none;
             }
-            .sidebar-overlay.active { display: block; }
+            .sidebar-overlay.active {
+                display: block;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen flex">
+<body class="flex min-h-screen">
 
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
-    <aside id="sidebar" class="sidebar-mobile w-72 sidebar-modern text-white flex flex-col shadow-2xl shrink-0">
-        <div class="p-8 flex justify-between items-center border-b border-white/5">
+    <!-- Sidebar - identical to attendance page -->
+    <aside id="sidebar" class="sidebar-mobile w-72 sidebar-gradient text-white flex flex-col shadow-2xl shrink-0">
+        <div class="p-8 text-center md:text-left flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-                    <i class="fas fa-crown text-slate-900 text-sm"></i>
+                <div class="w-10 h-10 bg-[#f1c40f] rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fas fa-university text-slate-900"></i>
                 </div>
-                <h1 class="text-xl font-black tracking-tight text-white">UCC <span class="text-[#f1c40f]">NEXUS</span></h1>
+                <h1 class="text-xl font-black tracking-tighter uppercase text-white">UCC <span class="ucc-gold">Portal</span></h1>
             </div>
-            <button id="closeSidebar" class="md:hidden text-white text-2xl hover:text-[#f1c40f] transition"><i class="fas fa-times"></i></button>
+            <button id="closeSidebar" class="md:hidden text-white text-2xl"><i class="fas fa-times"></i></button>
         </div>
         
-        <nav class="flex-grow px-4 mt-8 space-y-2">
-            <a href="dashboard.html" class="nav-item flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:text-white font-semibold text-sm uppercase tracking-wide">
-                <i class="fas fa-th-large w-5 text-lg"></i> <span>Dashboard</span>
+        <nav class="flex-grow px-4 mt-6 space-y-2">
+            <a href="dashboard.html" class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-2xl transition text-slate-400 hover:text-white group">
+                <i class="fas fa-th-large"></i> <span class="font-bold text-sm uppercase">Dashboard</span>
             </a>
-            <a href="courses.html" class="nav-item flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:text-white font-semibold text-sm uppercase tracking-wide">
-                <i class="fas fa-book-open w-5 text-lg"></i> <span>My Courses</span>
+            <a href="courses.html" class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-2xl transition text-slate-400 hover:text-white group">
+                <i class="fas fa-book-open"></i> <span class="font-bold text-sm uppercase">My Courses</span>
             </a>
-            <a href="attendance.html" class="nav-item flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:text-white font-semibold text-sm uppercase tracking-wide">
-                <i class="fas fa-calendar-check w-5 text-lg"></i> <span>Attendance</span>
+            <a href="attendance.html" class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-2xl transition text-slate-400 hover:text-white group">
+                <i class="fas fa-calendar-check"></i> <span class="font-bold text-sm uppercase">Attendance</span>
             </a>
-            <a href="fees.html" class="nav-item flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:text-white font-semibold text-sm uppercase tracking-wide">
-                <i class="fas fa-rupee-sign w-5 text-lg"></i> <span>Fee Status</span>
-            </a>
-            <a href="profile.html" class="active-link nav-item flex items-center gap-4 px-5 py-3.5 font-bold text-sm uppercase tracking-wide">
-                <i class="fas fa-user-circle w-5 text-lg"></i> <span>My Profile</span>
+            <a href="profile.html" class="active-link flex items-center gap-4 p-4 rounded-2xl transition group">
+                <i class="fas fa-user-circle"></i> <span class="font-bold text-sm uppercase">My Profile</span>
             </a>
         </nav>
 
-        <div class="p-6 border-t border-white/10 mt-auto">
-            <button onclick="logout()" class="w-full flex items-center gap-4 px-5 py-3.5 text-rose-400 font-black text-xs uppercase tracking-wider hover:bg-rose-500/10 rounded-xl transition-all duration-200">
+        <div class="p-6 border-t border-white/5">
+            <button onclick="logout()" class="w-full flex items-center gap-4 p-4 text-rose-500 font-black text-xs uppercase hover:bg-rose-500/10 rounded-2xl transition">
                 <i class="fas fa-power-off"></i> <span>Sign Out</span>
             </button>
         </div>
     </aside>
 
-    <main class="flex-grow p-5 md:p-10 overflow-x-hidden w-full">
+    <main class="flex-grow p-4 md:p-10 overflow-x-hidden">
         
+        <!-- Mobile header with sidebar toggle -->
         <div class="flex md:hidden justify-between items-center mb-6">
-            <button id="openSidebar" class="bg-white/80 backdrop-blur-sm text-slate-800 text-xl p-3 rounded-2xl shadow-md border border-white/50"><i class="fas fa-bars"></i></button>
-            <div class="w-10 h-10 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-xl flex items-center justify-center shadow-md">
-                <i class="fas fa-crown text-slate-900 text-xs"></i>
-            </div>
+            <button id="openSidebar" class="text-slate-800 text-2xl p-2 bg-white rounded-xl shadow-sm"><i class="fas fa-bars"></i></button>
+            <div class="w-10 h-10 bg-ucc-gold rounded-full flex items-center justify-center font-black">UCC</div>
         </div>
 
-        <div class="glass-panel rounded-3xl p-6 md:p-8 mb-8 animate-fadeSlideUp">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">My Profile</h2>
+                <p class="text-slate-500 font-medium text-sm">Manage your personal & academic information</p>
+            </div>
+            <div class="glass-card rounded-2xl px-5 py-3 shadow-sm flex items-center gap-4 border border-white/60">
+                <div class="relative group">
+                    <img id="profileImg" src="https://via.placeholder.com/100" class="w-14 h-14 rounded-2xl object-cover border-2 border-white shadow-md bg-slate-100">
+                    <label for="photoUpload" class="upload-overlay absolute -bottom-1 -right-1 bg-slate-800 text-[#f1c40f] w-6 h-6 rounded-xl flex items-center justify-center cursor-pointer text-[9px] border-2 border-white shadow-lg hover:bg-[#f1c40f] hover:text-slate-900 transition-all duration-200">
+                        <i class="fas fa-camera" id="cameraIcon"></i>
+                        <input type="file" id="photoUpload" class="hidden" accept="image/*">
+                    </label>
+                </div>
                 <div>
-                    <div class="flex items-center gap-3 mb-2">
-                        <div class="w-8 h-8 bg-[#f1c40f]/20 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-graduation-cap text-[#f1c40f] text-sm"></i>
-                        </div>
-                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Student Portal · Academic Identity</span>
-                    </div>
-                    <h2 class="text-3xl md:text-4xl font-black text-slate-800 tracking-tight">My Student Profile</h2>
-                    <p class="text-slate-500 font-medium text-sm md:text-base mt-1">Manage your personal & academic information</p>
-                </div>
-                <div class="glass-card rounded-2xl px-5 py-3 shadow-sm flex items-center gap-4 border border-white/60">
-                    <div class="relative group">
-                        <img id="profileImg" src="https://via.placeholder.com/150" class="w-16 h-16 rounded-2xl object-cover border-2 border-white shadow-md bg-slate-100">
-                        <label for="photoUpload" class="upload-overlay absolute -bottom-1 -right-1 bg-slate-800 text-[#f1c40f] w-7 h-7 rounded-xl flex items-center justify-center cursor-pointer text-[10px] border-2 border-white shadow-lg hover:bg-[#f1c40f] hover:text-slate-900 transition-all duration-200">
-                            <i class="fas fa-camera" id="cameraIcon"></i>
-                            <input type="file" id="photoUpload" class="hidden" accept="image/*">
-                        </label>
-                    </div>
-                    <div>
-                        <h4 id="displayName" class="font-black text-slate-800 text-base md:text-lg tracking-tight leading-tight">Loading...</h4>
-                        <div class="flex items-center gap-2 mt-1">
-                            <i class="fas fa-id-card text-[10px] text-slate-400"></i>
-                            <p id="studentId" class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">UCC-XXXX</p>
-                        </div>
+                    <h4 id="displayName" class="font-black text-slate-800 text-base tracking-tight leading-tight">Loading...</h4>
+                    <div class="flex items-center gap-2 mt-1">
+                        <i class="fas fa-id-card text-[10px] text-slate-400"></i>
+                        <p id="studentId" class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">UCC-XXXX</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 animate-fadeSlideUp" style="animation-delay: 0.05s">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 animate-fadeSlideUp">
             <div class="stat-badge rounded-2xl p-4 bg-white/70 shadow-sm border border-white/50 flex items-center gap-4">
                 <div class="w-10 h-10 rounded-xl bg-[#f1c40f]/15 flex items-center justify-center"><i class="fas fa-envelope text-[#f1c40f] text-lg"></i></div>
                 <div><p class="text-[9px] font-black text-slate-400 uppercase">Email</p><p id="statEmail" class="font-bold text-slate-700 text-xs truncate max-w-[150px]">---</p></div>
@@ -208,8 +166,10 @@
             </div>
         </div>
 
-        <div class="glass-card rounded-[2rem] p-6 md:p-10 shadow-xl animate-fadeSlideUp" style="animation-delay: 0.1s">
+        <!-- Profile Form -->
+        <div class="glass-card rounded-[2rem] p-6 md:p-8 shadow-xl">
             <form id="profileForm" class="space-y-8">
+                <!-- Personal Information Section -->
                 <div class="flex items-center gap-4 border-b border-slate-100 pb-4">
                     <div class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center"><i class="fas fa-user text-slate-600 text-sm"></i></div>
                     <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">Personal Information</h3>
@@ -217,28 +177,28 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-2"><i class="fas fa-user text-[9px]"></i> Full Name</label>
-                        <input type="text" id="fullName" class="input-elegant" placeholder="Your full name" readonly disabled style="background:#f8fafc; cursor:not-allowed;">
+                    <div>
+                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Full Name</label>
+                        <input type="text" id="fullName" class="input-elegant" readonly disabled style="background:#f8fafc; cursor:not-allowed;">
                     </div>
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-2"><i class="fas fa-envelope"></i> Email Address</label>
-                        <input type="email" id="email" class="input-elegant" placeholder="student@ucc.edu" readonly disabled style="background:#f8fafc; cursor:not-allowed;">
+                    <div>
+                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Email Address</label>
+                        <input type="email" id="email" class="input-elegant" readonly disabled style="background:#f8fafc; cursor:not-allowed;">
                     </div>
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-2"><i class="fas fa-user-friends"></i> Father's Name</label>
+                    <div>
+                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Father's Name</label>
                         <input type="text" id="fatherName" class="input-elegant" placeholder="e.g., Abdul Rahman">
                     </div>
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-2"><i class="fas fa-female"></i> Mother's Name</label>
+                    <div>
+                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Mother's Name</label>
                         <input type="text" id="motherName" class="input-elegant" placeholder="e.g., Fatima Begum">
                     </div>
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-2"><i class="fas fa-calendar-alt"></i> Date of Birth</label>
+                    <div>
+                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Date of Birth</label>
                         <input type="date" id="dob" class="input-elegant">
                     </div>
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-2"><i class="fas fa-chalkboard-user"></i> Qualification</label>
+                    <div>
+                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Qualification</label>
                         <select id="qualification" class="input-elegant bg-white">
                             <option value="">Select Level</option>
                             <option value="10th">Secondary (10th)</option>
@@ -249,6 +209,7 @@
                     </div>
                 </div>
 
+                <!-- Contact Section -->
                 <div class="flex items-center gap-4 border-b border-slate-100 pb-4 pt-4">
                     <div class="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center"><i class="fas fa-address-card text-slate-600 text-sm"></i></div>
                     <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">Contact & Address</h3>
@@ -256,30 +217,27 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-2"><i class="fab fa-whatsapp text-green-500"></i> WhatsApp Number</label>
+                    <div>
+                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500"><i class="fab fa-whatsapp text-green-500"></i> WhatsApp Number</label>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">+91</span>
                             <input type="tel" id="whatsapp" class="input-elegant pl-12" placeholder="98765 43210">
                         </div>
                     </div>
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-2"><i class="fas fa-phone-alt"></i> Guardian Contact</label>
+                    <div>
+                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Guardian Contact</label>
                         <input type="tel" id="guardianContact" class="input-elegant" placeholder="+91 98765 43210">
                     </div>
-                    <div class="space-y-1.5 md:col-span-2">
-                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-2"><i class="fas fa-map-marker-alt"></i> Residential Address</label>
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Residential Address</label>
                         <textarea id="address" rows="2" class="input-elegant resize-none" placeholder="House/Street, City, District, PIN"></textarea>
                     </div>
                 </div>
 
-                <div class="pt-6">
-                    <button type="submit" id="saveBtn" class="group w-full py-4 bg-slate-800 text-white font-black uppercase tracking-[0.15em] rounded-2xl shadow-lg hover:bg-[#f1c40f] hover:text-slate-900 transition-all duration-300 flex items-center justify-center gap-3 text-sm">
-                        <span>Update Profile</span>
-                        <i class="fas fa-save group-hover:translate-y-[-2px] transition-transform"></i>
-                    </button>
-                    <p class="text-center text-[10px] text-slate-400 mt-4"><i class="fas fa-shield-alt mr-1"></i> Your data is securely stored</p>
-                </div>
+                <button type="submit" id="saveBtn" class="group w-full py-4 bg-slate-800 text-white font-black uppercase tracking-[0.15em] rounded-2xl shadow-lg hover:bg-[#f1c40f] hover:text-slate-900 transition-all duration-300 flex items-center justify-center gap-3 text-sm">
+                    <span>Update Profile</span>
+                    <i class="fas fa-save group-hover:translate-y-[-2px] transition-transform"></i>
+                </button>
             </form>
         </div>
     </main>
@@ -302,13 +260,13 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- CLOUDINARY SETTINGS ---
-        const CLOUD_NAME = "dholrawub"; // Your Cloud Name
-        const UPLOAD_PRESET = "portal_profile"; // Your Unsigned Preset
+        // Cloudinary Settings
+        const CLOUD_NAME = "dholrawub";
+        const UPLOAD_PRESET = "portal_profile";
 
         function showToast(message, isError = false) {
             const toast = document.createElement('div');
-            toast.className = `fixed bottom-6 right-6 px-5 py-3 rounded-xl shadow-2xl z-[200] text-sm font-bold animate-fadeSlideUp ${isError ? 'bg-rose-500 text-white' : 'bg-emerald-500 text-white'}`;
+            toast.className = `fixed bottom-6 right-6 px-5 py-3 rounded-xl shadow-2xl z-[200] text-sm font-bold ${isError ? 'bg-rose-500 text-white' : 'bg-emerald-500 text-white'}`;
             toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-2"></i> ${message}`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
@@ -320,7 +278,7 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     if (data.role !== 'student') {
-                        showToast("Access denied.", true);
+                        showToast("Access denied. Student portal only.", true);
                         setTimeout(() => { window.location.href = "../index.html"; }, 1500);
                         return;
                     }
@@ -338,6 +296,7 @@
                     document.getElementById('whatsapp').value = data.whatsapp || "";
                     document.getElementById('guardianContact').value = data.guardianContact || "";
                     document.getElementById('address').value = data.address || "";
+                    
                     if(data.profilePic) {
                         document.getElementById('profileImg').src = data.profilePic;
                     } else {
@@ -349,7 +308,7 @@
             }
         });
 
-        // --- CLOUDINARY UPLOAD LOGIC ---
+        // Cloudinary Upload
         document.getElementById('photoUpload').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if(!file) return;
@@ -368,27 +327,26 @@
                 const data = await response.json();
                 
                 if (data.secure_url) {
-                    const imageUrl = data.secure_url;
-                    await updateDoc(doc(db, "users", auth.currentUser.uid), { profilePic: imageUrl });
-                    document.getElementById('profileImg').src = imageUrl;
-                    showToast("Profile photo synced to Cloudinary!");
+                    await updateDoc(doc(db, "users", auth.currentUser.uid), { profilePic: data.secure_url });
+                    document.getElementById('profileImg').src = data.secure_url;
+                    showToast("Profile photo updated!");
                 } else {
-                    throw new Error(data.error.message);
+                    throw new Error("Upload failed");
                 }
             } catch (err) { 
-                showToast("Cloudinary Upload Failed.", true);
-                console.error(err);
+                showToast("Upload failed. Please try again.", true);
             } finally { 
                 icon.className = "fas fa-camera"; 
             }
         });
 
+        // Save Profile
         document.getElementById('profileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('saveBtn');
             const originalHtml = btn.innerHTML;
             btn.disabled = true; 
-            btn.innerHTML = '<i class="fas fa-sync fa-spin mr-2"></i> Updating Profile...';
+            btn.innerHTML = '<i class="fas fa-sync fa-spin mr-2"></i> Updating...';
             try {
                 await updateDoc(doc(db, "users", auth.currentUser.uid), {
                     fatherName: document.getElementById('fatherName').value,
@@ -409,25 +367,26 @@
         });
 
         window.logout = async () => {
-            if(confirm("Sign out from UCC Student Portal?")) {
+            if(confirm("Sign out from UCC Portal?")) {
                 await signOut(auth);
                 window.location.href = "../index.html";
             }
         };
 
+        // MOBILE SIDEBAR TOGGLE (identical to attendance page)
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebarOverlay');
         const openBtn = document.getElementById('openSidebar');
         const closeBtn = document.getElementById('closeSidebar');
-        
+
         function toggleSidebar() {
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
-        
-        if(openBtn) openBtn.addEventListener('click', toggleSidebar);
-        if(closeBtn) closeBtn.addEventListener('click', toggleSidebar);
-        if(overlay) overlay.addEventListener('click', toggleSidebar);
+
+        if (openBtn) openBtn.addEventListener('click', toggleSidebar);
+        if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+        if (overlay) overlay.addEventListener('click', toggleSidebar);
     </script>
 </body>
 </html>
