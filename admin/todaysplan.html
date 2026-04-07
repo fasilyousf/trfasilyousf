@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Today's Plan | UCC Admin Nexus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Outfit', sans-serif; }
+        body { background: #0b1120; color: #ecf3f2; }
+        .glass-panel { background: rgba(15, 23, 42, 0.68); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.06); }
+        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%); backdrop-filter: blur(4px); border-right: 1px solid rgba(241,196,15,0.12); }
+        .active-link { background: rgba(241,196,15,0.1); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
+        .task-card { transition: all 0.2s ease; border-left: 3px solid transparent; }
+        .task-card:hover { transform: translateY(-2px); background: rgba(241,196,15,0.02); border-left-color: #f1c40f; }
+        .status-badge { font-size: 0.7rem; font-weight: 800; padding: 0.25rem 0.7rem; border-radius: 40px; letter-spacing: 0.3px; }
+        .status-not-started { background: #334155; color: #cbd5e1; }
+        .status-in-progress { background: #f1c40f20; color: #f1c40f; border: 1px solid #f1c40f40; }
+        .status-partial { background: #e67e2220; color: #f39c12; border: 1px solid #f39c1240; }
+        .status-completed { background: #10b98120; color: #10b981; border: 1px solid #10b98140; }
+        .skeleton { background: linear-gradient(90deg, #1e293b 25%, #2d3a4e 50%, #1e293b 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .modal-card { animation: slideUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #f1c40f; border-radius: 10px; }
+        .progress-ring { transition: stroke-dashoffset 0.35s; }
+        @media (max-width: 640px) {
+            .task-card .flex-wrap { flex-direction: column; align-items: flex-start !important; }
+            .task-actions { margin-top: 0.75rem; align-self: flex-end; }
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <div id="mobileSidebarOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+    
+    <aside id="mainSidebar" class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
+        <div class="p-6 border-b border-white/5">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
+                    <i class="fas fa-crown text-slate-900 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-tight text-white">UCC <span class="text-[#f1c40f]">ADMIN</span></h1>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Control Core</p>
+                </div>
+            </div>
+        </div>
+        <nav class="flex-1 p-5 space-y-2 mt-4">
+            <a href="dashboard.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-users text-lg w-6"></i> Directory</a>
+            <a href="profile.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-user-circle w-6"></i> My Profile</a>
+            <a href="edairy.html" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase"><i class="fas fa-clipboard-list w-6"></i> Today's Plan</a>
+            <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-rupee-sign w-6"></i> Fee Management</a>
+            <a href="attendance.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-calendar-check w-6"></i> Attendance</a>
+            <a href="communication.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-comments w-6"></i> Communication</a>
+        </nav>
+        <div class="p-5 border-t border-white/10">
+            <button onclick="logout()" class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase"><i class="fas fa-sign-out-alt w-6"></i> Exit Panel</button>
+        </div>
+    </aside>
+
+    <main class="flex-1 w-full p-4 md:p-8 lg:p-10 overflow-x-hidden">
+        <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8 border border-white/5">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-black text-white tracking-tight"><i class="fas fa-calendar-day text-[#f1c40f] mr-2"></i> Today's Plan</h2>
+                        <p class="text-slate-400 text-xs md:text-sm font-medium">Manage tasks, track progress, and stay organized</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg" id="adminInitial">?</div>
+                    <div><h2 class="text-xl md:text-3xl font-black text-white tracking-tight" id="adminName">Loading...</h2><p class="text-slate-400 text-xs md:text-sm font-medium" id="adminEmail">Secure session</p></div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-6">
+                <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10"><div class="flex justify-between"><div><p class="text-slate-400 text-[10px] font-black uppercase">Total Tasks</p><p class="text-2xl font-black text-white" id="statTotalTasks">0</p></div><i class="fas fa-tasks text-3xl text-[#f1c40f]/40"></i></div></div>
+                <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10"><div class="flex justify-between"><div><p class="text-slate-400 text-[10px] font-black uppercase">In Progress</p><p class="text-2xl font-black text-[#f1c40f]" id="statInProgress">0</p></div><i class="fas fa-spinner fa-pulse text-3xl text-[#f1c40f]/40"></i></div></div>
+                <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10"><div class="flex justify-between"><div><p class="text-slate-400 text-[10px] font-black uppercase">Completed</p><p class="text-2xl font-black text-emerald-400" id="statCompleted">0</p></div><i class="fas fa-check-circle text-3xl text-emerald-400/40"></i></div></div>
+                <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10"><div class="flex justify-between"><div><p class="text-slate-400 text-[10px] font-black uppercase">Completion Rate</p><p class="text-2xl font-black text-white" id="statRate">0%</p></div><i class="fas fa-chart-line text-3xl text-blue-400/40"></i></div></div>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center mb-6">
+            <div class="relative w-full sm:w-80"><i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i><input type="text" id="searchTaskInput" placeholder="Search tasks by plan or title..." class="w-full bg-slate-800/60 border border-slate-700 rounded-2xl py-3 pl-12 pr-5 text-white focus:border-[#f1c40f] transition outline-none text-sm"></div>
+            <button onclick="openTaskModal()" class="bg-[#f1c40f] hover:bg-[#f1c40f]/90 text-slate-900 px-5 py-3 rounded-xl font-black text-xs uppercase transition-all flex items-center justify-center gap-2 shadow-lg"><i class="fas fa-plus-circle"></i> Add New Task</button>
+        </div>
+
+        <div id="tasksContainer" class="space-y-4"><div class="glass-panel rounded-2xl p-8 text-center"><div class="skeleton h-24 w-full rounded-xl"></div></div></div>
+    </main>
+
+    <!-- Task Modal -->
+    <div id="taskModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-2xl rounded-3xl p-6 md:p-8 shadow-2xl border border-white/20 modal-card">
+            <div class="flex justify-between items-start mb-5"><div><h3 class="text-2xl md:text-3xl font-black text-white" id="modalTitle">Create Plan / Task</h3><p class="text-slate-400 text-xs mt-1">Set title, plan category, and track progress</p></div><button onclick="closeTaskModal()" class="text-slate-500 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button></div>
+            <form id="taskForm" class="space-y-5">
+                <input type="hidden" id="taskId">
+                <div><label class="text-[10px] font-black uppercase text-slate-500 ml-2">Task Title *</label><input type="text" id="taskTitle" class="w-full mt-1 px-5 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none" placeholder="e.g., Faculty Meeting, Exam Review, Event Planning" required></div>
+                <div><label class="text-[10px] font-black uppercase text-slate-500 ml-2">Plan / Category</label><input type="text" id="taskPlan" class="w-full mt-1 px-5 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none" placeholder="Academic, Administrative, Event, etc." value="General"></div>
+                <div><label class="text-[10px] font-black uppercase text-slate-500 ml-2">Description (Optional)</label><textarea id="taskDesc" rows="3" class="w-full mt-1 px-5 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none resize-none" placeholder="Add details or notes..."></textarea></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="text-[10px] font-black uppercase text-slate-500 ml-2">Status</label><select id="taskStatus" class="w-full mt-1 px-5 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white"><option value="not_started">⚪ Not Started</option><option value="in_progress">🟡 In Progress</option><option value="partial">🟠 Partially Completed</option><option value="completed">✅ Completed</option></select></div>
+                    <div><label class="text-[10px] font-black uppercase text-slate-500 ml-2">Due Date (optional)</label><input type="date" id="taskDueDate" class="w-full mt-1 px-5 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white"></div>
+                </div>
+                <div class="flex gap-3 pt-2"><button type="submit" class="flex-1 py-3.5 bg-emerald-500 text-slate-900 font-black uppercase rounded-xl hover:bg-emerald-400 transition"><i class="fas fa-save mr-2"></i> Save Task</button><button type="button" onclick="closeTaskModal()" class="flex-1 py-3.5 bg-slate-700 text-white font-bold rounded-xl hover:bg-slate-600 transition">Cancel</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastMessage" class="fixed bottom-6 right-6 bg-slate-800/95 backdrop-blur-md border-l-4 border-emerald-500 text-white px-5 py-3 rounded-xl shadow-2xl z-[200] hidden transition-all text-sm font-medium"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, getDoc, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4", authDomain: "trfasilyousf1.firebaseapp.com", projectId: "trfasilyousf1", storageBucket: "trfasilyousf1.firebasestorage.app", messagingSenderId: "158147210589", appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        let currentAdminUser = null, currentAdminData = null, allTasks = [];
+
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
+        function showToast(msg, isErr = false) { const toast = document.getElementById('toastMessage'); toast.innerHTML = `<i class="fas ${isErr ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-2"></i> ${msg}`; toast.classList.remove('hidden'); toast.style.borderLeftColor = isErr ? '#ef4444' : '#10b981'; setTimeout(() => toast.classList.add('hidden'), 3000); }
+        
+        function getStatusLabel(status) {
+            switch(status) {
+                case 'not_started': return '<span class="status-badge status-not-started"><i class="far fa-circle mr-1"></i> Not Started</span>';
+                case 'in_progress': return '<span class="status-badge status-in-progress"><i class="fas fa-play mr-1"></i> In Progress</span>';
+                case 'partial': return '<span class="status-badge status-partial"><i class="fas fa-adjust mr-1"></i> Partially Completed</span>';
+                case 'completed': return '<span class="status-badge status-completed"><i class="fas fa-check-circle mr-1"></i> Completed</span>';
+                default: return '<span class="status-badge status-not-started">Unknown</span>';
+            }
+        }
+
+        function updateStats(tasks) {
+            const total = tasks.length;
+            const inProgress = tasks.filter(t => t.status === 'in_progress').length;
+            const completed = tasks.filter(t => t.status === 'completed').length;
+            const rate = total === 0 ? 0 : Math.round((completed / total) * 100);
+            document.getElementById('statTotalTasks').innerText = total;
+            document.getElementById('statInProgress').innerText = inProgress;
+            document.getElementById('statCompleted').innerText = completed;
+            document.getElementById('statRate').innerHTML = `${rate}%`;
+        }
+
+        function renderTasks(tasks) {
+            const container = document.getElementById('tasksContainer');
+            if (!tasks.length) {
+                container.innerHTML = `<div class="glass-panel rounded-2xl p-12 text-center border border-white/10"><i class="fas fa-calendar-alt text-6xl mb-4 opacity-30 text-[#f1c40f]"></i><p class="text-slate-400 font-medium">No tasks found. Create your first plan!</p><button onclick="openTaskModal()" class="mt-4 text-[#f1c40f] bg-[#f1c40f]/10 px-5 py-2 rounded-xl text-sm font-bold">+ Add New Task</button></div>`;
+                updateStats([]);
+                return;
+            }
+            let html = '';
+            tasks.forEach(task => {
+                const createdAtDate = task.createdAt?.toDate ? task.createdAt.toDate() : new Date(task.createdAt);
+                const dueDateRaw = task.dueDate ? new Date(task.dueDate) : null;
+                const formattedDate = createdAtDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+                const dueDisplay = dueDateRaw ? `<span class="text-slate-400 text-xs ml-2"><i class="far fa-calendar-alt mr-1"></i> Due: ${dueDateRaw.toLocaleDateString('en-IN')}</span>` : '';
+                const planDisplay = task.plan ? `<span class="bg-slate-800 text-slate-300 text-[10px] px-2 py-1 rounded-full"><i class="fas fa-tag mr-1"></i>${escapeHtml(task.plan)}</span>` : '';
+                html += `
+                    <div class="glass-panel rounded-2xl p-5 task-card border border-white/10 transition-all">
+                        <div class="flex flex-wrap justify-between items-start gap-3">
+                            <div class="flex-1">
+                                <div class="flex items-center flex-wrap gap-2 mb-1"><h3 class="text-lg md:text-xl font-bold text-white">${escapeHtml(task.title)}</h3>${getStatusLabel(task.status)}</div>
+                                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400 mt-1"><span><i class="far fa-calendar-plus mr-1"></i> Added: ${formattedDate}</span>${dueDisplay}<span><i class="fas fa-folder-open mr-1"></i> Plan: ${escapeHtml(task.plan || 'General')}</span></div>
+                                ${task.description ? `<div class="mt-3 text-slate-300 text-sm border-l-2 border-[#f1c40f]/30 pl-3">${escapeHtml(task.description)}</div>` : ''}
+                            </div>
+                            <div class="flex gap-2 task-actions ml-auto">
+                                <button onclick="openEditTask('${task.id}', '${escapeHtml(task.title)}', '${escapeHtml(task.plan || '')}', '${escapeHtml(task.description || '')}', '${task.status}', '${task.dueDate || ''}')" class="text-blue-400 bg-blue-400/10 p-2.5 rounded-xl hover:bg-blue-400 hover:text-white transition"><i class="fas fa-edit text-sm"></i></button>
+                                <button onclick="deleteTaskHandler('${task.id}')" class="text-rose-400 bg-rose-400/10 p-2.5 rounded-xl hover:bg-rose-500 hover:text-white transition"><i class="fas fa-trash-alt text-sm"></i></button>
+                                <div class="relative group"><button onclick="quickStatusUpdate('${task.id}', '${task.status}')" class="text-[#f1c40f] bg-[#f1c40f]/10 p-2.5 rounded-xl hover:bg-[#f1c40f] hover:text-slate-900 transition"><i class="fas fa-sync-alt text-sm"></i></button><div class="absolute bottom-full mb-2 right-0 hidden group-hover:block bg-slate-800 text-[10px] px-2 py-1 rounded">Change status</div></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            updateStats(tasks);
+        }
+
+        async function loadTasks(searchTerm = '') {
+            const container = document.getElementById('tasksContainer');
+            container.innerHTML = '<div class="glass-panel rounded-2xl p-8"><div class="skeleton h-24 w-full rounded-xl"></div></div>';
+            try {
+                const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
+                const snap = await getDocs(q);
+                allTasks = snap.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+                let filtered = allTasks;
+                if (searchTerm.trim()) {
+                    const term = searchTerm.toLowerCase();
+                    filtered = allTasks.filter(t => (t.title?.toLowerCase().includes(term) || t.plan?.toLowerCase().includes(term) || (t.description?.toLowerCase().includes(term))));
+                }
+                renderTasks(filtered);
+            } catch (err) { console.error(err); container.innerHTML = '<div class="glass-panel rounded-2xl p-8 text-rose-400 text-center"><i class="fas fa-exclamation-triangle"></i> Failed to load tasks. <button onclick="refreshTasks()" class="underline">Retry</button></div>'; }
+        }
+
+        window.refreshTasks = () => { const search = document.getElementById('searchTaskInput')?.value || ''; loadTasks(search); };
+        window.openTaskModal = () => { document.getElementById('modalTitle').innerText = 'Create New Task'; document.getElementById('taskId').value = ''; document.getElementById('taskTitle').value = ''; document.getElementById('taskPlan').value = 'General'; document.getElementById('taskDesc').value = ''; document.getElementById('taskStatus').value = 'not_started'; document.getElementById('taskDueDate').value = ''; document.getElementById('taskModal').classList.remove('hidden'); };
+        window.closeTaskModal = () => { document.getElementById('taskModal').classList.add('hidden'); };
+        
+        window.openEditTask = (id, title, plan, desc, status, dueDate) => {
+            document.getElementById('modalTitle').innerText = 'Edit Task';
+            document.getElementById('taskId').value = id;
+            document.getElementById('taskTitle').value = title;
+            document.getElementById('taskPlan').value = plan;
+            document.getElementById('taskDesc').value = desc;
+            document.getElementById('taskStatus').value = status;
+            document.getElementById('taskDueDate').value = dueDate || '';
+            document.getElementById('taskModal').classList.remove('hidden');
+        };
+        
+        window.deleteTaskHandler = async (id) => { if(confirm("⚠️ Delete this task permanently?")) { try { await deleteDoc(doc(db, "tasks", id)); showToast("Task deleted", false); const search = document.getElementById('searchTaskInput')?.value || ''; await loadTasks(search); } catch(e) { showToast(e.message, true); } } };
+        
+        window.quickStatusUpdate = async (taskId, currentStatus) => {
+            const statusCycle = ['not_started', 'in_progress', 'partial', 'completed'];
+            let nextIdx = (statusCycle.indexOf(currentStatus) + 1) % statusCycle.length;
+            if (currentStatus === 'completed') nextIdx = 0;
+            const newStatus = statusCycle[nextIdx];
+            try {
+                await updateDoc(doc(db, "tasks", taskId), { status: newStatus, updatedAt: new Date() });
+                showToast(`Status updated to ${newStatus.replace(/_/g, ' ')}`, false);
+                const search = document.getElementById('searchTaskInput')?.value || '';
+                await loadTasks(search);
+            } catch(e) { showToast("Update failed", true); }
+        };
+        
+        document.getElementById('taskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('taskId').value;
+            const title = document.getElementById('taskTitle').value.trim();
+            const plan = document.getElementById('taskPlan').value.trim() || 'General';
+            const description = document.getElementById('taskDesc').value.trim();
+            const status = document.getElementById('taskStatus').value;
+            const dueDate = document.getElementById('taskDueDate').value;
+            if (!title) { showToast("Title is required", true); return; }
+            const submitBtn = e.target.querySelector('button[type="submit"]'); const original = submitBtn.innerHTML; submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Saving...';
+            const now = new Date();
+            try {
+                if (id) {
+                    await updateDoc(doc(db, "tasks", id), { title, plan, description, status, dueDate, updatedAt: now, lastModifiedBy: currentAdminUser?.uid });
+                    showToast("Task updated", false);
+                } else {
+                    await addDoc(collection(db, "tasks"), { title, plan, description, status, dueDate, createdAt: now, updatedAt: now, createdBy: currentAdminUser?.uid, authorName: currentAdminData?.fullName || "Admin" });
+                    showToast("New task added to Today's Plan!", false);
+                }
+                closeTaskModal();
+                const search = document.getElementById('searchTaskInput')?.value || '';
+                await loadTasks(search);
+            } catch(err) { showToast(err.message, true); } finally { submitBtn.disabled = false; submitBtn.innerHTML = original; }
+        });
+        
+        document.getElementById('searchTaskInput').addEventListener('input', (e) => { const term = e.target.value; if (allTasks.length) { const filtered = allTasks.filter(t => t.title?.toLowerCase().includes(term.toLowerCase()) || t.plan?.toLowerCase().includes(term.toLowerCase()) || (t.description?.toLowerCase().includes(term.toLowerCase()))); renderTasks(filtered); } else loadTasks(term); });
+        
+        document.getElementById('mobileMenuButton').onclick = () => { document.getElementById('mainSidebar').classList.remove('-translate-x-full'); document.getElementById('mobileSidebarOverlay').classList.remove('hidden'); };
+        document.getElementById('mobileSidebarOverlay').onclick = () => { document.getElementById('mainSidebar').classList.add('-translate-x-full'); document.getElementById('mobileSidebarOverlay').classList.add('hidden'); };
+        window.addEventListener('resize', () => { if (window.innerWidth >= 1024) { document.getElementById('mainSidebar').classList.remove('-translate-x-full'); document.getElementById('mobileSidebarOverlay').classList.add('hidden'); } });
+        
+        window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
+        
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().role === 'admin') {
+                    currentAdminUser = user; currentAdminData = userDoc.data();
+                    const fullName = currentAdminData.fullName || "Administrator";
+                    document.getElementById('adminName').innerText = "Salam, " + fullName;
+                    document.getElementById('adminEmail').innerText = user.email || currentAdminData.email;
+                    document.getElementById('adminInitial').innerText = fullName.charAt(0).toUpperCase();
+                    await loadTasks('');
+                } else { await signOut(auth); window.location.href = "../auth/login.html"; }
+            } else { window.location.href = "../auth/login.html"; }
+        });
+    </script>
+</body>
+</html>
