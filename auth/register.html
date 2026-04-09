@@ -1,72 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>FyOrbit | Sign Up – Students, Staff, Institute Heads</title>
+    <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         * {
             font-family: 'Outfit', sans-serif;
         }
+
         body {
             background: #f0f4f8;
         }
+
         .role-card {
             transition: all 0.2s ease;
             cursor: pointer;
             border: 2px solid transparent;
         }
+
         .role-card.active {
             border-color: #f5b81b;
             background-color: #fef9e6;
             transform: scale(1.02);
-            box-shadow: 0 12px 24px -12px rgba(0,0,0,0.2);
+            box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.2);
         }
+
         .form-field-group {
             transition: all 0.2s;
         }
+
         .error-text {
             color: #dc2626;
             font-size: 0.75rem;
             margin-top: 0.25rem;
             display: block;
         }
-        input, select, textarea {
+
+        input,
+        select,
+        textarea {
             transition: all 0.2s;
         }
-        input:focus, select:focus, textarea:focus {
+
+        input:focus,
+        select:focus,
+        textarea:focus {
             box-shadow: 0 0 0 2px #f5b81b;
             border-color: #f5b81b;
             outline: none;
         }
+
         .btn-primary {
             background: linear-gradient(105deg, #0b1120, #1e293b);
             transition: all 0.3s;
         }
+
         .btn-primary:hover {
             background: linear-gradient(105deg, #f5b81b, #e67e22);
             color: #0b1120;
         }
+
         .required-star::after {
             content: "*";
             color: #e53e3e;
             margin-left: 4px;
         }
+
         .loader {
             border-top-color: #f5b81b;
             animation: spinner 0.8s linear infinite;
         }
+
         @keyframes spinner {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
+
 <body class="antialiased">
 
     <!-- Header Mini (branding) -->
@@ -75,7 +100,8 @@
             <div class="w-9 h-9 bg-[#f5b81b] rounded-xl flex items-center justify-center">
                 <i class="fas fa-digital-tiling text-[#0b1120] text-lg"></i>
             </div>
-            <div class="text-xl font-black tracking-tight">Fy<span class="text-[#f5b81b]">Orbit</span></div>
+            <div class="text-xl font-black tracking-tight"><a href="../index.html">Fy<span
+                        class="text-[#f5b81b]">Orbit</span></a></div>
             <div class="ml-auto text-sm font-medium opacity-80">Digital Management Ecosystem</div>
         </div>
     </div>
@@ -85,13 +111,15 @@
         <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
             <div class="bg-gradient-to-r from-[#0b1120] to-[#1a2538] px-6 py-8 md:px-10">
                 <h1 class="text-3xl md:text-4xl font-black text-white">Create your account</h1>
-                <p class="text-slate-300 mt-2 text-sm md:text-base">Join FyOrbit as a student, staff member, or institute head</p>
+                <p class="text-slate-300 mt-2 text-sm md:text-base">Join FyOrbit as a student, staff member, or
+                    institute head</p>
             </div>
 
             <div class="p-6 md:p-10">
                 <!-- Role Selection (Cards) -->
                 <div class="mb-10">
-                    <label class="block text-sm font-black uppercase tracking-wider text-gray-700 mb-4 required-star">I am registering as</label>
+                    <label class="block text-sm font-black uppercase tracking-wider text-gray-700 mb-4 required-star">I
+                        am registering as</label>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div class="role-card bg-gray-50 rounded-2xl p-4 text-center" data-role="student">
                             <i class="fas fa-graduation-cap text-3xl text-[#f5b81b] mb-2"></i>
@@ -117,27 +145,36 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                         <label class="block text-sm font-bold text-gray-700 required-star">Full Name</label>
-                        <input type="text" id="fullName" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#f5b81b] outline-none" placeholder="e.g. Ayesha Khan">
+                        <input type="text" id="fullName"
+                            class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#f5b81b] outline-none"
+                            placeholder="e.g. Ayesha Khan">
                         <div id="fullNameError" class="error-text hidden"></div>
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 required-star">Email Address</label>
-                        <input type="email" id="email" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#f5b81b]" placeholder="hello@example.com">
+                        <input type="email" id="email"
+                            class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#f5b81b]"
+                            placeholder="hello@example.com">
                         <div id="emailError" class="error-text hidden"></div>
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 required-star">Mobile Number</label>
-                        <input type="tel" id="mobile" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3" placeholder="10-digit number">
+                        <input type="tel" id="mobile" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3"
+                            placeholder="10-digit number">
                         <div id="mobileError" class="error-text hidden"></div>
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 required-star">Password</label>
-                        <input type="password" id="password" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3" placeholder="Min. 8 characters">
+                        <input type="password" id="password"
+                            class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3"
+                            placeholder="Min. 8 characters">
                         <div id="passwordError" class="error-text hidden"></div>
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 required-star">Confirm Password</label>
-                        <input type="password" id="confirmPassword" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3" placeholder="Retype password">
+                        <input type="password" id="confirmPassword"
+                            class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3"
+                            placeholder="Retype password">
                         <div id="confirmError" class="error-text hidden"></div>
                     </div>
                 </div>
@@ -146,16 +183,32 @@
                 <div id="roleSpecificContainer" class="space-y-6 border-t border-gray-200 pt-6 mt-2">
                     <!-- Student Fields (default visible) -->
                     <div id="studentFields" class="role-fields">
-                        <h3 class="text-lg font-black text-gray-800 flex items-center gap-2"><i class="fas fa-user-graduate text-[#f5b81b]"></i> Student Details</h3>
+                        <h3 class="text-lg font-black text-gray-800 flex items-center gap-2"><i
+                                class="fas fa-user-graduate text-[#f5b81b]"></i> Student Details</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
-                            <div><label class="text-sm font-bold required-star">Roll Number</label><input type="text" id="rollNo" class="w-full border rounded-xl px-4 py-2.5 mt-1" placeholder="e.g. 2024CS01"></div>
-                            <div><label class="text-sm font-bold required-star">Class/Grade</label><input type="text" id="classGrade" class="w-full border rounded-xl px-4 py-2.5 mt-1" placeholder="e.g. 10, 12"></div>
-                            <div><label class="text-sm font-bold">Section</label><input type="text" id="section" class="w-full border rounded-xl px-4 py-2.5 mt-1" placeholder="A / B"></div>
-                            <div><label class="text-sm font-bold required-star">Parent/Guardian Name</label><input type="text" id="parentName" class="w-full border rounded-xl px-4 py-2.5 mt-1" placeholder="Full name"></div>
-                            <div><label class="text-sm font-bold required-star">Parent Mobile</label><input type="tel" id="parentMobile" class="w-full border rounded-xl px-4 py-2.5 mt-1" placeholder="10-digit"></div>
-                            <div><label class="text-sm font-bold required-star">Date of Birth</label><input type="date" id="dob" class="w-full border rounded-xl px-4 py-2.5 mt-1"></div>
-                            <div class="md:col-span-2"><label class="text-sm font-bold required-star">Institute Code</label>
-                                <div class="flex gap-2"><input type="text" id="studentInstituteCode" class="flex-1 border rounded-xl px-4 py-2.5" placeholder="e.g. FYORBIT123"><button type="button" id="verifyStudentCode" class="bg-gray-200 px-4 rounded-xl text-sm font-bold hover:bg-[#f5b81b] transition">Verify</button></div>
+                            <div><label class="text-sm font-bold required-star">Roll Number</label><input type="text"
+                                    id="rollNo" class="w-full border rounded-xl px-4 py-2.5 mt-1"
+                                    placeholder="e.g. 2024CS01"></div>
+                            <div><label class="text-sm font-bold required-star">Class/Grade</label><input type="text"
+                                    id="classGrade" class="w-full border rounded-xl px-4 py-2.5 mt-1"
+                                    placeholder="e.g. 10, 12"></div>
+                            <div><label class="text-sm font-bold">Section</label><input type="text" id="section"
+                                    class="w-full border rounded-xl px-4 py-2.5 mt-1" placeholder="A / B"></div>
+                            <div><label class="text-sm font-bold required-star">Parent/Guardian Name</label><input
+                                    type="text" id="parentName" class="w-full border rounded-xl px-4 py-2.5 mt-1"
+                                    placeholder="Full name"></div>
+                            <div><label class="text-sm font-bold required-star">Parent Mobile</label><input type="tel"
+                                    id="parentMobile" class="w-full border rounded-xl px-4 py-2.5 mt-1"
+                                    placeholder="10-digit"></div>
+                            <div><label class="text-sm font-bold required-star">Date of Birth</label><input type="date"
+                                    id="dob" class="w-full border rounded-xl px-4 py-2.5 mt-1"></div>
+                            <div class="md:col-span-2"><label class="text-sm font-bold required-star">Institute
+                                    Code</label>
+                                <div class="flex gap-2"><input type="text" id="studentInstituteCode"
+                                        class="flex-1 border rounded-xl px-4 py-2.5"
+                                        placeholder="e.g. FYORBIT123"><button type="button" id="verifyStudentCode"
+                                        class="bg-gray-200 px-4 rounded-xl text-sm font-bold hover:bg-[#f5b81b] transition">Verify</button>
+                                </div>
                                 <div id="studentCodeMsg" class="text-xs mt-1 text-gray-500"></div>
                             </div>
                         </div>
@@ -163,28 +216,74 @@
 
                     <!-- Staff Fields (hidden initially) -->
                     <div id="staffFields" class="role-fields hidden">
-                        <h3 class="text-lg font-black text-gray-800 flex items-center gap-2"><i class="fas fa-briefcase text-[#f5b81b]"></i> Staff Details</h3>
+                        <h3 class="text-lg font-black text-gray-800 flex items-center gap-2"><i
+                                class="fas fa-briefcase text-[#f5b81b]"></i> Staff Details</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
-                            <div><label class="text-sm font-bold required-star">Employee ID</label><input type="text" id="empId" class="w-full border rounded-xl px-4 py-2.5" placeholder="EMP-001"></div>
-                            <div><label class="text-sm font-bold required-star">Department</label><select id="department" class="w-full border rounded-xl px-4 py-2.5"><option value="">Select</option><option>Teaching</option><option>Administration</option><option>Accounts</option><option>Library</option><option>IT</option></select></div>
-                            <div><label class="text-sm font-bold required-star">Designation</label><input type="text" id="designation" class="w-full border rounded-xl px-4 py-2.5" placeholder="Teacher / Coordinator / Admin"></div>
-                            <div><label class="text-sm font-bold required-star">Joining Date</label><input type="date" id="joiningDate" class="w-full border rounded-xl px-4 py-2.5"></div>
-                            <div class="md:col-span-2"><label class="text-sm font-bold">Subjects Handled (if teacher)</label><input type="text" id="subjects" class="w-full border rounded-xl px-4 py-2.5" placeholder="Mathematics, Science"></div>
-                            <div class="md:col-span-2"><label class="text-sm font-bold required-star">Institute Code</label><div class="flex gap-2"><input type="text" id="staffInstituteCode" class="flex-1 border rounded-xl px-4 py-2.5" placeholder="Institute code"><button type="button" id="verifyStaffCode" class="bg-gray-200 px-4 rounded-xl text-sm font-bold hover:bg-[#f5b81b] transition">Verify</button></div><div id="staffCodeMsg" class="text-xs mt-1 text-gray-500"></div></div>
+                            <div><label class="text-sm font-bold required-star">Employee ID</label><input type="text"
+                                    id="empId" class="w-full border rounded-xl px-4 py-2.5" placeholder="EMP-001"></div>
+                            <div><label class="text-sm font-bold required-star">Department</label><select
+                                    id="department" class="w-full border rounded-xl px-4 py-2.5">
+                                    <option value="">Select</option>
+                                    <option>Teaching</option>
+                                    <option>Administration</option>
+                                    <option>Accounts</option>
+                                    <option>Library</option>
+                                    <option>IT</option>
+                                </select></div>
+                            <div><label class="text-sm font-bold required-star">Designation</label><input type="text"
+                                    id="designation" class="w-full border rounded-xl px-4 py-2.5"
+                                    placeholder="Teacher / Coordinator / Admin"></div>
+                            <div><label class="text-sm font-bold required-star">Joining Date</label><input type="date"
+                                    id="joiningDate" class="w-full border rounded-xl px-4 py-2.5"></div>
+                            <div class="md:col-span-2"><label class="text-sm font-bold">Subjects Handled (if
+                                    teacher)</label><input type="text" id="subjects"
+                                    class="w-full border rounded-xl px-4 py-2.5" placeholder="Mathematics, Science">
+                            </div>
+                            <div class="md:col-span-2"><label class="text-sm font-bold required-star">Institute
+                                    Code</label>
+                                <div class="flex gap-2"><input type="text" id="staffInstituteCode"
+                                        class="flex-1 border rounded-xl px-4 py-2.5"
+                                        placeholder="Institute code"><button type="button" id="verifyStaffCode"
+                                        class="bg-gray-200 px-4 rounded-xl text-sm font-bold hover:bg-[#f5b81b] transition">Verify</button>
+                                </div>
+                                <div id="staffCodeMsg" class="text-xs mt-1 text-gray-500"></div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Institute Head Fields (hidden initially) -->
                     <div id="instituteHeadFields" class="role-fields hidden">
-                        <h3 class="text-lg font-black text-gray-800 flex items-center gap-2"><i class="fas fa-building text-[#f5b81b]"></i> Institute Profile</h3>
+                        <h3 class="text-lg font-black text-gray-800 flex items-center gap-2"><i
+                                class="fas fa-building text-[#f5b81b]"></i> Institute Profile</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
-                            <div class="md:col-span-2"><label class="text-sm font-bold required-star">Institute Name</label><input type="text" id="instName" class="w-full border rounded-xl px-4 py-2.5" placeholder="e.g. Delhi Public School"></div>
-                            <div><label class="text-sm font-bold required-star">Registration Number</label><input type="text" id="regNumber" class="w-full border rounded-xl px-4 py-2.5" placeholder="UDISE / Board Code"></div>
-                            <div><label class="text-sm font-bold required-star">Institute Type</label><select id="instType" class="w-full border rounded-xl px-4 py-2.5"><option>School</option><option>College</option><option>Coaching Centre</option><option>Library</option><option>Computer Hub</option></select></div>
-                            <div class="md:col-span-2"><label class="text-sm font-bold required-star">Address</label><textarea id="address" rows="2" class="w-full border rounded-xl px-4 py-2.5" placeholder="Street, City, PIN, State"></textarea></div>
-                            <div><label class="text-sm font-bold">GST Number (optional)</label><input type="text" id="gst" class="w-full border rounded-xl px-4 py-2.5" placeholder="22AAAAA0000A1Z"></div>
-                            <div><label class="text-sm font-bold required-star">Your Designation</label><input type="text" id="headDesignation" class="w-full border rounded-xl px-4 py-2.5" placeholder="Director / Principal / Owner"></div>
-                            <div class="md:col-span-2"><label class="text-sm font-bold">Verification Document (Trust Deed / Registration)</label><input type="file" id="docUpload" class="w-full border rounded-xl px-4 py-2.5 bg-white" accept=".pdf,.jpg,.png"></div>
+                            <div class="md:col-span-2"><label class="text-sm font-bold required-star">Institute
+                                    Name</label><input type="text" id="instName"
+                                    class="w-full border rounded-xl px-4 py-2.5" placeholder="e.g. Delhi Public School">
+                            </div>
+                            <div><label class="text-sm font-bold required-star">Registration Number</label><input
+                                    type="text" id="regNumber" class="w-full border rounded-xl px-4 py-2.5"
+                                    placeholder="UDISE / Board Code"></div>
+                            <div><label class="text-sm font-bold required-star">Institute Type</label><select
+                                    id="instType" class="w-full border rounded-xl px-4 py-2.5">
+                                    <option>School</option>
+                                    <option>College</option>
+                                    <option>Coaching Centre</option>
+                                    <option>Library</option>
+                                    <option>Computer Hub</option>
+                                </select></div>
+                            <div class="md:col-span-2"><label
+                                    class="text-sm font-bold required-star">Address</label><textarea id="address"
+                                    rows="2" class="w-full border rounded-xl px-4 py-2.5"
+                                    placeholder="Street, City, PIN, State"></textarea></div>
+                            <div><label class="text-sm font-bold">GST Number (optional)</label><input type="text"
+                                    id="gst" class="w-full border rounded-xl px-4 py-2.5" placeholder="22AAAAA0000A1Z">
+                            </div>
+                            <div><label class="text-sm font-bold required-star">Your Designation</label><input
+                                    type="text" id="headDesignation" class="w-full border rounded-xl px-4 py-2.5"
+                                    placeholder="Director / Principal / Owner"></div>
+                            <div class="md:col-span-2"><label class="text-sm font-bold">Verification Document (Trust
+                                    Deed / Registration)</label><input type="file" id="docUpload"
+                                    class="w-full border rounded-xl px-4 py-2.5 bg-white" accept=".pdf,.jpg,.png"></div>
                         </div>
                     </div>
                 </div>
@@ -192,16 +291,21 @@
                 <!-- Terms and Submit -->
                 <div class="mt-8 flex items-start gap-3">
                     <input type="checkbox" id="terms" class="mt-1 w-5 h-5 accent-[#f5b81b]">
-                    <label for="terms" class="text-sm text-gray-600">I agree to the <a href="#" class="text-[#f5b81b] font-bold">Terms of Service</a> and <a href="#" class="text-[#f5b81b] font-bold">Privacy Policy</a>.</label>
+                    <label for="terms" class="text-sm text-gray-600">I agree to the <a href="#"
+                            class="text-[#f5b81b] font-bold">Terms of Service</a> and <a href="#"
+                            class="text-[#f5b81b] font-bold">Privacy Policy</a>.</label>
                 </div>
                 <div id="termsError" class="error-text hidden">You must accept terms to register.</div>
 
-                <button id="registerBtn" class="btn-primary w-full mt-8 bg-[#0b1120] text-white py-4 rounded-xl font-black uppercase tracking-wider text-sm transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+                <button id="registerBtn"
+                    class="btn-primary w-full mt-8 bg-[#0b1120] text-white py-4 rounded-xl font-black uppercase tracking-wider text-sm transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
                     <span id="btnText">Create Account</span>
                     <i class="fas fa-arrow-right" id="btnIcon"></i>
-                    <div id="btnLoader" class="loader hidden rounded-full border-2 border-t-2 border-white/20 h-5 w-5"></div>
+                    <div id="btnLoader" class="loader hidden rounded-full border-2 border-t-2 border-white/20 h-5 w-5">
+                    </div>
                 </button>
-                <p class="text-center text-gray-500 text-xs mt-6">Already have an account? <a href="login.html" class="text-[#f5b81b] font-bold">Portal Login</a></p>
+                <p class="text-center text-gray-500 text-xs mt-6">Already have an account? <a href="login.html"
+                        class="text-[#f5b81b] font-bold">Portal Login</a></p>
             </div>
         </div>
     </div>
@@ -264,7 +368,7 @@
                 if (card.dataset.role === role) card.classList.add('active');
                 else card.classList.remove('active');
             });
-            if(roleErrorDiv) roleErrorDiv.classList.add('hidden');
+            if (roleErrorDiv) roleErrorDiv.classList.add('hidden');
         }
 
         roleCards.forEach(card => {
@@ -303,8 +407,8 @@
                 errorDiv.classList.remove('hidden');
             }
             const inputField = document.getElementById(inputId);
-            if(inputField && message) inputField.classList.add('border-red-500');
-            else if(inputField) inputField.classList.remove('border-red-500');
+            if (inputField && message) inputField.classList.add('border-red-500');
+            else if (inputField) inputField.classList.remove('border-red-500');
         }
         function validateEmail(email) { return /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(email); }
         function validateMobile(mob) { return /^[0-9]{10}$/.test(mob); }
@@ -317,42 +421,42 @@
             document.querySelectorAll('input, select, textarea').forEach(el => el.classList.remove('border-red-500'));
 
             const fullName = document.getElementById('fullName').value.trim();
-            if(!fullName) { showError('fullName', 'fullNameError', 'Full name required'); isValid=false; }
+            if (!fullName) { showError('fullName', 'fullNameError', 'Full name required'); isValid = false; }
             const email = document.getElementById('email').value.trim();
-            if(!email || !validateEmail(email)) { showError('email', 'emailError', 'Valid email required'); isValid=false; }
+            if (!email || !validateEmail(email)) { showError('email', 'emailError', 'Valid email required'); isValid = false; }
             const mobile = document.getElementById('mobile').value.trim();
-            if(!mobile || !validateMobile(mobile)) { showError('mobile', 'mobileError', '10-digit mobile number'); isValid=false; }
+            if (!mobile || !validateMobile(mobile)) { showError('mobile', 'mobileError', '10-digit mobile number'); isValid = false; }
             const pwd = document.getElementById('password').value;
-            if(!validatePassword(pwd)) { showError('password', 'passwordError', 'Minimum 8 characters'); isValid=false; }
+            if (!validatePassword(pwd)) { showError('password', 'passwordError', 'Minimum 8 characters'); isValid = false; }
             const confirm = document.getElementById('confirmPassword').value;
-            if(pwd !== confirm) { showError('confirmPassword', 'confirmError', 'Passwords do not match'); isValid=false; }
-            if(!document.getElementById('terms').checked) { document.getElementById('termsError').classList.remove('hidden'); isValid=false; }
+            if (pwd !== confirm) { showError('confirmPassword', 'confirmError', 'Passwords do not match'); isValid = false; }
+            if (!document.getElementById('terms').checked) { document.getElementById('termsError').classList.remove('hidden'); isValid = false; }
 
-            if(role === 'student') {
-                if(!document.getElementById('rollNo').value.trim()) { showError('rollNo', 'fullNameError', 'Roll number required'); isValid=false; }
-                if(!document.getElementById('classGrade').value.trim()) { showError('classGrade', 'fullNameError', 'Class required'); isValid=false; }
-                if(!document.getElementById('parentName').value.trim()) { showError('parentName', 'fullNameError', 'Parent name required'); isValid=false; }
+            if (role === 'student') {
+                if (!document.getElementById('rollNo').value.trim()) { showError('rollNo', 'fullNameError', 'Roll number required'); isValid = false; }
+                if (!document.getElementById('classGrade').value.trim()) { showError('classGrade', 'fullNameError', 'Class required'); isValid = false; }
+                if (!document.getElementById('parentName').value.trim()) { showError('parentName', 'fullNameError', 'Parent name required'); isValid = false; }
                 const parentMobile = document.getElementById('parentMobile').value.trim();
-                if(!parentMobile || !validateMobile(parentMobile)) { showError('parentMobile', 'fullNameError', 'Valid parent mobile required'); isValid=false; }
-                if(!document.getElementById('dob').value) { showError('dob', 'fullNameError', 'Date of birth required'); isValid=false; }
+                if (!parentMobile || !validateMobile(parentMobile)) { showError('parentMobile', 'fullNameError', 'Valid parent mobile required'); isValid = false; }
+                if (!document.getElementById('dob').value) { showError('dob', 'fullNameError', 'Date of birth required'); isValid = false; }
                 const instCode = document.getElementById('studentInstituteCode').value.trim();
-                if(!instCode) { showError('studentInstituteCode', 'fullNameError', 'Institute code required'); isValid=false; }
-                else if(!validInstituteCodes.includes(instCode.toUpperCase())) { document.getElementById('studentCodeMsg').innerHTML = '<span class="text-red-500">❌ Invalid institute code</span>'; isValid=false; }
+                if (!instCode) { showError('studentInstituteCode', 'fullNameError', 'Institute code required'); isValid = false; }
+                else if (!validInstituteCodes.includes(instCode.toUpperCase())) { document.getElementById('studentCodeMsg').innerHTML = '<span class="text-red-500">❌ Invalid institute code</span>'; isValid = false; }
             }
-            else if(role === 'staff') {
-                if(!document.getElementById('empId').value.trim()) { showError('empId', 'fullNameError', 'Employee ID required'); isValid=false; }
-                if(!document.getElementById('department').value) { showError('department', 'fullNameError', 'Select department'); isValid=false; }
-                if(!document.getElementById('designation').value.trim()) { showError('designation', 'fullNameError', 'Designation required'); isValid=false; }
-                if(!document.getElementById('joiningDate').value) { showError('joiningDate', 'fullNameError', 'Joining date required'); isValid=false; }
+            else if (role === 'staff') {
+                if (!document.getElementById('empId').value.trim()) { showError('empId', 'fullNameError', 'Employee ID required'); isValid = false; }
+                if (!document.getElementById('department').value) { showError('department', 'fullNameError', 'Select department'); isValid = false; }
+                if (!document.getElementById('designation').value.trim()) { showError('designation', 'fullNameError', 'Designation required'); isValid = false; }
+                if (!document.getElementById('joiningDate').value) { showError('joiningDate', 'fullNameError', 'Joining date required'); isValid = false; }
                 const staffCode = document.getElementById('staffInstituteCode').value.trim();
-                if(!staffCode) { showError('staffInstituteCode', 'fullNameError', 'Institute code required'); isValid=false; }
-                else if(!validInstituteCodes.includes(staffCode.toUpperCase())) { document.getElementById('staffCodeMsg').innerHTML = '<span class="text-red-500">❌ Invalid institute code</span>'; isValid=false; }
+                if (!staffCode) { showError('staffInstituteCode', 'fullNameError', 'Institute code required'); isValid = false; }
+                else if (!validInstituteCodes.includes(staffCode.toUpperCase())) { document.getElementById('staffCodeMsg').innerHTML = '<span class="text-red-500">❌ Invalid institute code</span>'; isValid = false; }
             }
-            else if(role === 'institute_head') {
-                if(!document.getElementById('instName').value.trim()) { showError('instName', 'fullNameError', 'Institute name required'); isValid=false; }
-                if(!document.getElementById('regNumber').value.trim()) { showError('regNumber', 'fullNameError', 'Registration number required'); isValid=false; }
-                if(!document.getElementById('address').value.trim()) { showError('address', 'fullNameError', 'Address required'); isValid=false; }
-                if(!document.getElementById('headDesignation').value.trim()) { showError('headDesignation', 'fullNameError', 'Your designation required'); isValid=false; }
+            else if (role === 'institute_head') {
+                if (!document.getElementById('instName').value.trim()) { showError('instName', 'fullNameError', 'Institute name required'); isValid = false; }
+                if (!document.getElementById('regNumber').value.trim()) { showError('regNumber', 'fullNameError', 'Registration number required'); isValid = false; }
+                if (!document.getElementById('address').value.trim()) { showError('address', 'fullNameError', 'Address required'); isValid = false; }
+                if (!document.getElementById('headDesignation').value.trim()) { showError('headDesignation', 'fullNameError', 'Your designation required'); isValid = false; }
             }
             return isValid;
         }
@@ -465,4 +569,5 @@
         });
     </script>
 </body>
+
 </html>
