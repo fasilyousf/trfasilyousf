@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>My Courses | UCC Handwara</title>
+    <title>My Courses | FyOrbit Student Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-     <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
     <style>
         body { font-family: 'Outfit', sans-serif; background-color: #f1f5f9; }
         .sidebar-gradient { background: #1a2233; }
@@ -15,7 +15,7 @@
         .stat-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .stat-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
         .active-link { background: rgba(241, 196, 15, 0.1); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
-        .ucc-gold { color: #f1c40f; }
+        .fy-gold { color: #f1c40f; }
         .course-card { transition: all 0.2s ease; }
         .course-card:hover { transform: translateY(-4px); }
 
@@ -52,14 +52,15 @@
 
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
-    <!-- SIDEBAR (now responsive) -->
+    <!-- SIDEBAR - FyOrbit Student Portal -->
     <aside id="sidebar" class="sidebar-mobile w-72 sidebar-gradient text-white flex flex-col shadow-2xl shrink-0">
         <div class="p-8 text-center md:text-left flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-[#f1c40f] rounded-xl flex items-center justify-center shadow-lg">
-                    <i class="fas fa-university text-slate-900"></i>
+                 <div
+                    class="w-10 h-10  rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300 overflow-hidden">
+                    <img src="../assets/img/slogo.png" alt="FyOrbit Logo" class="w-full h-full object-cover">
                 </div>
-                <h1 class="text-xl font-black tracking-tighter uppercase text-white">UCC <span class="ucc-gold">Portal</span></h1>
+                <h1 class="text-xl font-black tracking-tighter uppercase text-white">Fy<span class="fy-gold">Orbit</span></h1>
             </div>
             <button id="closeSidebar" class="md:hidden text-white text-2xl"><i class="fas fa-times"></i></button>
         </div>
@@ -92,13 +93,13 @@
         <!-- Mobile header with sidebar toggle -->
         <div class="flex md:hidden justify-between items-center mb-6">
             <button id="openSidebar" class="text-slate-800 text-2xl p-2 bg-white rounded-xl shadow-sm"><i class="fas fa-bars"></i></button>
-            <div class="w-10 h-10 bg-ucc-gold rounded-full flex items-center justify-center font-black">UCC</div>
+            <div class="w-10 h-10 bg-fy-gold rounded-full flex items-center justify-center font-black text-slate-900">FY</div>
         </div>
 
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-12 gap-6">
             <div>
                 <h2 class="text-2xl md:text-4xl font-black text-slate-800 tracking-tight">
-                    My <span class="ucc-gold">Courses</span>
+                    My <span class="fy-gold">Courses</span>
                 </h2>
                 <p class="text-slate-500 font-medium mt-1 text-sm md:text-base">Your enrolled subjects for this semester</p>
             </div>
@@ -110,7 +111,7 @@
         <!-- Course Grid -->
         <div id="coursesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             <div class="col-span-full text-center py-20">
-                <i class="fas fa-spinner fa-pulse text-4xl text-ucc-gold"></i>
+                <i class="fas fa-spinner fa-pulse text-4xl text-fy-gold"></i>
                 <p class="mt-4 text-slate-500">Loading your courses...</p>
             </div>
         </div>
@@ -276,7 +277,7 @@
         }
 
         window.logout = async () => {
-            if(confirm("Sign out of UCC Portal?")) {
+            if(confirm("Sign out of FyOrbit Student Portal?")) {
                 await signOut(auth);
                 window.location.href = "../index.html";
             }

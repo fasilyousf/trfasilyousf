@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>My Profile | UCC Handwara</title>
+    <title>My Profile | FyOrbit Student Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-     <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
     <style>
         * { font-family: 'Outfit', sans-serif; }
         body { background: linear-gradient(135deg, #f0f4fa 0%, #e6ecf3 100%); }
@@ -15,7 +15,7 @@
         .glass-card { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.7); }
         .sidebar-gradient { background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%); }
         .active-link { background: rgba(241, 196, 15, 0.12); border-left: 3px solid #f1c40f; color: #f1c40f !important; }
-        .ucc-gold { color: #f1c40f; }
+        .fy-gold { color: #f1c40f; }
         
         .input-elegant {
             transition: all 0.2s ease;
@@ -53,7 +53,7 @@
             animation: fadeSlideUp 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
         }
 
-        /* Mobile sidebar – same as attendance page */
+        /* Mobile sidebar – same as dashboard */
         @media (max-width: 768px) {
             .sidebar-mobile {
                 position: fixed;
@@ -86,14 +86,15 @@
 
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
-    <!-- Sidebar - identical to attendance page -->
+    <!-- Sidebar - FyOrbit Student Portal -->
     <aside id="sidebar" class="sidebar-mobile w-72 sidebar-gradient text-white flex flex-col shadow-2xl shrink-0">
         <div class="p-8 text-center md:text-left flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-[#f1c40f] rounded-xl flex items-center justify-center shadow-lg">
-                    <i class="fas fa-university text-slate-900"></i>
+                 <div
+                    class="w-10 h-10  rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300 overflow-hidden">
+                    <img src="../assets/img/slogo.png" alt="FyOrbit Logo" class="w-full h-full object-cover">
                 </div>
-                <h1 class="text-xl font-black tracking-tighter uppercase text-white">UCC <span class="ucc-gold">Portal</span></h1>
+                <h1 class="text-xl font-black tracking-tighter uppercase text-white">Fy<span class="fy-gold">Orbit</span></h1>
             </div>
             <button id="closeSidebar" class="md:hidden text-white text-2xl"><i class="fas fa-times"></i></button>
         </div>
@@ -125,7 +126,7 @@
         <!-- Mobile header with sidebar toggle -->
         <div class="flex md:hidden justify-between items-center mb-6">
             <button id="openSidebar" class="text-slate-800 text-2xl p-2 bg-white rounded-xl shadow-sm"><i class="fas fa-bars"></i></button>
-            <div class="w-10 h-10 bg-ucc-gold rounded-full flex items-center justify-center font-black">UCC</div>
+            <div class="w-10 h-10 bg-fy-gold rounded-full flex items-center justify-center font-black text-slate-900">FY</div>
         </div>
 
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
@@ -145,7 +146,7 @@
                     <h4 id="displayName" class="font-black text-slate-800 text-base tracking-tight leading-tight">Loading...</h4>
                     <div class="flex items-center gap-2 mt-1">
                         <i class="fas fa-id-card text-[10px] text-slate-400"></i>
-                        <p id="studentId" class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">UCC-XXXX</p>
+                        <p id="studentId" class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">FY-XXXX</p>
                     </div>
                 </div>
             </div>
@@ -286,7 +287,7 @@
                     document.getElementById('displayName').innerText = data.fullName || "Student";
                     document.getElementById('fullName').value = data.fullName || "";
                     document.getElementById('email').value = data.email || "";
-                    document.getElementById('studentId').innerText = `UCC-${user.uid.slice(-6).toUpperCase()}`;
+                    document.getElementById('studentId').innerText = `FY-${user.uid.slice(-6).toUpperCase()}`;
                     document.getElementById('statEmail').innerText = data.email || "---";
                     document.getElementById('enrolledSince').innerText = data.createdAt ? new Date(data.createdAt).toLocaleDateString('en-IN') : "2025";
                     document.getElementById('courseCount').innerText = (data.enrolledCourses?.length || 0);
@@ -368,13 +369,13 @@
         });
 
         window.logout = async () => {
-            if(confirm("Sign out from UCC Portal?")) {
+            if(confirm("Sign out from FyOrbit Student Portal?")) {
                 await signOut(auth);
                 window.location.href = "../index.html";
             }
         };
 
-        // MOBILE SIDEBAR TOGGLE (identical to attendance page)
+        // MOBILE SIDEBAR TOGGLE
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebarOverlay');
         const openBtn = document.getElementById('openSidebar');

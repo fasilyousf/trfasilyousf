@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Student Dashboard | UCC Handwara</title>
+    <title>FyOrbit | Student Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
         .stat-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .stat-card:hover { transform: translateY(-8px); box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.15); }
         .active-link { background: rgba(241, 196, 15, 0.12); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
-        .ucc-gold { color: #f1c40f; }
+        .fy-gold { color: #f1c40f; }
         .course-card { transition: all 0.2s ease; }
         .course-card:hover { transform: translateY(-4px); }
         .fee-badge { font-size: 9px; font-weight: 800; padding: 4px 12px; border-radius: 40px; text-transform: uppercase; display: inline-block; }
@@ -49,10 +49,11 @@
     <aside id="sidebar" class="sidebar-mobile w-72 sidebar-gradient text-white flex flex-col shadow-2xl shrink-0">
         <div class="p-8 text-center md:text-left flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-[#f1c40f] rounded-xl flex items-center justify-center shadow-lg">
-                    <i class="fas fa-university text-slate-900"></i>
+                 <div
+                    class="w-10 h-10  rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300 overflow-hidden">
+                    <img src="../assets/img/slogo.png" alt="FyOrbit Logo" class="w-full h-full object-cover">
                 </div>
-                <h1 class="text-xl font-black tracking-tighter uppercase text-white">UCC <span class="ucc-gold">Portal</span></h1>
+                <h1 class="text-xl font-black tracking-tighter uppercase text-white">Fy<span class="fy-gold">Orbit</span></h1>
             </div>
             <button id="closeSidebar" class="md:hidden text-white text-2xl"><i class="fas fa-times"></i></button>
         </div>
@@ -82,7 +83,7 @@
     <main class="flex-grow p-4 md:p-10 overflow-x-hidden w-full">
         <div class="flex md:hidden justify-between items-center mb-6">
             <button id="openSidebar" class="text-slate-800 text-2xl p-3 bg-white rounded-xl shadow-sm"><i class="fas fa-bars"></i></button>
-            <div class="w-10 h-10 bg-ucc-gold rounded-xl flex items-center justify-center font-black shadow-md">UCC</div>
+            <div class="w-10 h-10 bg-fy-gold rounded-xl flex items-center justify-center font-black shadow-md">FY</div>
         </div>
 
         <header class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
@@ -111,7 +112,7 @@
                     <h3 class="text-xl md:text-2xl font-black text-slate-800 flex items-center gap-2">
                         <i class="fas fa-bullhorn text-[#f1c40f]"></i> Latest Announcements
                     </h3>
-                    <p class="text-slate-400 text-xs font-medium mt-1">Important updates from UCC administration</p>
+                    <p class="text-slate-400 text-xs font-medium mt-1">Important updates from FyOrbit administration</p>
                 </div>
                 <button id="viewAllAnnouncementsBtn" class="px-4 py-2 rounded-xl bg-slate-700/10 text-slate-600 font-bold text-xs uppercase tracking-wider hover:bg-slate-700 hover:text-white transition-all">
                     <i class="fas fa-list mr-1"></i> View All
@@ -342,7 +343,7 @@
                         coursesHtml.push(`
                             <div class="glass-card rounded-2xl overflow-hidden shadow-md course-card">
                                 <div class="h-24 bg-gradient-to-r from-slate-800 to-slate-700 flex items-center justify-center">
-                                    <i class="fas fa-chalkboard-user text-3xl text-ucc-gold opacity-80"></i>
+                                    <i class="fas fa-chalkboard-user text-3xl text-fy-gold opacity-80"></i>
                                 </div>
                                 <div class="p-5">
                                     <h4 class="font-black text-slate-800 text-base">${escapeHtml(course.courseName)}</h4>
