@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>UCC Admin | Communication & Announcements</title>
+    <title>FyOrbit Admin | Communication & Announcements</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Outfit', sans-serif; }
-        body { background: #0b1120; color: #ecf3f2; }
-        .glass-panel { background: rgba(15, 23, 42, 0.68); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.06); }
-        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%); backdrop-filter: blur(4px); border-right: 1px solid rgba(241,196,15,0.12); }
-        .active-link { background: rgba(241,196,15,0.1); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
-        .notice-card { transition: all 0.2s ease; cursor: pointer; }
+        body { background: linear-gradient(135deg, #0f172a 0%, #1a2233 100%); color: #ecf3f2; }
+        .glass-panel { background: rgba(15, 23, 42, 0.68); backdrop-filter: blur(14px); border: 1px solid rgba(241, 196, 15, 0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%); backdrop-filter: blur(4px); border-right: 1px solid rgba(241,196,15,0.2); }
+        .active-link { background: rgba(241,196,15,0.12); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
+        .notice-card { transition: all 0.2s ease; cursor: pointer; border-left: 3px solid transparent; }
         .notice-card:hover { transform: translateX(4px); background: rgba(241,196,15,0.05); border-left-color: #f1c40f; }
-        .priority-high { background: rgba(239,68,68,0.15); border-left: 3px solid #ef4444; }
-        .priority-medium { background: rgba(245,158,11,0.15); border-left: 3px solid #f59e0b; }
-        .priority-low { background: rgba(16,185,129,0.15); border-left: 3px solid #10b981; }
+        .priority-high { background: rgba(239,68,68,0.1); border-left-color: #ef4444; }
+        .priority-medium { background: rgba(245,158,11,0.1); border-left-color: #f59e0b; }
+        .priority-low { background: rgba(16,185,129,0.1); border-left-color: #10b981; }
         .modal-card { animation: slideUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
         @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -25,15 +25,13 @@
         .custom-scroll::-webkit-scrollbar-thumb { background: #f1c40f; border-radius: 10px; }
         @media (max-width: 640px) { .notice-card { padding: 1rem; } }
         
-        /* Avatar styling for admin header */
+        /* Admin Avatar Styling - matches dashboard */
         .admin-avatar-container {
             position: relative;
             cursor: pointer;
             transition: transform 0.2s ease;
         }
-        .admin-avatar-container:hover {
-            transform: scale(1.02);
-        }
+        .admin-avatar-container:hover { transform: scale(1.02); }
         .admin-avatar-img {
             width: 64px;
             height: 64px;
@@ -61,29 +59,36 @@
             transition: all 0.2s;
             cursor: pointer;
         }
-        .camera-badge-admin:hover {
-            background: #f1c40f;
-            color: #0f172a;
-        }
+        .camera-badge-admin:hover { background: #f1c40f; color: #0f172a; }
         @media (max-width: 768px) {
             .admin-avatar-img { width: 52px; height: 52px; }
             .camera-badge-admin { width: 22px; height: 22px; font-size: 0.6rem; bottom: -4px; right: -4px; }
         }
+
+        /* Stats Cards */
+        .stat-card { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); border: 1px solid rgba(241, 196, 15, 0.2); transition: all 0.2s; }
+        .stat-card:hover { transform: translateY(-3px); border-color: rgba(241, 196, 15, 0.5); box-shadow: 0 20px 25px -12px rgba(241,196,15,0.2); }
+
+        /* Buttons */
+        .btn-gold { background: #f1c40f; color: #1a2233; transition: all 0.2s; }
+        .btn-gold:hover { background: #e67e22; transform: translateY(-1px); }
     </style>
 </head>
 <body class="flex min-h-screen">
 
     <div id="mobileSidebarOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden lg:hidden"></div>
     
+    <!-- Sidebar - FyOrbit Admin Style -->
     <aside id="mainSidebar" class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
         <div class="p-6 border-b border-white/5">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
-                    <i class="fas fa-crown text-slate-900 text-xl"></i>
+               <div
+                    class="w-10 h-10  rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300 overflow-hidden">
+                    <img src="../assets/img/slogo.png" alt="FyOrbit Logo" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <h1 class="text-xl font-black tracking-tight text-white">UCC <span class="text-[#f1c40f]">ADMIN</span></h1>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Control Core</p>
+                    <h1 class="text-xl font-black tracking-tight text-white">Fy<span class="text-[#f1c40f]">Orbit</span></h1>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Admin Control</p>
                 </div>
             </div>
         </div>
@@ -101,7 +106,7 @@
             <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-rupee-sign w-6"></i> Fee Management
             </a>
-            <a href="attendance.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+            <a href="attendance.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-calendar-check w-6"></i> Attendance
             </a>
             <a href="communication.html" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
@@ -119,7 +124,7 @@
     <main class="flex-1 w-full p-4 md:p-8 lg:p-10 overflow-x-hidden">
         
         <!-- Header with Clickable Avatar for Cloudinary Upload -->
-        <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 border border-white/5">
+        <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
@@ -151,20 +156,20 @@
 
         <!-- Stats Row -->
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
-            <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10">
-                <p class="text-slate-400 text-[10px] font-black uppercase">Total Notices</p>
+            <div class="stat-card rounded-2xl p-4">
+                <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Total Notices</p>
                 <p class="text-2xl font-black text-white mt-1" id="totalNotices">0</p>
             </div>
-            <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10">
-                <p class="text-slate-400 text-[10px] font-black uppercase">High Priority</p>
+            <div class="stat-card rounded-2xl p-4">
+                <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">High Priority</p>
                 <p class="text-2xl font-black text-rose-400 mt-1" id="highPriorityCount">0</p>
             </div>
-            <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10">
-                <p class="text-slate-400 text-[10px] font-black uppercase">Published</p>
+            <div class="stat-card rounded-2xl p-4">
+                <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Published</p>
                 <p class="text-2xl font-black text-emerald-400 mt-1" id="publishedCount">0</p>
             </div>
-            <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10">
-                <p class="text-slate-400 text-[10px] font-black uppercase">Drafts</p>
+            <div class="stat-card rounded-2xl p-4">
+                <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Drafts</p>
                 <p class="text-2xl font-black text-amber-400 mt-1" id="draftCount">0</p>
             </div>
         </div>
@@ -176,13 +181,13 @@
                 <input type="text" id="searchNotices" placeholder="Search notices by title..." class="w-full bg-slate-800/60 border border-slate-700 rounded-2xl py-3.5 pl-12 pr-5 text-white focus:border-[#f1c40f] transition outline-none text-sm">
             </div>
             <div class="flex gap-3">
-                <select id="filterPriority" class="bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:border-[#f1c40f]">
+                <select id="filterPriority" class="bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:border-[#f1c40f] outline-none">
                     <option value="all">All Priorities</option>
                     <option value="high">⚠️ High Priority</option>
                     <option value="medium">📢 Medium</option>
                     <option value="low">ℹ️ Low</option>
                 </select>
-                <button onclick="openCreateNoticeModal()" class="bg-[#f1c40f] hover:bg-[#f1c40f]/90 text-slate-900 px-5 py-3 rounded-xl font-black text-xs uppercase transition-all flex items-center gap-2 shadow-lg">
+                <button onclick="openCreateNoticeModal()" class="btn-gold px-5 py-3 rounded-xl font-black text-xs uppercase transition-all flex items-center gap-2 shadow-lg">
                     <i class="fas fa-plus-circle"></i> Create Notice
                 </button>
             </div>
@@ -250,8 +255,8 @@
             <h3 class="text-xl font-black text-white mb-2">Delete Announcement?</h3>
             <p class="text-slate-400 text-sm mb-6">This action cannot be undone. The notice will be permanently removed.</p>
             <div class="flex gap-3">
-                <button onclick="closeDeleteModal()" class="flex-1 py-3 bg-slate-700 rounded-xl font-bold">Cancel</button>
-                <button id="confirmDeleteBtn" class="flex-1 py-3 bg-rose-500 rounded-xl font-bold hover:bg-rose-600">Delete</button>
+                <button onclick="closeDeleteModal()" class="flex-1 py-3 bg-slate-700 rounded-xl font-bold hover:bg-slate-600 transition">Cancel</button>
+                <button id="confirmDeleteBtn" class="flex-1 py-3 bg-rose-500 rounded-xl font-bold hover:bg-rose-600 transition">Delete</button>
             </div>
         </div>
     </div>
@@ -289,7 +294,7 @@
         function showToast(message, isError = false) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `bg-slate-800 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-sm font-bold border-l-4 ${isError ? 'border-rose-500' : 'border-emerald-500'} animate-fadeIn`;
+            toast.className = `bg-slate-800 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-sm font-bold border-l-4 ${isError ? 'border-rose-500' : 'border-emerald-500'} transition-all`;
             toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle text-rose-500' : 'fa-check-circle text-emerald-500'}"></i> ${message}`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
@@ -324,9 +329,7 @@
                 const data = await response.json();
                 if (data.secure_url) {
                     const imageUrl = data.secure_url;
-                    // Update Firestore user document
                     await updateDoc(doc(db, "users", currentAdminUser.uid), { photoURL: imageUrl });
-                    // Update Auth profile
                     await updateProfile(currentAdminUser, { photoURL: imageUrl });
                     if (currentAdminData) currentAdminData.photoURL = imageUrl;
                     updateAdminAvatarUI(imageUrl, currentAdminData?.fullName || "Admin");
@@ -347,27 +350,12 @@
             const avatarWrapper = document.getElementById('adminAvatarWrapper');
             const cameraBadge = document.getElementById('adminCameraBadge');
             const fileInput = document.getElementById('adminPhotoUpload');
-            
             if (!avatarWrapper || !cameraBadge || !fileInput) return;
             
-            const openFilePicker = (e) => {
-                e.stopPropagation();
-                fileInput.click();
-            };
-            
+            const openFilePicker = (e) => { e.stopPropagation(); fileInput.click(); };
             cameraBadge.addEventListener('click', openFilePicker);
-            avatarWrapper.addEventListener('click', (e) => {
-                if (e.target.closest('#adminCameraBadge')) return;
-                fileInput.click();
-            });
-            
-            fileInput.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    await uploadAdminPhoto(file);
-                }
-                fileInput.value = '';
-            });
+            avatarWrapper.addEventListener('click', (e) => { if (!e.target.closest('#adminCameraBadge')) fileInput.click(); });
+            fileInput.addEventListener('change', async (e) => { if (e.target.files[0]) await uploadAdminPhoto(e.target.files[0]); fileInput.value = ''; });
         }
 
         function formatDate(timestamp) {
@@ -397,10 +385,7 @@
                 const q = query(collection(db, "notices"), orderBy("createdAt", "desc"));
                 const snap = await getDocs(q);
                 allNotices = [];
-                snap.forEach(doc => {
-                    allNotices.push({ id: doc.id, ...doc.data() });
-                });
-                
+                snap.forEach(doc => { allNotices.push({ id: doc.id, ...doc.data() }); });
                 renderNotices();
                 updateStats();
             } catch (err) {
@@ -415,12 +400,8 @@
             const priorityFilter = document.getElementById('filterPriority').value;
             
             let filtered = allNotices;
-            if (searchTerm) {
-                filtered = filtered.filter(n => n.title?.toLowerCase().includes(searchTerm));
-            }
-            if (priorityFilter !== 'all') {
-                filtered = filtered.filter(n => n.priority === priorityFilter);
-            }
+            if (searchTerm) filtered = filtered.filter(n => n.title?.toLowerCase().includes(searchTerm));
+            if (priorityFilter !== 'all') filtered = filtered.filter(n => n.priority === priorityFilter);
             
             if (filtered.length === 0) {
                 container.innerHTML = `<div class="p-12 text-center text-slate-400"><i class="fas fa-inbox text-4xl mb-3 opacity-30"></i><p>No announcements found</p><button onclick="openCreateNoticeModal()" class="mt-3 text-[#f1c40f] underline text-sm">Create your first announcement →</button></div>`;
@@ -466,7 +447,6 @@
             const high = allNotices.filter(n => n.priority === 'high').length;
             const published = allNotices.filter(n => n.status === 'published').length;
             const drafts = allNotices.filter(n => n.status === 'draft').length;
-            
             document.getElementById('totalNotices').innerText = total;
             document.getElementById('highPriorityCount').innerText = high;
             document.getElementById('publishedCount').innerText = published;
@@ -486,7 +466,6 @@
         window.editNotice = async (id) => {
             const notice = allNotices.find(n => n.id === id);
             if (!notice) return;
-            
             document.getElementById('modalTitle').innerText = 'Edit Notice';
             document.getElementById('noticeId').value = id;
             document.getElementById('noticeTitle').value = notice.title || '';
@@ -496,19 +475,9 @@
             document.getElementById('noticeModal').classList.remove('hidden');
         };
 
-        window.closeNoticeModal = () => {
-            document.getElementById('noticeModal').classList.add('hidden');
-        };
-
-        window.confirmDelete = (id) => {
-            deleteTargetId = id;
-            document.getElementById('deleteModal').classList.remove('hidden');
-        };
-
-        window.closeDeleteModal = () => {
-            document.getElementById('deleteModal').classList.add('hidden');
-            deleteTargetId = null;
-        };
+        window.closeNoticeModal = () => document.getElementById('noticeModal').classList.add('hidden');
+        window.confirmDelete = (id) => { deleteTargetId = id; document.getElementById('deleteModal').classList.remove('hidden'); };
+        window.closeDeleteModal = () => { document.getElementById('deleteModal').classList.add('hidden'); deleteTargetId = null; };
 
         document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
             if (deleteTargetId) {
@@ -516,9 +485,7 @@
                     await deleteDoc(doc(db, "notices", deleteTargetId));
                     showToast("Announcement deleted successfully");
                     await loadNotices();
-                } catch (err) {
-                    showToast("Delete failed: " + err.message, true);
-                }
+                } catch (err) { showToast("Delete failed: " + err.message, true); }
                 closeDeleteModal();
             }
         });
@@ -530,26 +497,14 @@
             const message = document.getElementById('noticeMessage').value.trim();
             const priority = document.getElementById('noticePriority').value;
             const status = document.getElementById('noticeStatus').value;
-            
-            if (!title || !message) {
-                showToast("Title and message are required", true);
-                return;
-            }
+            if (!title || !message) { showToast("Title and message are required", true); return; }
             
             const btn = document.getElementById('saveNoticeBtn');
             const originalText = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
-            
             try {
-                const noticeData = { 
-                    title: title, 
-                    message: message, 
-                    priority: priority, 
-                    status: status,
-                    author: currentAdminName
-                };
-                
+                const noticeData = { title, message, priority, status, author: currentAdminName };
                 if (id) {
                     await updateDoc(doc(db, "notices", id), noticeData);
                     showToast("Notice updated successfully!");
@@ -560,26 +515,15 @@
                 }
                 closeNoticeModal();
                 await loadNotices();
-            } catch (err) {
-                showToast("Error: " + err.message, true);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            }
+            } catch (err) { showToast("Error: " + err.message, true); }
+            finally { btn.disabled = false; btn.innerHTML = originalText; }
         });
 
         document.getElementById('searchNotices').addEventListener('input', () => renderNotices());
         document.getElementById('filterPriority').addEventListener('change', () => renderNotices());
 
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
-        }
-
-        window.logout = async () => {
-            await signOut(auth);
-            window.location.href = "../index.html";
-        };
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+        window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
 
         document.getElementById('mobileMenuButton').onclick = () => {
             document.getElementById('mainSidebar').classList.remove('-translate-x-full');
@@ -599,22 +543,13 @@
                     currentAdminName = currentAdminData.fullName || "Admin";
                     const email = user.email || currentAdminData.email;
                     const photoURL = currentAdminData.photoURL || null;
-
-                    document.getElementById('adminName').innerText = "Salam, " + currentAdminName;
+                    document.getElementById('adminName').innerText = "Welcome, " + currentAdminName;
                     document.getElementById('adminEmail').innerText = email;
                     updateAdminAvatarUI(photoURL, currentAdminName);
-                    
-                    // Setup avatar upload after admin data loaded
                     setupAvatarUpload();
-                    
                     await loadNotices();
-                } else {
-                    await signOut(auth);
-                    window.location.href = "../auth/login.html";
-                }
-            } else {
-                window.location.href = "../auth/login.html";
-            }
+                } else { await signOut(auth); window.location.href = "../auth/login.html"; }
+            } else { window.location.href = "../auth/login.html"; }
         });
     </script>
 </body>

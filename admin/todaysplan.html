@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Today's Plan | UCC Admin Nexus | Enhanced Task Flow</title>
+    <title>FyOrbit Admin | Today's Plan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Outfit', sans-serif; }
-        body { background: #0b1120; color: #ecf3f2; }
-        .glass-panel { background: rgba(15, 23, 42, 0.68); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.06); }
-        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%); backdrop-filter: blur(4px); border-right: 1px solid rgba(241,196,15,0.12); }
-        .active-link { background: rgba(241,196,15,0.1); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
+        body { background: linear-gradient(135deg, #0f172a 0%, #1a2233 100%); color: #ecf3f2; }
+        .glass-panel { background: rgba(15, 23, 42, 0.68); backdrop-filter: blur(14px); border: 1px solid rgba(241, 196, 15, 0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+        .sidebar-glass { background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%); backdrop-filter: blur(4px); border-right: 1px solid rgba(241,196,15,0.2); }
+        .active-link { background: rgba(241,196,15,0.12); border-left: 4px solid #f1c40f; color: #f1c40f !important; }
         .task-card { transition: all 0.2s ease; border-left: 3px solid transparent; }
         .task-card:hover { transform: translateY(-2px); background: rgba(241,196,15,0.02); border-left-color: #f1c40f; }
         .status-badge { font-size: 0.7rem; font-weight: 800; padding: 0.25rem 0.7rem; border-radius: 40px; letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 5px; }
         .status-not-started { background: #334155; color: #cbd5e1; }
-        .status-in-progress { background: #f1c40f20; color: #f1c40f; border: 1px solid #f1c40f40; }
-        .status-partial { background: #e67e2220; color: #f39c12; border: 1px solid #f39c1240; }
-        .status-completed { background: #10b98120; color: #10b981; border: 1px solid #10b98140; }
+        .status-in-progress { background: rgba(241,196,15,0.2); color: #f1c40f; border: 1px solid rgba(241,196,15,0.4); }
+        .status-partial { background: rgba(230,126,34,0.2); color: #f39c12; border: 1px solid rgba(243,156,18,0.4); }
+        .status-completed { background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid rgba(16,185,129,0.4); }
         .skeleton { background: linear-gradient(90deg, #1e293b 25%, #2d3a4e 50%, #1e293b 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 1rem; }
         @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         .modal-card { animation: slideUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
@@ -32,6 +32,50 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in { animation: fadeIn 0.3s ease-out; }
         .permission-banner { background: linear-gradient(135deg, #ef444420, #dc262610); border-left: 4px solid #ef4444; }
+        
+        /* Admin Avatar Styling */
+        .admin-avatar-container {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .admin-avatar-container:hover { transform: scale(1.02); }
+        .admin-avatar-img {
+            width: 64px;
+            height: 64px;
+            border-radius: 1.5rem;
+            object-fit: cover;
+            border: 2px solid rgba(241, 196, 15, 0.5);
+            background: linear-gradient(135deg, #f1c40f, #e67e22);
+            box-shadow: 0 8px 20px -5px rgba(0,0,0,0.4);
+        }
+        .camera-badge-admin {
+            position: absolute;
+            bottom: -6px;
+            right: -6px;
+            background: #0f172a;
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #f1c40f;
+            color: #f1c40f;
+            font-size: 0.7rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .camera-badge-admin:hover { background: #f1c40f; color: #0f172a; }
+        @media (max-width: 768px) {
+            .admin-avatar-img { width: 48px; height: 48px; }
+            .camera-badge-admin { width: 22px; height: 22px; font-size: 0.6rem; bottom: -4px; right: -4px; }
+        }
+        .stat-card { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); border: 1px solid rgba(241, 196, 15, 0.2); transition: all 0.2s; }
+        .stat-card:hover { transform: translateY(-3px); border-color: rgba(241, 196, 15, 0.5); box-shadow: 0 20px 25px -12px rgba(241,196,15,0.2); }
+        .btn-gold { background: #f1c40f; color: #1a2233; transition: all 0.2s; }
+        .btn-gold:hover { background: #e67e22; transform: translateY(-1px); }
     </style>
 </head>
 <body class="flex min-h-screen">
@@ -41,22 +85,23 @@
     <aside id="mainSidebar" class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-glass z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
         <div class="p-6 border-b border-white/5">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
-                    <i class="fas fa-crown text-slate-900 text-xl"></i>
+              <div
+                    class="w-10 h-10  rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300 overflow-hidden">
+                    <img src="../assets/img/slogo.png" alt="FyOrbit Logo" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <h1 class="text-xl font-black tracking-tight text-white">UCC <span class="text-[#f1c40f]">ADMIN</span></h1>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Control Core</p>
+                    <h1 class="text-xl font-black tracking-tight text-white">Fy<span class="text-[#f1c40f]">Orbit</span></h1>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Admin Control</p>
                 </div>
             </div>
         </div>
         <nav class="flex-1 p-5 space-y-2 mt-4">
             <a href="dashboard.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-users text-lg w-6"></i> Directory</a>
             <a href="profile.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-user-circle w-6"></i> My Profile</a>
-            <a href="edairy.html" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase"><i class="fas fa-clipboard-list w-6"></i> Today's Plan</a>
+            <a href="todaysplan.html" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase"><i class="fas fa-clipboard-list w-6"></i> Today's Plan</a>
             <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-rupee-sign w-6"></i> Fee Management</a>
-            <a href="attendance.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-calendar-check w-6"></i> Attendance</a>
-            <a href="communication.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-comments w-6"></i> Communication</a>
+            <a href="attendance.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-calendar-check w-6"></i> Attendance</a>
+            <a href="communication.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-comments w-6"></i> Communication</a>
         </nav>
         <div class="p-5 border-t border-white/10">
             <button onclick="logout()" class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase"><i class="fas fa-sign-out-alt w-6"></i> Exit Panel</button>
@@ -64,7 +109,7 @@
     </aside>
 
     <main class="flex-1 w-full p-4 md:p-8 lg:p-10 overflow-x-hidden">
-        <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8 border border-white/5">
+        <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
@@ -73,20 +118,40 @@
                         <p class="text-slate-400 text-xs md:text-sm font-medium">Manage tasks, track progress, and stay organized</p>
                     </div>
                 </div>
+                <!-- Admin Profile with Clickable Avatar -->
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-black text-[#f1c40f] border-2 border-[#f1c40f]/40 shadow-lg" id="adminInitial">?</div>
-                    <div><h2 class="text-xl md:text-3xl font-black text-white tracking-tight" id="adminName">Loading...</h2><p class="text-slate-400 text-xs md:text-sm font-medium" id="adminEmail">Secure session</p></div>
+                    <div class="admin-avatar-container" id="adminAvatarWrapper">
+                        <img id="adminAvatarImg" class="admin-avatar-img" src="https://via.placeholder.com/64" alt="Admin Avatar">
+                        <div id="adminCameraBadge" class="camera-badge-admin">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-black text-white tracking-tight" id="adminName">Authenticating...</h2>
+                        <p class="text-slate-400 text-xs md:text-sm font-medium" id="adminEmail">Secure session</p>
+                    </div>
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-6">
-                <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10"><div class="flex justify-between"><div><p class="text-slate-400 text-[10px] font-black uppercase">Total Tasks</p><p class="text-2xl font-black text-white" id="statTotalTasks">0</p></div><i class="fas fa-tasks text-3xl text-[#f1c40f]/40"></i></div></div>
-                <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10"><div class="flex justify-between"><div><p class="text-slate-400 text-[10px] font-black uppercase">In Progress</p><p class="text-2xl font-black text-[#f1c40f]" id="statInProgress">0</p></div><i class="fas fa-spinner fa-pulse text-3xl text-[#f1c40f]/40"></i></div></div>
-                <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10"><div class="flex justify-between"><div><p class="text-slate-400 text-[10px] font-black uppercase">Completed</p><p class="text-2xl font-black text-emerald-400" id="statCompleted">0</p></div><i class="fas fa-check-circle text-3xl text-emerald-400/40"></i></div></div>
-                <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10"><div class="flex justify-between"><div><p class="text-slate-400 text-[10px] font-black uppercase">Completion Rate</p><p class="text-2xl font-black text-white" id="statRate">0%</p></div><i class="fas fa-chart-line text-3xl text-blue-400/40"></i></div></div>
+                <div class="stat-card rounded-2xl p-4">
+                    <div class="flex justify-between"><div><p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Total Tasks</p><p class="text-2xl font-black text-white" id="statTotalTasks">0</p></div><i class="fas fa-tasks text-3xl text-[#f1c40f]/40"></i></div>
+                </div>
+                <div class="stat-card rounded-2xl p-4">
+                    <div class="flex justify-between"><div><p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">In Progress</p><p class="text-2xl font-black text-[#f1c40f]" id="statInProgress">0</p></div><i class="fas fa-spinner fa-pulse text-3xl text-[#f1c40f]/40"></i></div>
+                </div>
+                <div class="stat-card rounded-2xl p-4">
+                    <div class="flex justify-between"><div><p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Completed</p><p class="text-2xl font-black text-emerald-400" id="statCompleted">0</p></div><i class="fas fa-check-circle text-3xl text-emerald-400/40"></i></div>
+                </div>
+                <div class="stat-card rounded-2xl p-4">
+                    <div class="flex justify-between"><div><p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Completion Rate</p><p class="text-2xl font-black text-white" id="statRate">0%</p></div><i class="fas fa-chart-line text-3xl text-blue-400/40"></i></div>
+                </div>
             </div>
         </div>
 
-        <!-- Permission error hint (will show only if error occurs) -->
+        <!-- Hidden File Input for Admin Photo Upload -->
+        <input type="file" id="adminPhotoUpload" accept="image/jpeg,image/png,image/webp" class="hidden">
+
+        <!-- Permission error hint -->
         <div id="permissionAlert" class="hidden permission-banner glass-panel rounded-2xl p-4 mb-6 flex items-center justify-between">
             <div class="flex items-center gap-3"><i class="fas fa-shield-alt text-rose-400 text-xl"></i><div><p class="text-sm font-bold text-white">Permission Issue Detected</p><p class="text-xs text-slate-300" id="permMessage">Firestore rules may be blocking writes. Using fallback sync.</p></div></div>
             <button onclick="retryLastAction()" class="bg-rose-500/20 text-rose-300 px-3 py-1.5 rounded-lg text-xs font-bold">Retry</button>
@@ -94,13 +159,13 @@
 
         <div class="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center mb-6">
             <div class="relative w-full sm:w-80"><i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i><input type="text" id="searchTaskInput" placeholder="Search tasks by plan or title..." class="w-full bg-slate-800/60 border border-slate-700 rounded-2xl py-3 pl-12 pr-5 text-white focus:border-[#f1c40f] transition outline-none text-sm"></div>
-            <div class="flex gap-3"><button onclick="filterByStatus('all')" class="filter-chip px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-[#f1c40f]/20 transition" data-filter="all">All</button><button onclick="filterByStatus('in_progress')" class="filter-chip px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-[#f1c40f]/20 transition">In Progress</button><button onclick="filterByStatus('completed')" class="filter-chip px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-[#f1c40f]/20 transition">Completed</button><button onclick="openTaskModal()" class="bg-[#f1c40f] hover:bg-[#f1c40f]/90 text-slate-900 px-5 py-3 rounded-xl font-black text-xs uppercase transition-all flex items-center gap-2 shadow-lg"><i class="fas fa-plus-circle"></i> Add Task</button></div>
+            <div class="flex gap-3"><button onclick="filterByStatus('all')" class="filter-chip px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-[#f1c40f]/20 transition" data-filter="all">All</button><button onclick="filterByStatus('in_progress')" class="filter-chip px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-[#f1c40f]/20 transition">In Progress</button><button onclick="filterByStatus('completed')" class="filter-chip px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-[#f1c40f]/20 transition">Completed</button><button onclick="openTaskModal()" class="btn-gold px-5 py-3 rounded-xl font-black text-xs uppercase transition-all flex items-center gap-2 shadow-lg"><i class="fas fa-plus-circle"></i> Add Task</button></div>
         </div>
 
         <div id="tasksContainer" class="space-y-4"><div class="glass-panel rounded-2xl p-8 text-center"><div class="skeleton h-24 w-full"></div></div></div>
     </main>
 
-    <!-- Task Modal with enhanced fields (priority) -->
+    <!-- Task Modal -->
     <div id="taskModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-2xl rounded-3xl p-6 md:p-8 shadow-2xl border border-white/20 modal-card">
             <div class="flex justify-between items-start mb-5"><div><h3 class="text-2xl md:text-3xl font-black text-white" id="modalTitle">Create Plan / Task</h3><p class="text-slate-400 text-xs mt-1">Set title, plan category, and track progress</p></div><button onclick="closeTaskModal()" class="text-slate-500 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button></div>
@@ -125,17 +190,27 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = { apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4", authDomain: "trfasilyousf1.firebaseapp.com", projectId: "trfasilyousf1", storageBucket: "trfasilyousf1.firebasestorage.app", messagingSenderId: "158147210589", appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4" };
+        const firebaseConfig = {
+            apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
+            authDomain: "trfasilyousf1.firebaseapp.com",
+            projectId: "trfasilyousf1",
+            storageBucket: "trfasilyousf1.firebasestorage.app",
+            messagingSenderId: "158147210589",
+            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
+        };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        
+
+        // Cloudinary Configuration
+        const CLOUD_NAME = "dholrawub";
+        const UPLOAD_PRESET = "portal_profile";
+
         let currentAdminUser = null, currentAdminData = null, allTasks = [];
         let currentFilter = 'all';
-        let pendingRetryAction = null;
 
         function showToast(msg, isErr = false) { 
             const toast = document.getElementById('toastMessage'); 
@@ -143,6 +218,68 @@
             toast.classList.remove('hidden'); 
             toast.style.borderLeftColor = isErr ? '#ef4444' : '#10b981'; 
             setTimeout(() => toast.classList.add('hidden'), 3500); 
+        }
+
+        // Update admin avatar UI
+        function updateAdminAvatarUI(photoURL, fullName) {
+            const avatarImg = document.getElementById('adminAvatarImg');
+            if (photoURL && photoURL.trim() !== "") {
+                avatarImg.src = photoURL;
+            } else {
+                const fallbackUrl = `https://ui-avatars.com/api/?background=f1c40f&color=0f172a&bold=true&name=${encodeURIComponent(fullName || "Admin")}&size=64&rounded=true`;
+                avatarImg.src = fallbackUrl;
+            }
+        }
+
+        // Upload image to Cloudinary
+        async function uploadToCloudinary(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', UPLOAD_PRESET);
+            try {
+                const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                if (data.secure_url) return data.secure_url;
+                else throw new Error(data.error?.message || "Upload failed");
+            } catch (err) {
+                console.error("Cloudinary error:", err);
+                throw err;
+            }
+        }
+
+        // Setup Admin Avatar Upload
+        function setupAdminAvatarUpload() {
+            const avatarWrapper = document.getElementById('adminAvatarWrapper');
+            const cameraBadge = document.getElementById('adminCameraBadge');
+            const fileInput = document.getElementById('adminPhotoUpload');
+            if (!avatarWrapper || !cameraBadge || !fileInput) return;
+            const openFilePicker = (e) => { e.stopPropagation(); fileInput.click(); };
+            cameraBadge.addEventListener('click', openFilePicker);
+            avatarWrapper.addEventListener('click', (e) => { if (!e.target.closest('#adminCameraBadge')) fileInput.click(); });
+            fileInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file && currentAdminUser) {
+                    const cameraIcon = cameraBadge.querySelector('i');
+                    if (cameraIcon) cameraIcon.className = "fas fa-spinner fa-spin";
+                    try {
+                        const imageUrl = await uploadToCloudinary(file);
+                        await updateDoc(doc(db, "users", currentAdminUser.uid), { photoURL: imageUrl });
+                        await updateProfile(currentAdminUser, { photoURL: imageUrl });
+                        if (currentAdminData) currentAdminData.photoURL = imageUrl;
+                        updateAdminAvatarUI(imageUrl, currentAdminData?.fullName || "Admin");
+                        showToast("Profile photo updated successfully!");
+                    } catch (err) {
+                        console.error("Admin upload error:", err);
+                        showToast("Failed to update admin photo", true);
+                    } finally {
+                        if (cameraIcon) cameraIcon.className = "fas fa-camera";
+                    }
+                }
+                fileInput.value = '';
+            });
         }
 
         function getPriorityClass(priority) {
@@ -205,7 +342,7 @@
             updateStats(tasks);
         }
 
-        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
 
         async function loadTasks() {
             const container = document.getElementById('tasksContainer');
@@ -341,11 +478,15 @@
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists() && userDoc.data().role === 'admin') {
-                    currentAdminUser = user; currentAdminData = userDoc.data();
+                    currentAdminUser = user;
+                    currentAdminData = userDoc.data();
                     const fullName = currentAdminData.fullName || "Administrator";
-                    document.getElementById('adminName').innerText = "Salam, " + fullName;
-                    document.getElementById('adminEmail').innerText = user.email || currentAdminData.email;
-                    document.getElementById('adminInitial').innerText = fullName.charAt(0).toUpperCase();
+                    const email = user.email || currentAdminData.email;
+                    const photoURL = currentAdminData.photoURL || null;
+                    document.getElementById('adminName').innerText = "Welcome, " + fullName;
+                    document.getElementById('adminEmail').innerText = email;
+                    updateAdminAvatarUI(photoURL, fullName);
+                    setupAdminAvatarUpload();
                     await loadTasks();
                 } else { await signOut(auth); window.location.href = "../auth/login.html"; }
             } else { window.location.href = "../auth/login.html"; }

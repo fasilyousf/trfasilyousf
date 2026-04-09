@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>UCC Admin Nexus | Student Directory</title>
+    <title>FyOrbit Admin Portal | Student Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
@@ -15,20 +15,21 @@
         }
 
         body {
-            background: #0b1120;
+            background: linear-gradient(135deg, #0f172a 0%, #1a2233 100%);
             color: #ecf3f2;
         }
 
         .glass-panel {
             background: rgba(15, 23, 42, 0.68);
             backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(241, 196, 15, 0.15);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         }
 
         .sidebar-glass {
             background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%);
             backdrop-filter: blur(4px);
-            border-right: 1px solid rgba(241, 196, 15, 0.12);
+            border-right: 1px solid rgba(241, 196, 15, 0.2);
         }
 
         .modal-backdrop {
@@ -36,23 +37,13 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         @keyframes slideUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .modal-card {
@@ -62,7 +53,6 @@
         .custom-scroll::-webkit-scrollbar {
             width: 4px;
         }
-
         .custom-scroll::-webkit-scrollbar-thumb {
             background: #f1c40f;
             border-radius: 10px;
@@ -75,27 +65,26 @@
         }
 
         @keyframes shimmer {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
 
         .active-link {
-            background: rgba(241, 196, 15, 0.1);
+            background: rgba(241, 196, 15, 0.12);
             border-left: 4px solid #f1c40f;
             color: #f1c40f !important;
         }
 
         .stat-card {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(241, 196, 15, 0.2);
         }
-
         .stat-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 25px -12px rgba(241, 196, 15, 0.2);
+            border-color: rgba(241, 196, 15, 0.5);
         }
 
         /* Admin Avatar Styling */
@@ -112,7 +101,7 @@
             height: 64px;
             border-radius: 1.5rem;
             object-fit: cover;
-            border: 2px solid rgba(241, 196, 15, 0.5);
+            border: 2px solid rgba(241, 196, 15, 0.6);
             background: linear-gradient(135deg, #f1c40f, #e67e22);
             box-shadow: 0 8px 20px -5px rgba(0,0,0,0.4);
         }
@@ -145,7 +134,7 @@
             height: 80px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid rgba(241, 196, 15, 0.5);
+            border: 3px solid rgba(241, 196, 15, 0.6);
             background: linear-gradient(135deg, #f1c40f, #e67e22);
             cursor: pointer;
             transition: all 0.2s;
@@ -179,10 +168,26 @@
             display: inline-block;
         }
 
+        /* Blue accent buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            transition: all 0.2s;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            transform: translateY(-1px);
+        }
+        .btn-outline-blue {
+            border: 1px solid #3b82f6;
+            background: rgba(59,130,246,0.1);
+        }
+        .btn-outline-blue:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
         @media (max-width: 640px) {
-            td, th {
-                padding: 12px 8px !important;
-            }
+            td, th { padding: 12px 8px !important; }
             .admin-avatar-img { width: 48px; height: 48px; }
             .admin-camera-badge { width: 22px; height: 22px; font-size: 0.6rem; bottom: -4px; right: -4px; }
         }
@@ -199,48 +204,39 @@
         <div class="p-6 border-b border-white/5">
             <div class="flex items-center gap-3">
                 <div
-                    class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
-                    <i class="fas fa-crown text-slate-900 text-xl"></i>
+                    class="w-10 h-10  rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300 overflow-hidden">
+                    <img src="../assets/img/slogo.png" alt="FyOrbit Logo" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <h1 class="text-xl font-black tracking-tight text-white">UCC <span
-                            class="text-[#f1c40f]">ADMIN</span></h1>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Control Core</p>
+                    <h1 class="text-xl font-black tracking-tight text-white">Fy<span class="text-[#f1c40f]">Orbit</span></h1>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Admin Control</p>
                 </div>
             </div>
         </div>
 
         <nav class="flex-1 p-5 space-y-2 mt-4">
-            <a href="#"
-                class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
+            <a href="#" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase">
                 <i class="fas fa-users text-lg w-6"></i> Directory
             </a>
-            <a href="profile.html"
-                class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+            <a href="profile.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-user-circle w-6"></i> My Profile
             </a>
-            <a href="todaysplan.html"
-                class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+            <a href="todaysplan.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-book-open w-6"></i> Today's Plan
             </a>
-            <a href="fees.html"
-                class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+            <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-rupee-sign w-6"></i> Fee Management
             </a>
-            <a href="attendance.html"
-                class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+            <a href="attendance.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
                 <i class="fas fa-calendar-check w-6"></i> Attendance
             </a>
-            <a href="communication.html"
-                class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-2xl transition text-slate-400 hover:text-white group">
-                <i class="fas fa-comments"></i>
-                <span class="font-bold text-sm uppercase">Communication</span>
+            <a href="communication.html" class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase">
+                <i class="fas fa-comments w-6"></i> Communication
             </a>
         </nav>
 
         <div class="p-5 border-t border-white/10">
-            <button onclick="logout()"
-                class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase">
+            <button onclick="logout()" class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase">
                 <i class="fas fa-sign-out-alt w-6"></i> Exit Panel
             </button>
         </div>
@@ -248,12 +244,10 @@
 
     <main class="flex-1 w-full p-4 md:p-8 lg:p-10 overflow-x-hidden">
 
-        <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8 border border-white/5">
+        <div class="glass-panel rounded-2xl md:rounded-3xl p-5 md:p-7 mb-6 md:mb-8">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                    <button id="mobileMenuButton"
-                        class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i
-                            class="fas fa-bars"></i></button>
+                    <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
                     
                     <!-- Admin Avatar with Cloudinary Upload -->
                     <div class="admin-avatar-container" id="adminAvatarWrapper">
@@ -264,26 +258,22 @@
                     </div>
                     
                     <div>
-                        <h2 class="text-xl md:text-3xl font-black text-white tracking-tight" id="adminName">
-                            Authenticating...</h2>
-                        <p class="text-slate-400 text-xs md:text-sm font-medium" id="adminEmail">Secure session
-                            verifying</p>
+                        <h2 class="text-xl md:text-3xl font-black text-white tracking-tight" id="adminName">Authenticating...</h2>
+                        <p class="text-slate-400 text-xs md:text-sm font-medium" id="adminEmail">Secure session verifying</p>
                     </div>
                 </div>
                 <div class="flex gap-3 items-center">
-                    <button onclick="refreshDashboard()"
-                        class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-md flex items-center gap-2">
+                    <button onclick="refreshDashboard()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-md flex items-center gap-2">
                         <i class="fas fa-sync-alt"></i> <span class="hidden sm:inline">Refresh</span>
                     </button>
-                    <button onclick="openAddModal()"
-                        class="bg-emerald-500 hover:bg-emerald-400 text-slate-900 px-4 md:px-6 py-2.5 md:py-3.5 rounded-xl md:rounded-2xl font-black uppercase text-xs transition-all shadow-xl hover:scale-105 flex items-center gap-2">
+                    <button onclick="openAddModal()" class="btn-primary text-white px-4 md:px-6 py-2.5 md:py-3.5 rounded-xl md:rounded-2xl font-black uppercase text-xs transition-all shadow-xl hover:scale-105 flex items-center gap-2">
                         <i class="fas fa-plus"></i> <span>Enroll</span>
                     </button>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
-                <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10 stat-card">
+                <div class="stat-card rounded-2xl p-4">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Total Students</p>
@@ -292,21 +282,19 @@
                         <i class="fas fa-user-graduate text-4xl text-[#f1c40f]/40"></i>
                     </div>
                 </div>
-                <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10 stat-card">
+                <div class="stat-card rounded-2xl p-4">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Available Courses
-                            </p>
+                            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Available Courses</p>
                             <p class="text-3xl font-black text-white mt-1" id="statTotalCourses">0</p>
                         </div>
                         <i class="fas fa-book-open text-4xl text-emerald-400/40"></i>
                     </div>
                 </div>
-                <div class="bg-slate-900/60 rounded-2xl p-4 border border-white/10 stat-card">
+                <div class="stat-card rounded-2xl p-4">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Total Fee Revenue
-                            </p>
+                            <p class="text-slate-400 text-[10px] font-black uppercase tracking-wider">Total Fee Revenue</p>
                             <p class="text-2xl md:text-3xl font-black text-[#f1c40f] mt-1" id="statTotalRevenue">₹0</p>
                         </div>
                         <i class="fas fa-chart-line text-4xl text-[#f1c40f]/40"></i>
@@ -324,8 +312,7 @@
                 <input type="text" id="searchBar" placeholder="Search by name or email..."
                     class="w-full bg-slate-800/60 border border-slate-700 rounded-2xl py-3.5 pl-12 pr-5 text-white focus:border-[#f1c40f] transition outline-none text-sm">
             </div>
-            <button onclick="exportToCSV()"
-                class="bg-[#f1c40f]/10 hover:bg-[#f1c40f]/20 text-[#f1c40f] border border-[#f1c40f]/30 px-5 py-3 rounded-xl font-bold text-xs uppercase transition-all flex items-center justify-center gap-2">
+            <button onclick="exportToCSV()" class="btn-outline-blue text-[#3b82f6] px-5 py-3 rounded-xl font-bold text-xs uppercase transition-all flex items-center justify-center gap-2">
                 <i class="fas fa-download"></i> Export CSV
             </button>
         </div>
@@ -333,8 +320,7 @@
         <div class="glass-panel rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
             <div class="overflow-x-auto custom-scroll">
                 <table class="w-full text-left min-w-[750px] md:min-w-full">
-                    <thead
-                        class="bg-slate-900/80 text-[10px] md:text-[11px] font-black uppercase tracking-widest text-slate-400 border-b border-white/10">
+                    <thead class="bg-slate-900/80 text-[10px] md:text-[11px] font-black uppercase tracking-widest text-slate-400 border-b border-white/10">
                         <tr>
                             <th class="px-4 md:px-6 py-4 md:py-5">Scholar Identity</th>
                             <th class="px-4 md:px-6 py-4 md:py-5">Login ID</th>
@@ -357,17 +343,14 @@
     </main>
 
     <!-- Add/Enroll Student Modal with Photo Upload -->
-    <div id="addModal"
-        class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
-        <div
-            class="glass-panel w-full max-w-xl rounded-3xl md:rounded-[3rem] p-6 md:p-10 shadow-2xl border border-white/20 modal-card">
+    <div id="addModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
+        <div class="glass-panel w-full max-w-xl rounded-3xl md:rounded-[3rem] p-6 md:p-10 shadow-2xl border border-white/20 modal-card">
             <div class="flex justify-between items-start mb-6">
                 <div>
                     <h3 class="text-2xl md:text-3xl font-black text-white">Enroll Scholar</h3>
                     <p class="text-slate-400 text-xs mt-1">Upload photo and fill student details</p>
                 </div>
-                <button onclick="closeAddModal()" class="text-slate-500 hover:text-white text-2xl"><i
-                        class="fas fa-times-circle"></i></button>
+                <button onclick="closeAddModal()" class="text-slate-500 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button>
             </div>
             
             <!-- Avatar Upload Section -->
@@ -382,20 +365,11 @@
             <input type="file" id="studentPhotoUpload" accept="image/jpeg,image/png,image/webp" class="hidden">
             
             <form id="addStudentForm" class="space-y-5">
-                <input type="text" id="addName" placeholder="Full Name"
-                    class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-[#f1c40f] transition"
-                    required>
-                <input type="email" id="addEmail" placeholder="Email Address"
-                    class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-[#f1c40f] transition"
-                    required>
-                <input type="text" id="addPass"
-                    class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-[#f1c40f] transition"
-                    value="UCC@2026" required>
-                <input type="number" id="addFeeTotal"
-                    class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-[#f1c40f] transition"
-                    value="25000" required>
-                <button type="submit" id="createBtn"
-                    class="w-full py-4 bg-emerald-500 text-slate-900 font-black uppercase rounded-xl shadow-xl hover:bg-emerald-400 transition-all">
+                <input type="text" id="addName" placeholder="Full Name" class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-[#f1c40f] transition" required>
+                <input type="email" id="addEmail" placeholder="Email Address" class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-[#f1c40f] transition" required>
+                <input type="text" id="addPass" class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-[#f1c40f] transition" value="FyOrbit@2026" required>
+                <input type="number" id="addFeeTotal" class="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-[#f1c40f] transition" value="25000" required>
+                <button type="submit" id="createBtn" class="btn-primary w-full py-4 text-white font-black uppercase rounded-xl shadow-xl transition-all">
                     <i class="fas fa-user-plus mr-2"></i> Create Account
                 </button>
             </form>
@@ -423,7 +397,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Cloudinary Configuration
+        // Cloudinary Configuration (unchanged)
         const CLOUD_NAME = "dholrawub";
         const UPLOAD_PRESET = "portal_profile";
 
@@ -442,76 +416,51 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
-        // Upload image to Cloudinary
         async function uploadToCloudinary(file) {
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', UPLOAD_PRESET);
-            
             try {
                 const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
                     method: 'POST',
                     body: formData
                 });
                 const data = await response.json();
-                if (data.secure_url) {
-                    return data.secure_url;
-                } else {
-                    throw new Error(data.error?.message || "Upload failed");
-                }
+                if (data.secure_url) return data.secure_url;
+                else throw new Error(data.error?.message || "Upload failed");
             } catch (err) {
                 console.error("Cloudinary error:", err);
                 throw err;
             }
         }
 
-        // Update admin avatar UI
         function updateAdminAvatarUI(photoURL, fullName) {
             const avatarImg = document.getElementById('adminAvatarImg');
             if (photoURL && photoURL.trim() !== "") {
                 avatarImg.src = photoURL;
             } else {
-                const fallbackUrl = `https://ui-avatars.com/api/?background=f1c40f&color=0f172a&bold=true&name=${encodeURIComponent(fullName || "Admin")}&size=64&rounded=true`;
-                avatarImg.src = fallbackUrl;
+                avatarImg.src = `https://ui-avatars.com/api/?background=f1c40f&color=0f172a&bold=true&name=${encodeURIComponent(fullName || "Admin")}&size=64&rounded=true`;
             }
         }
 
-        // Setup Admin Avatar Upload
         function setupAdminAvatarUpload() {
-            const avatarWrapper = document.getElementById('adminAvatarWrapper');
             const cameraBadge = document.getElementById('adminCameraBadge');
             const fileInput = document.getElementById('adminPhotoUpload');
-            
-            if (!avatarWrapper || !cameraBadge || !fileInput) return;
-            
-            const openFilePicker = (e) => {
-                e.stopPropagation();
-                fileInput.click();
-            };
-            
-            cameraBadge.addEventListener('click', openFilePicker);
-            avatarWrapper.addEventListener('click', (e) => {
-                if (e.target.closest('#adminCameraBadge')) return;
-                fileInput.click();
-            });
-            
+            if (!cameraBadge || !fileInput) return;
+            cameraBadge.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', async (e) => {
                 const file = e.target.files[0];
                 if (file && currentAdminUser) {
-                    const cameraIcon = document.querySelector('#adminCameraBadge i');
+                    const cameraIcon = cameraBadge.querySelector('i');
                     if (cameraIcon) cameraIcon.className = "fas fa-spinner fa-spin";
-                    
                     try {
                         const imageUrl = await uploadToCloudinary(file);
-                        // Update Firestore user document
                         await updateDoc(doc(db, "users", currentAdminUser.uid), { photoURL: imageUrl });
-                        // Update Auth profile
                         await updateProfile(currentAdminUser, { photoURL: imageUrl });
                         if (currentAdminData) currentAdminData.photoURL = imageUrl;
                         updateAdminAvatarUI(imageUrl, currentAdminData?.fullName || "Admin");
                         showToast("Admin profile photo updated successfully!");
                     } catch (err) {
-                        console.error("Admin upload error:", err);
                         showToast("Failed to update admin photo", true);
                     } finally {
                         if (cameraIcon) cameraIcon.className = "fas fa-camera";
@@ -521,25 +470,17 @@
             });
         }
 
-        // Setup student avatar upload in modal
         function setupStudentAvatarUpload() {
             const uploadBtn = document.getElementById('uploadAvatarBtn');
             const fileInput = document.getElementById('studentPhotoUpload');
             const preview = document.getElementById('studentAvatarPreview');
-            
             if (!uploadBtn || !fileInput || !preview) return;
-            
-            uploadBtn.addEventListener('click', () => {
-                fileInput.click();
-            });
-            
+            uploadBtn.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = (event) => {
-                        preview.src = event.target.result;
-                    };
+                    reader.onload = (event) => { preview.src = event.target.result; };
                     reader.readAsDataURL(file);
                     pendingPhotoFile = file;
                 }
@@ -570,21 +511,15 @@
         function renderTable(data) {
             const tbody = document.getElementById('studentTableBody');
             const searchTerm = document.getElementById('searchBar').value.toLowerCase();
-            const filtered = searchTerm ? data.filter(s => 
-                s.fullName?.toLowerCase().includes(searchTerm) || 
-                s.email?.toLowerCase().includes(searchTerm)
-            ) : data;
-            
+            const filtered = searchTerm ? data.filter(s => s.fullName?.toLowerCase().includes(searchTerm) || s.email?.toLowerCase().includes(searchTerm)) : data;
             if (filtered.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400"><i class="fas fa-user-slash text-3xl mb-2 opacity-50 block"></i>No students found</td></tr>`;
                 return;
             }
-            
             tbody.innerHTML = filtered.map(s => {
                 const enrolledCount = (s.enrolledCourses || []).length;
                 const photo = s.profilePic || `https://ui-avatars.com/api/?background=f1c40f&color=1a2233&bold=true&name=${encodeURIComponent(s.fullName || 'S')}`;
                 const enrollmentDate = s.createdAt ? new Date(s.createdAt).toLocaleDateString('en-IN') : '—';
-                
                 return `
                 <tr class="hover:bg-white/[0.03] transition-all">
                     <td class="px-4 md:px-6 py-4">
@@ -592,7 +527,7 @@
                             <img src="${photo}" class="w-10 h-10 md:w-12 md:h-12 rounded-xl object-cover border border-white/10 shadow-lg">
                             <div>
                                 <div class="font-bold text-white text-sm md:text-base">${escapeHtml(s.fullName || 'Unknown')}</div>
-                                <div class="text-[9px] md:text-[10px] text-[#f1c40f] font-mono uppercase tracking-tighter">UCC-${s.id?.slice(-6).toUpperCase() || 'NEW'}</div>
+                                <div class="text-[9px] md:text-[10px] text-[#f1c40f] font-mono uppercase tracking-tighter">FY-${s.id?.slice(-6).toUpperCase() || 'NEW'}</div>
                             </div>
                         </div>
                     </td>
@@ -602,10 +537,10 @@
                     <td class="px-4 md:px-6 py-4"><span class="bg-slate-700/50 text-[#f1c40f] px-2 py-1 rounded-full text-[10px] font-bold">${enrolledCount} enrolled</span></td>
                     <td class="px-4 md:px-6 py-4 text-right whitespace-nowrap">
                         <div class="flex gap-2 justify-end">
-                             <a href="student-details.html?id=${s.id}" class="text-blue-400 bg-blue-400/10 p-2 md:p-3 rounded-xl hover:bg-blue-400 hover:text-white transition shadow-md text-sm"><i class="fas fa-id-card"></i></a>
-                             <button onclick="deleteStudent('${s.id}', '${escapeHtml(s.fullName)}')" class="text-rose-500 bg-rose-500/10 p-2 md:p-3 rounded-xl hover:bg-rose-500 hover:text-white transition shadow-md text-sm"><i class="fas fa-trash-alt"></i></button>
+                            <a href="student-details.html?id=${s.id}" class="text-blue-400 bg-blue-400/10 p-2 md:p-3 rounded-xl hover:bg-blue-400 hover:text-white transition shadow-md text-sm"><i class="fas fa-id-card"></i></a>
+                            <button onclick="deleteStudent('${s.id}', '${escapeHtml(s.fullName)}')" class="text-rose-500 bg-rose-500/10 p-2 md:p-3 rounded-xl hover:bg-rose-500 hover:text-white transition shadow-md text-sm"><i class="fas fa-trash-alt"></i></button>
                         </div>
-                      </td>
+                    </td>
                 </tr>`;
             }).join('');
         }
@@ -625,54 +560,31 @@
                     await deleteDoc(doc(db, "users", studentId));
                     showToast(`${studentName} has been removed`);
                     await loadStudents();
-                } catch (err) {
-                    showToast("Delete failed: " + err.message, true);
-                }
+                } catch (err) { showToast("Delete failed: " + err.message, true); }
             }
         };
 
-        window.refreshDashboard = async () => { 
-            await loadAllCourses(); 
-            await loadStudents(); 
-            showToast("Dashboard refreshed");
-        };
-        
+        window.refreshDashboard = async () => { await loadAllCourses(); await loadStudents(); showToast("Dashboard refreshed"); };
         window.openAddModal = () => {
             document.getElementById('addName').value = '';
             document.getElementById('addEmail').value = '';
-            document.getElementById('addPass').value = 'UCC@2026';
+            document.getElementById('addPass').value = 'FyOrbit@2026';
             document.getElementById('addFeeTotal').value = '25000';
             document.getElementById('studentAvatarPreview').src = 'https://via.placeholder.com/80';
             pendingPhotoFile = null;
             document.getElementById('addModal').classList.remove('hidden');
         };
-        
         window.closeAddModal = () => document.getElementById('addModal').classList.add('hidden');
-        
-        window.logout = async () => { 
-            await signOut(auth); 
-            window.location.href = "../index.html"; 
-        };
-
+        window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
         window.exportToCSV = () => {
-            if (studentsData.length === 0) {
-                showToast("No student data to export", true);
-                return;
-            }
+            if (studentsData.length === 0) { showToast("No student data to export", true); return; }
             const headers = ["Full Name", "Email", "Student ID", "Enrollment Date", "Total Fee (₹)", "Courses Enrolled"];
-            const rows = studentsData.map(s => [
-                s.fullName || "",
-                s.email || "",
-                s.id || "",
-                s.createdAt ? new Date(s.createdAt).toLocaleDateString() : "",
-                s.feeTotal || 0,
-                (s.enrolledCourses || []).length
-            ]);
+            const rows = studentsData.map(s => [s.fullName || "", s.email || "", s.id || "", s.createdAt ? new Date(s.createdAt).toLocaleDateString() : "", s.feeTotal || 0, (s.enrolledCourses || []).length]);
             const csvContent = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
             const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `UCC_Students_${new Date().toISOString().slice(0,10)}.csv`;
+            link.download = `FyOrbit_Students_${new Date().toISOString().slice(0,10)}.csv`;
             link.click();
             URL.revokeObjectURL(link.href);
             showToast("CSV exported successfully");
@@ -684,69 +596,34 @@
             const email = document.getElementById('addEmail').value.trim();
             const password = document.getElementById('addPass').value;
             const feeTotal = parseInt(document.getElementById('addFeeTotal').value) || 0;
-            
-            if (!name || !email || !password) {
-                showToast("Please fill all required fields", true);
-                return;
-            }
-            
+            if (!name || !email || !password) { showToast("Please fill all required fields", true); return; }
             const btn = document.getElementById('createBtn');
             const originalText = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creating...';
-            
             try {
                 const userCred = await createUserWithEmailAndPassword(auth, email, password);
                 const newUser = userCred.user;
-                
                 let profilePicUrl = null;
                 if (pendingPhotoFile) {
-                    try {
-                        profilePicUrl = await uploadToCloudinary(pendingPhotoFile);
-                    } catch (uploadErr) {
-                        console.warn("Photo upload failed:", uploadErr);
-                        showToast("Photo upload failed, but account created", true);
-                    }
+                    try { profilePicUrl = await uploadToCloudinary(pendingPhotoFile); } catch (uploadErr) { showToast("Photo upload failed, but account created", true); }
                 }
-                
-                if (profilePicUrl) {
-                    await updateProfile(newUser, { displayName: name, photoURL: profilePicUrl });
-                } else {
-                    await updateProfile(newUser, { displayName: name });
-                }
-                
+                if (profilePicUrl) await updateProfile(newUser, { displayName: name, photoURL: profilePicUrl });
+                else await updateProfile(newUser, { displayName: name });
                 await setDoc(doc(db, "users", newUser.uid), {
-                    fullName: name,
-                    email: email,
-                    role: "student",
-                    feeTotal: feeTotal,
-                    feePaid: 0,
-                    enrolledCourses: [],
-                    createdAt: new Date().toISOString(),
-                    profilePic: profilePicUrl || null,
-                    uid: newUser.uid
+                    fullName: name, email: email, role: "student", feeTotal: feeTotal, feePaid: 0,
+                    enrolledCourses: [], createdAt: new Date().toISOString(), profilePic: profilePicUrl || null, uid: newUser.uid
                 });
-                
                 showToast(`✅ ${name} enrolled successfully!`);
                 closeAddModal();
                 await loadStudents();
             } catch (err) {
-                console.error(err);
-                if (err.code === 'auth/email-already-in-use') {
-                    showToast("Email already registered. Use a different email.", true);
-                } else {
-                    showToast("Enrollment failed: " + err.message, true);
-                }
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            }
+                if (err.code === 'auth/email-already-in-use') showToast("Email already registered. Use a different email.", true);
+                else showToast("Enrollment failed: " + err.message, true);
+            } finally { btn.disabled = false; btn.innerHTML = originalText; }
         });
 
-        document.getElementById('searchBar').addEventListener('input', () => {
-            renderTable(studentsData);
-        });
-
+        document.getElementById('searchBar').addEventListener('input', () => renderTable(studentsData));
         document.getElementById('mobileMenuButton').onclick = () => {
             document.getElementById('mainSidebar').classList.remove('-translate-x-full');
             document.getElementById('mobileSidebarOverlay').classList.remove('hidden');
@@ -771,23 +648,15 @@
                     const fullName = currentAdminData.fullName || "Admin";
                     const email = currentAdminData.email;
                     const photoURL = currentAdminData.photoURL || null;
-                    
-                    document.getElementById('adminName').innerText = "Salam, " + fullName;
+                    document.getElementById('adminName').innerText = "Welcome, " + fullName;
                     document.getElementById('adminEmail').innerText = email;
                     updateAdminAvatarUI(photoURL, fullName);
-                    
                     setupAdminAvatarUpload();
                     setupStudentAvatarUpload();
-                    
                     await loadAllCourses();
                     await loadStudents();
-                } else { 
-                    await signOut(auth); 
-                    window.location.href = "../auth/login.html"; 
-                }
-            } else { 
-                window.location.href = "../auth/login.html"; 
-            }
+                } else { await signOut(auth); window.location.href = "../auth/login.html"; }
+            } else { window.location.href = "../auth/login.html"; }
         });
     </script>
 </body>

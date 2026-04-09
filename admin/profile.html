@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>UCC Admin Nexus | Enhanced Profile + Institute Code</title>
+    <title>FyOrbit Admin | Profile & Institute Code</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
@@ -15,7 +15,7 @@
         }
 
         body {
-            background: radial-gradient(circle at 10% 20%, #0a0f1c, #05070f);
+            background: linear-gradient(135deg, #0f172a 0%, #1a2233 100%);
             min-height: 100vh;
         }
 
@@ -24,7 +24,6 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -38,14 +37,14 @@
         .glass-panel {
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(241, 196, 15, 0.15);
             box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.35);
         }
 
         .glass-card {
             background: rgba(15, 23, 42, 0.65);
             backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(241, 196, 15, 0.1);
             transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
 
@@ -57,7 +56,7 @@
 
         .sidebar-modern {
             background: linear-gradient(165deg, #0f172a 0%, #0a0f1c 100%);
-            border-right: 1px solid rgba(241, 196, 15, 0.12);
+            border-right: 1px solid rgba(241, 196, 15, 0.2);
         }
 
         .active-link {
@@ -107,7 +106,7 @@
             border-color: #f1c40f;
         }
 
-        /* Avatar upload styles - fully clickable */
+        /* Avatar upload styles */
         .avatar-wrapper {
             position: relative;
             display: inline-block;
@@ -119,7 +118,7 @@
             height: 160px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid rgba(241, 196, 15, 0.5);
+            border: 4px solid rgba(241, 196, 15, 0.6);
             box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
             transition: all 0.2s;
             background: linear-gradient(135deg, #f1c40f, #e67e22);
@@ -142,7 +141,6 @@
             font-size: 1.3rem;
             transition: all 0.2s;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            pointer-events: auto;
             cursor: pointer;
         }
 
@@ -166,7 +164,7 @@
             backdrop-filter: blur(10px);
             border-radius: 1.5rem;
             padding: 1rem 1.25rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(241, 196, 15, 0.15);
             transition: all 0.2s;
         }
 
@@ -175,12 +173,16 @@
             border-color: rgba(241, 196, 15, 0.3);
         }
 
+        .institute-code-badge {
+            background: linear-gradient(135deg, rgba(241,196,15,0.1), rgba(230,126,34,0.05));
+            border-left: 3px solid #f1c40f;
+        }
+
         @media (max-width: 768px) {
             .avatar-img {
                 width: 120px;
                 height: 120px;
             }
-
             .camera-badge {
                 width: 36px;
                 height: 36px;
@@ -188,26 +190,18 @@
                 bottom: 8px;
                 right: 8px;
             }
-
             .small-avatar {
                 width: 48px;
                 height: 48px;
             }
         }
 
-        /* Hidden file input but accessible */
         #photoUploadInput {
             position: absolute;
             width: 0;
             height: 0;
             opacity: 0;
             z-index: -1;
-        }
-
-        /* institute code specific styling */
-        .institute-code-badge {
-            background: linear-gradient(135deg, #f1c40f15, #e67e2210);
-            border-left: 3px solid #f1c40f;
         }
     </style>
 </head>
@@ -220,43 +214,26 @@
         class="fixed left-0 top-0 lg:relative lg:flex flex-col w-72 sidebar-modern z-50 h-screen transition-all duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl">
         <div class="p-6 border-b border-white/5">
             <div class="flex items-center gap-3">
-                <div
-                    class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl">
-                    <i class="fas fa-crown text-slate-900 text-xl"></i>
+               <div
+                    class="w-10 h-10  rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300 overflow-hidden">
+                    <img src="../assets/img/slogo.png" alt="FyOrbit Logo" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <h1 class="text-xl font-black tracking-tight text-white">UCC <span
-                            class="text-[#f1c40f]">ADMIN</span></h1>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Control Core</p>
+                    <h1 class="text-xl font-black tracking-tight text-white">Fy<span class="text-[#f1c40f]">Orbit</span></h1>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Admin Control</p>
                 </div>
             </div>
         </div>
         <nav class="flex-1 p-5 space-y-2 mt-4">
-            <a href="dashboard.html"
-                class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i
-                    class="fas fa-users text-lg w-6"></i> Directory</a>
-            <a href="profile.html"
-                class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase"><i
-                    class="fas fa-user-circle w-6"></i> My Profile</a>
-            <a href="todaysplan.html"
-                class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i
-                    class="fas fa-book-open w-6"></i> Today's Plan</a>
-            <a href="fees.html"
-                class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i
-                    class="fas fa-rupee-sign w-6"></i> Fee Management</a>
-            <a href="attendance.html"
-                class="flex items-center gap-4 px-5 py-3.5 text-slate-400 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i
-                    class="fas fa-calendar-check w-6"></i> Attendance</a>
-            <a href="communication.html"
-                class="flex items-center gap-4 p-4 hover:bg-white/5 rounded-2xl transition text-slate-400 hover:text-white group">
-                <i class="fas fa-comments"></i>
-                <span class="font-bold text-sm uppercase">Communication</span>
-            </a>
+            <a href="dashboard.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-users text-lg w-6"></i> Directory</a>
+            <a href="profile.html" class="active-link w-full flex items-center gap-4 px-5 py-3.5 rounded-xl font-bold text-sm uppercase"><i class="fas fa-user-circle w-6"></i> My Profile</a>
+            <a href="todaysplan.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-book-open w-6"></i> Today's Plan</a>
+            <a href="fees.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-rupee-sign w-6"></i> Fee Management</a>
+            <a href="attendance.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-calendar-check w-6"></i> Attendance</a>
+            <a href="communication.html" class="w-full flex items-center gap-4 px-5 py-3.5 text-slate-300 hover:bg-white/5 rounded-xl transition font-semibold text-sm uppercase"><i class="fas fa-comments w-6"></i> Communication</a>
         </nav>
         <div class="p-5 border-t border-white/10">
-            <button onclick="logout()"
-                class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase"><i
-                    class="fas fa-sign-out-alt w-6"></i> Exit Panel</button>
+            <button onclick="logout()" class="flex items-center gap-4 w-full px-5 py-3.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition font-bold text-sm uppercase"><i class="fas fa-sign-out-alt w-6"></i> Exit Panel</button>
         </div>
     </aside>
 
@@ -264,22 +241,17 @@
         <div class="glass-panel rounded-3xl p-5 md:p-7 mb-6 md:mb-8 animate-fadeSlideUp">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                    <button id="mobileMenuButton"
-                        class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i
-                            class="fas fa-bars"></i></button>
+                    <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
                     <div>
-                        <div class="flex items-center gap-2 text-[#f1c40f] text-sm font-bold mb-1"><i
-                                class="fas fa-shield-alt"></i> <span>ADMIN DASHBOARD</span></div>
+                        <div class="flex items-center gap-2 text-[#f1c40f] text-sm font-bold mb-1"><i class="fas fa-shield-alt"></i> <span>ADMIN DASHBOARD</span></div>
                         <h2 class="text-xl md:text-3xl font-black text-white tracking-tight">My Profile</h2>
-                        <p class="text-slate-400 text-xs md:text-sm font-medium">Manage credentials, institute & personal details
-                        </p>
+                        <p class="text-slate-400 text-xs md:text-sm font-medium">Manage credentials, institute & personal details</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-4 bg-slate-900/40 rounded-2xl px-4 py-2 backdrop-blur-sm">
                     <img id="headerAvatar" class="small-avatar" src="https://via.placeholder.com/150" alt="avatar">
                     <div>
-                        <h3 id="adminName" class="text-xl md:text-2xl font-black text-white tracking-tight">
-                            Authenticating...</h3>
+                        <h3 id="adminName" class="text-xl md:text-2xl font-black text-white tracking-tight">Authenticating...</h3>
                         <p id="adminEmail" class="text-slate-400 text-xs font-medium">Secure session</p>
                     </div>
                 </div>
@@ -288,162 +260,97 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8 animate-fadeSlideUp" style="animation-delay: 0.05s">
             <div class="stat-card flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-[#f1c40f]/15 flex items-center justify-center"><i
-                        class="fas fa-envelope text-[#f1c40f] text-xl"></i></div>
-                <div>
-                    <p class="text-[10px] font-black uppercase text-slate-400">Email (verified)</p>
-                    <p id="statEmail" class="font-bold text-white text-sm truncate">---</p>
-                </div>
+                <div class="w-12 h-12 rounded-2xl bg-[#f1c40f]/15 flex items-center justify-center"><i class="fas fa-envelope text-[#f1c40f] text-xl"></i></div>
+                <div><p class="text-[10px] font-black uppercase text-slate-400">Email (verified)</p><p id="statEmail" class="font-bold text-white text-sm truncate">---</p></div>
             </div>
             <div class="stat-card flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-[#f1c40f]/15 flex items-center justify-center"><i
-                        class="fas fa-calendar-alt text-[#f1c40f] text-xl"></i></div>
-                <div>
-                    <p class="text-[10px] font-black uppercase text-slate-400">Admin Since</p>
-                    <p id="adminSinceStat" class="font-bold text-white text-sm">---</p>
-                </div>
+                <div class="w-12 h-12 rounded-2xl bg-[#f1c40f]/15 flex items-center justify-center"><i class="fas fa-calendar-alt text-[#f1c40f] text-xl"></i></div>
+                <div><p class="text-[10px] font-black uppercase text-slate-400">Admin Since</p><p id="adminSinceStat" class="font-bold text-white text-sm">---</p></div>
             </div>
             <div class="stat-card flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-[#f1c40f]/15 flex items-center justify-center"><i
-                        class="fas fa-id-card text-[#f1c40f] text-xl"></i></div>
-                <div>
-                    <p class="text-[10px] font-black uppercase text-slate-400">User ID</p>
-                    <p id="userIdDisplay" class="font-mono text-white text-xs">---</p>
-                </div>
+                <div class="w-12 h-12 rounded-2xl bg-[#f1c40f]/15 flex items-center justify-center"><i class="fas fa-id-card text-[#f1c40f] text-xl"></i></div>
+                <div><p class="text-[10px] font-black uppercase text-slate-400">User ID</p><p id="userIdDisplay" class="font-mono text-white text-xs">---</p></div>
             </div>
         </div>
 
         <div class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl animate-fadeSlideUp" style="animation-delay: 0.1s">
             <div class="flex flex-col lg:flex-row gap-10">
                 <div class="lg:w-1/3 flex flex-col items-center text-center">
-                    <!-- Avatar with clickable area -->
                     <div class="avatar-wrapper" id="avatarClickArea">
-                        <img id="profileAvatarImg" class="avatar-img" src="https://via.placeholder.com/160"
-                            alt="Profile">
-                        <div class="camera-badge" id="cameraButton">
-                            <i class="fas fa-camera"></i>
-                        </div>
+                        <img id="profileAvatarImg" class="avatar-img" src="https://via.placeholder.com/160" alt="Profile">
+                        <div class="camera-badge" id="cameraButton"><i class="fas fa-camera"></i></div>
                     </div>
-                    <!-- Hidden file input - explicitly placed and referenced -->
                     <input type="file" id="photoUploadInput" accept="image/jpeg,image/png,image/webp">
                     <div class="mt-6">
-                        <div
-                            class="bg-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-black uppercase inline-flex items-center gap-2">
-                            <i class="fas fa-shield-alt"></i> Administrator Access</div>
-                        <p class="text-slate-400 text-sm mt-3">Role: <strong class="text-white">Super Admin</strong></p>
-                        <p class="text-slate-500 text-[11px] mt-2"><i
-                                class="fas fa-cloud-upload-alt mr-1 text-[#f1c40f]"></i> Click avatar or camera to
-                            update photo</p>
+                        <div class="bg-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-black uppercase inline-flex items-center gap-2"><i class="fas fa-shield-alt"></i> Super Administrator</div>
+                        <p class="text-slate-400 text-sm mt-3">Role: <strong class="text-white">Admin</strong></p>
+                        <p class="text-slate-500 text-[11px] mt-2"><i class="fas fa-cloud-upload-alt mr-1 text-[#f1c40f]"></i> Click avatar or camera to update photo</p>
                     </div>
                 </div>
 
                 <div class="lg:w-2/3 space-y-7">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="rounded-2xl p-5 bg-slate-800/40 border border-white/5">
-                            <label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i
-                                    class="fas fa-user-graduate"></i> Full Name</label>
+                            <label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i class="fas fa-user-graduate"></i> Full Name</label>
                             <div class="mt-2 flex items-center justify-between gap-3">
                                 <span id="displayFullName" class="text-white font-bold text-lg">—</span>
-                                <button onclick="enableEdit('fullName')"
-                                    class="text-[#f1c40f] hover:bg-[#f1c40f]/10 p-2 rounded-xl transition text-sm"><i
-                                        class="fas fa-pen"></i></button>
+                                <button onclick="enableEdit('fullName')" class="text-[#f1c40f] hover:bg-[#f1c40f]/10 p-2 rounded-xl transition text-sm"><i class="fas fa-pen"></i></button>
                             </div>
                             <div id="editFullNameContainer" class="hidden mt-3">
                                 <input type="text" id="editFullNameInput" class="input-elegant text-sm">
-                                <div class="flex gap-2 mt-3"><button onclick="saveField('fullName')"
-                                        class="bg-emerald-500 text-slate-900 text-xs font-black px-4 py-1.5 rounded-lg">Save</button><button
-                                        onclick="cancelEdit('fullName')"
-                                        class="bg-slate-700 text-white text-xs px-4 py-1.5 rounded-lg">Cancel</button>
-                                </div>
+                                <div class="flex gap-2 mt-3"><button onclick="saveField('fullName')" class="bg-emerald-500 text-slate-900 text-xs font-black px-4 py-1.5 rounded-lg">Save</button><button onclick="cancelEdit('fullName')" class="bg-slate-700 text-white text-xs px-4 py-1.5 rounded-lg">Cancel</button></div>
                             </div>
                         </div>
                         <div class="rounded-2xl p-5 bg-slate-800/40 border border-white/5">
-                            <label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i
-                                    class="fas fa-envelope"></i> Email Address</label>
-                            <div class="mt-2 flex items-center justify-between"><span id="displayEmail"
-                                    class="text-white font-mono text-sm break-all">—</span><span
-                                    class="text-slate-500 text-[10px] bg-slate-700 px-2 py-1 rounded-full">verified</span>
-                            </div>
+                            <label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i class="fas fa-envelope"></i> Email Address</label>
+                            <div class="mt-2 flex items-center justify-between"><span id="displayEmail" class="text-white font-mono text-sm break-all">—</span><span class="text-slate-500 text-[10px] bg-slate-700 px-2 py-1 rounded-full">verified</span></div>
                             <p class="text-[10px] text-slate-500 mt-2">Email cannot be changed. Contact support.</p>
                         </div>
                     </div>
                     
-                    <!-- NEW INSTITUTE CODE CARD - FULLY EDITABLE with DB field instituteCode -->
+                    <!-- Institute Code Card -->
                     <div class="rounded-2xl p-5 bg-slate-800/40 border border-amber-500/30 institute-code-badge">
-                        <label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i
-                                class="fas fa-building text-[#f1c40f]"></i> Institute Code (UCC Affiliation)</label>
+                        <label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i class="fas fa-building text-[#f1c40f]"></i> Institute Code (FyOrbit Affiliation)</label>
                         <div class="mt-2 flex items-center justify-between gap-3 flex-wrap">
                             <div class="flex items-center gap-2">
                                 <i class="fas fa-qrcode text-[#f1c40f] text-sm opacity-80"></i>
                                 <span id="displayInstituteCode" class="text-white font-mono font-bold text-base tracking-wide">—</span>
                             </div>
-                            <button onclick="enableEdit('instituteCode')"
-                                class="text-[#f1c40f] hover:bg-[#f1c40f]/10 p-2 rounded-xl transition text-sm"><i
-                                    class="fas fa-pen"></i> <span class="hidden sm:inline ml-1">Edit Code</span></button>
+                            <button onclick="enableEdit('instituteCode')" class="text-[#f1c40f] hover:bg-[#f1c40f]/10 p-2 rounded-xl transition text-sm"><i class="fas fa-pen"></i> <span class="hidden sm:inline ml-1">Edit Code</span></button>
                         </div>
                         <p class="text-[10px] text-slate-400 mt-2 flex items-center gap-1"><i class="fas fa-database"></i> Custom institute identifier — used for reports & verification</p>
                         <div id="editInstituteCodeContainer" class="hidden mt-3">
-                            <input type="text" id="editInstituteCodeInput" placeholder="e.g., UCC-MUM-001" class="input-elegant text-sm">
-                            <div class="flex gap-2 mt-3">
-                                <button onclick="saveField('instituteCode')" class="bg-emerald-500 text-slate-900 text-xs font-black px-4 py-1.5 rounded-lg">Save Code</button>
-                                <button onclick="cancelEdit('instituteCode')" class="bg-slate-700 text-white text-xs px-4 py-1.5 rounded-lg">Cancel</button>
-                            </div>
+                            <input type="text" id="editInstituteCodeInput" placeholder="e.g., FY-ORD-001" class="input-elegant text-sm">
+                            <div class="flex gap-2 mt-3"><button onclick="saveField('instituteCode')" class="bg-emerald-500 text-slate-900 text-xs font-black px-4 py-1.5 rounded-lg">Save Code</button><button onclick="cancelEdit('instituteCode')" class="bg-slate-700 text-white text-xs px-4 py-1.5 rounded-lg">Cancel</button></div>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="rounded-2xl p-5 bg-slate-800/40 border border-white/5"><label
-                                class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i
-                                    class="fas fa-history"></i> Admin Since</label>
-                            <p id="adminSinceDetail" class="text-white font-semibold text-md mt-2">—</p>
-                        </div>
-                        <div class="rounded-2xl p-5 bg-slate-800/40 border border-white/5"><label
-                                class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i
-                                    class="fas fa-clock"></i> Last Session</label>
-                            <p id="lastLoginDisplay" class="text-white font-semibold text-md mt-2">—</p>
-                        </div>
+                        <div class="rounded-2xl p-5 bg-slate-800/40 border border-white/5"><label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i class="fas fa-history"></i> Admin Since</label><p id="adminSinceDetail" class="text-white font-semibold text-md mt-2">—</p></div>
+                        <div class="rounded-2xl p-5 bg-slate-800/40 border border-white/5"><label class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"><i class="fas fa-clock"></i> Last Session</label><p id="lastLoginDisplay" class="text-white font-semibold text-md mt-2">—</p></div>
                     </div>
                     <div class="rounded-2xl p-5 bg-slate-800/40 border border-amber-500/20">
                         <div class="flex flex-wrap items-center justify-between gap-4">
-                            <div>
-                                <h3 class="text-white font-bold flex items-center gap-2"><i
-                                        class="fas fa-key text-[#f1c40f]"></i> Security Credentials</h3>
-                                <p class="text-slate-400 text-xs mt-1">Update your password regularly.</p>
-                            </div><button onclick="openPasswordModal()"
-                                class="btn-gold px-5 py-2.5 rounded-xl font-bold text-sm uppercase flex items-center gap-2"><i
-                                    class="fas fa-lock"></i> Change Password</button>
+                            <div><h3 class="text-white font-bold flex items-center gap-2"><i class="fas fa-key text-[#f1c40f]"></i> Security Credentials</h3><p class="text-slate-400 text-xs mt-1">Update your password regularly.</p></div>
+                            <button onclick="openPasswordModal()" class="btn-gold px-5 py-2.5 rounded-xl font-bold text-sm uppercase flex items-center gap-2"><i class="fas fa-lock"></i> Change Password</button>
                         </div>
                     </div>
-                    <div class="text-center text-slate-500 text-[11px] border-t border-white/10 pt-5"><i
-                            class="fas fa-database mr-1"></i> Profile data synchronized with Firebase & Cloudinary • Institute Code optional</div>
+                    <div class="text-center text-slate-500 text-[11px] border-t border-white/10 pt-5"><i class="fas fa-database mr-1"></i> Profile data synchronized with Firebase & Cloudinary • Institute Code optional</div>
                 </div>
             </div>
         </div>
     </main>
 
-    <div id="passwordModal"
-        class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4">
+    <div id="passwordModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 md:p-8 border border-white/20">
             <div class="flex justify-between items-start mb-5">
-                <div>
-                    <h3 class="text-2xl font-black text-white"><i class="fas fa-key text-[#f1c40f] mr-2"></i> Change
-                        Password</h3>
-                    <p class="text-slate-400 text-xs mt-1">New credentials for admin account</p>
-                </div><button onclick="closePasswordModal()" class="text-slate-500 hover:text-white text-2xl"><i
-                        class="fas fa-times-circle"></i></button>
+                <div><h3 class="text-2xl font-black text-white"><i class="fas fa-key text-[#f1c40f] mr-2"></i> Change Password</h3><p class="text-slate-400 text-xs mt-1">New credentials for admin account</p></div>
+                <button onclick="closePasswordModal()" class="text-slate-500 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button>
             </div>
             <form id="passwordForm" class="space-y-5">
-                <div><label class="text-[10px] font-black uppercase text-slate-500 ml-2">New Password (min 6
-                        chars)</label><input type="password" id="newPassword"
-                        class="w-full mt-1 px-5 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none"
-                        required minlength="6"></div>
-                <div><label class="text-[10px] font-black uppercase text-slate-500 ml-2">Confirm Password</label><input
-                        type="password" id="confirmPassword"
-                        class="w-full mt-1 px-5 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none"
-                        required></div>
-                <button type="submit" id="updatePasswordBtn"
-                    class="w-full py-3.5 bg-[#f1c40f] text-slate-900 font-black uppercase rounded-xl hover:bg-white transition-all shadow-xl text-sm">Update
-                    Password</button>
+                <div><label class="text-[10px] font-black uppercase text-slate-500 ml-2">New Password (min 6 chars)</label><input type="password" id="newPassword" class="w-full mt-1 px-5 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none" required minlength="6"></div>
+                <div><label class="text-[10px] font-black uppercase text-slate-500 ml-2">Confirm Password</label><input type="password" id="confirmPassword" class="w-full mt-1 px-5 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#f1c40f] outline-none" required></div>
+                <button type="submit" id="updatePasswordBtn" class="w-full py-3.5 bg-[#f1c40f] text-slate-900 font-black uppercase rounded-xl hover:bg-white transition-all shadow-xl text-sm">Update Password</button>
             </form>
         </div>
     </div>
@@ -494,7 +401,6 @@
             }
         }
 
-        // RENDER INSTITUTE CODE WITH NULL FALLBACK
         function renderInstituteCode(value) {
             const instituteSpan = document.getElementById('displayInstituteCode');
             if (!instituteSpan) return;
@@ -518,10 +424,9 @@
                 const email = user.email || currentAdminData.email;
                 const createdAt = currentAdminData.createdAt ? new Date(currentAdminData.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : "January 2025";
                 const photoURL = currentAdminData.photoURL || null;
-                // instituteCode support: if field missing, default null
                 const instituteCode = currentAdminData.instituteCode !== undefined ? currentAdminData.instituteCode : null;
                 
-                document.getElementById('adminName').innerText = `Salam, ${fullName}`;
+                document.getElementById('adminName').innerText = `Welcome, ${fullName}`;
                 document.getElementById('adminEmail').innerText = email;
                 document.getElementById('displayFullName').innerText = fullName;
                 document.getElementById('displayEmail').innerText = email;
@@ -539,17 +444,13 @@
             }
         }
 
-        // Open file picker
         function openFilePicker() {
             const fileInput = document.getElementById('photoUploadInput');
             if (fileInput) fileInput.click();
-            else showToast("Upload input missing", true);
         }
 
-        const cameraBtn = document.getElementById('cameraButton');
-        const avatarArea = document.getElementById('avatarClickArea');
-        if (cameraBtn) cameraBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); openFilePicker(); });
-        if (avatarArea) avatarArea.addEventListener('click', (e) => { if (!e.target.closest('#cameraButton')) openFilePicker(); });
+        document.getElementById('cameraButton')?.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); openFilePicker(); });
+        document.getElementById('avatarClickArea')?.addEventListener('click', (e) => { if (!e.target.closest('#cameraButton')) openFilePicker(); });
 
         const photoInput = document.getElementById('photoUploadInput');
         if (photoInput) {
@@ -571,16 +472,11 @@
                         updateAvatarUI(data.secure_url, currentAdminData?.fullName || "Admin");
                         showToast("Profile photo updated!");
                     } else throw new Error(data.error?.message || "Upload failed");
-                } catch (err) {
-                    showToast("Cloudinary upload failed", true);
-                } finally {
-                    if (cameraIcon) cameraIcon.className = "fas fa-camera";
-                    e.target.value = '';
-                }
+                } catch (err) { showToast("Cloudinary upload failed", true); }
+                finally { if (cameraIcon) cameraIcon.className = "fas fa-camera"; e.target.value = ''; }
             });
         }
 
-        // Editable logic for fullName and instituteCode
         window.enableEdit = (field) => {
             if (field === 'fullName') {
                 document.getElementById('editFullNameContainer').classList.remove('hidden');
@@ -591,7 +487,8 @@
                 document.getElementById('editInstituteCodeContainer').classList.remove('hidden');
                 const currentCode = currentAdminData?.instituteCode || "";
                 document.getElementById('editInstituteCodeInput').value = currentCode;
-                document.getElementById('displayInstituteCode').parentElement.parentElement.querySelector('.flex.justify-between').classList.add('hidden');
+                const parentFlex = document.getElementById('displayInstituteCode')?.parentElement?.parentElement?.querySelector('.flex.justify-between');
+                if(parentFlex) parentFlex.classList.add('hidden');
                 editFieldActive = 'instituteCode';
             }
         };
@@ -615,15 +512,13 @@
                     await updateProfile(currentAdminUser, { displayName: newName });
                     currentAdminData.fullName = newName;
                     document.getElementById('displayFullName').innerText = newName;
-                    document.getElementById('adminName').innerText = `Salam, ${newName}`;
+                    document.getElementById('adminName').innerText = `Welcome, ${newName}`;
                     updateAvatarUI(currentAdminData.photoURL, newName);
                     cancelEdit('fullName');
                     showToast("Name updated");
                 } catch (err) { showToast(err.message, true); }
-            } 
-            else if (field === 'instituteCode') {
+            } else if (field === 'instituteCode') {
                 const newCode = document.getElementById('editInstituteCodeInput').value.trim();
-                // allow null/empty string to store as null in DB (we store empty string or null? but we can store as null if empty)
                 const finalValue = newCode === "" ? null : newCode;
                 try {
                     await updateDoc(doc(db, "users", currentAdminUser.uid), { instituteCode: finalValue });
@@ -655,9 +550,7 @@
                     await signOut(auth);
                     window.location.href = "../auth/login.html";
                 } else showToast(err.message, true);
-            } finally {
-                btn.disabled = false; btn.innerHTML = 'Update Password';
-            }
+            } finally { btn.disabled = false; btn.innerHTML = 'Update Password'; }
         });
 
         window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
@@ -670,7 +563,6 @@
             } else window.location.href = "../auth/login.html";
         });
 
-        // Mobile sidebar
         document.getElementById('mobileMenuButton').onclick = () => {
             document.getElementById('mainSidebar').classList.remove('-translate-x-full');
             document.getElementById('mobileSidebarOverlay').classList.remove('hidden');
