@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>FyOrbit Showcase | Success Stories & Digital Transformations</title>
+    <link rel="shortcut icon" href="../assets/img/icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+            background: #f8fafc;
+        }
+
+        .bg-ucc-dark {
+            background-color: #1a2233;
+        }
+
+        .text-ucc-gold {
+            color: #f1c40f;
+        }
+
+        .bg-ucc-gold {
+            background-color: #f1c40f;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: #f1c40f;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        #mobile-menu {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        #mobile-menu.active {
+            max-height: 450px;
+            opacity: 1;
+            padding: 1.5rem;
+        }
+
+        .footer-h4-underline::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 3px;
+            background-color: #f1c40f;
+            border-radius: 10px;
+        }
+
+        /* Gallery Card Styles */
+        .gallery-card {
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            background: white;
+            overflow: hidden;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery-img {
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-card:hover .gallery-img {
+            transform: scale(1.05);
+        }
+
+        .category-chip {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .category-chip.active {
+            background-color: #f1c40f;
+            color: #1a2233;
+            border-color: #f1c40f;
+            box-shadow: 0 4px 12px rgba(241, 196, 15, 0.3);
+        }
+
+        /* Lightbox Modal */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox .close {
+            position: absolute;
+            top: 25px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Counter animation */
+        .counter {
+            font-size: 2.5rem;
+            font-weight: 900;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <header class="bg-ucc-dark text-white sticky top-0 z-[100] px-[5%] py-4 shadow-2xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- FyOrbit Branding -->
+            <div class="flex items-center gap-3 group cursor-pointer" onclick="window.location.href='../index.html'">
+                <div class="w-10 h-10 bg-ucc-gold rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300">
+                    <i class="fas fa-digital-tiling text-[#1a2233] text-xl"></i>
+                </div>
+                <div class="logo text-xl md:text-2xl font-black tracking-tighter">
+                    Fy<span class="text-ucc-gold">Orbit</span>
+                </div>
+            </div>
+
+            <nav class="hidden lg:flex items-center gap-10 font-bold text-[11px] tracking-[0.2em]">
+                <a href="../index.html" class="nav-link">HOME</a>
+                <a href="services.html" class="nav-link">SERVICES</a>
+                <a href="resources.html" class="nav-link">RESOURCES</a>
+                <a href="gallery.html" class="text-ucc-gold nav-link">SHOWCASE</a>
+                <a href="about.html" class="hover:text-ucc-gold nav-link">ABOUT</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <a href="../auth/login.html" class="bg-ucc-gold hover:bg-white text-ucc-dark px-6 py-2.5 rounded-full font-black text-xs uppercase transition-all shadow-lg active:scale-95">
+                    Portal Login
+                </a>
+                <button class="lg:hidden text-ucc-gold text-2xl" id="hamburger"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="lg:hidden absolute top-full left-0 w-full bg-[#1e2b38] shadow-2xl border-t border-white/10">
+            <ul class="flex flex-col gap-5 font-bold tracking-widest uppercase text-xs">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="gallery.html" class="text-ucc-gold">Showcase</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-ucc-dark text-white py-20 px-[6%] text-center relative overflow-hidden">
+        <div class="relative z-10 max-w-3xl mx-auto">
+            <span class="bg-ucc-gold/10 text-ucc-gold border border-ucc-gold/20 px-5 py-2 rounded-full text-[11px] font-black uppercase tracking-[0.3em] mb-6 inline-block backdrop-blur-sm">
+                <i class="fas fa-images mr-2"></i> Our Impact
+            </span>
+            <h1 class="text-5xl md:text-6xl font-black mb-5 uppercase tracking-tighter leading-tight">
+                Success <span class="text-ucc-gold">Showcase</span>
+            </h1>
+            <p class="text-slate-400 text-lg font-medium max-w-2xl mx-auto">Real transformations. Real results. Explore how FyOrbit empowers institutions across India.</p>
+        </div>
+        <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-ucc-gold/5 rounded-full blur-3xl"></div>
+    </section>
+
+    <!-- Stats Counter Section -->
+    <div class="bg-white py-12 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-[6%] grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <div class="counter text-4xl md:text-5xl font-black text-ucc-dark" data-target="45">0</div>
+                <p class="text-slate-500 text-sm font-bold uppercase tracking-wider mt-2">Institutions Onboarded</p>
+            </div>
+            <div>
+                <div class="counter text-4xl md:text-5xl font-black text-ucc-dark" data-target="12500">0</div>
+                <p class="text-slate-500 text-sm font-bold uppercase tracking-wider mt-2">Students Empowered</p>
+            </div>
+            <div>
+                <div class="counter text-4xl md:text-5xl font-black text-ucc-dark" data-target="98">0</div>
+                <p class="text-slate-500 text-sm font-bold uppercase tracking-wider mt-2">Client Satisfaction (%)</p>
+            </div>
+            <div>
+                <div class="counter text-4xl md:text-5xl font-black text-ucc-dark" data-target="15">0</div>
+                <p class="text-slate-500 text-sm font-bold uppercase tracking-wider mt-2">Cities Covered</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="max-w-7xl mx-auto px-[6%] pt-12 pb-6 flex flex-wrap gap-3 justify-center">
+        <button class="category-chip active px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-ucc-gold text-ucc-dark border border-ucc-gold transition-all" data-filter="all">All Projects</button>
+        <button class="category-chip px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 transition-all" data-filter="school">Schools & Colleges</button>
+        <button class="category-chip px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 transition-all" data-filter="coaching">Coaching Centers</button>
+        <button class="category-chip px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 transition-all" data-filter="library">Libraries</button>
+        <button class="category-chip px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 transition-all" data-filter="computer">Computer Hubs</button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <main class="py-8 px-[6%] max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="gallery-container">
+            
+            <!-- Project 1 - School ERP -->
+            <div class="gallery-card rounded-2xl overflow-hidden bg-white shadow-md" data-category="school">
+                <div class="relative overflow-hidden h-64 cursor-pointer" onclick="openLightbox('https://picsum.photos/id/20/800/600')">
+                    <img src="https://picsum.photos/id/20/800/600" alt="School Campus" class="gallery-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="bg-ucc-gold text-ucc-dark text-[10px] font-black px-2 py-1 rounded">ERP Implementation</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-black text-ucc-dark mb-2">Green Valley School</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Complete digital transformation with FyOrbit Institute Suite. 60% reduction in administrative workload.</p>
+                    <div class="flex items-center justify-between mt-4">
+                        <span class="text-xs text-ucc-gold font-bold"><i class="fas fa-map-marker-alt mr-1"></i> Srinagar</span>
+                        <a href="#" class="text-[10px] font-black uppercase tracking-wider text-ucc-dark hover:text-ucc-gold transition">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2 - Library Automation -->
+            <div class="gallery-card rounded-2xl overflow-hidden bg-white shadow-md" data-category="library">
+                <div class="relative overflow-hidden h-64 cursor-pointer" onclick="openLightbox('https://picsum.photos/id/24/800/600')">
+                    <img src="https://picsum.photos/id/24/800/600" alt="Digital Library" class="gallery-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="bg-ucc-gold text-ucc-dark text-[10px] font-black px-2 py-1 rounded">Library Suite</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-black text-ucc-dark mb-2">District Central Library</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">RFID-based automation, OPAC portal, and member management for 50k+ books.</p>
+                    <div class="flex items-center justify-between mt-4">
+                        <span class="text-xs text-ucc-gold font-bold"><i class="fas fa-map-marker-alt mr-1"></i> Kupwara</span>
+                        <a href="#" class="text-[10px] font-black uppercase tracking-wider text-ucc-dark hover:text-ucc-gold transition">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3 - Coaching Center OS -->
+            <div class="gallery-card rounded-2xl overflow-hidden bg-white shadow-md" data-category="coaching">
+                <div class="relative overflow-hidden h-64 cursor-pointer" onclick="openLightbox('https://picsum.photos/id/26/800/600')">
+                    <img src="https://picsum.photos/id/26/800/600" alt="Coaching Class" class="gallery-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="bg-ucc-gold text-ucc-dark text-[10px] font-black px-2 py-1 rounded">Coaching Hub</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-black text-ucc-dark mb-2">Apex Learning Centre</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Batch analytics, test series, and automated parent alerts increased retention by 35%.</p>
+                    <div class="flex items-center justify-between mt-4">
+                        <span class="text-xs text-ucc-gold font-bold"><i class="fas fa-map-marker-alt mr-1"></i> Handwara</span>
+                        <a href="#" class="text-[10px] font-black uppercase tracking-wider text-ucc-dark hover:text-ucc-gold transition">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 4 - Computer Hub Manager -->
+            <div class="gallery-card rounded-2xl overflow-hidden bg-white shadow-md" data-category="computer">
+                <div class="relative overflow-hidden h-64 cursor-pointer" onclick="openLightbox('https://picsum.photos/id/0/800/600')">
+                    <img src="https://picsum.photos/id/0/800/600" alt="Computer Lab" class="gallery-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="bg-ucc-gold text-ucc-dark text-[10px] font-black px-2 py-1 rounded">Computer Hub</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-black text-ucc-dark mb-2">TechBridge Institute</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Course enrollment automation & lab scheduling reduced conflicts by 90%.</p>
+                    <div class="flex items-center justify-between mt-4">
+                        <span class="text-xs text-ucc-gold font-bold"><i class="fas fa-map-marker-alt mr-1"></i> Baramulla</span>
+                        <a href="#" class="text-[10px] font-black uppercase tracking-wider text-ucc-dark hover:text-ucc-gold transition">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 5 - Multi-campus ERP -->
+            <div class="gallery-card rounded-2xl overflow-hidden bg-white shadow-md" data-category="school">
+                <div class="relative overflow-hidden h-64 cursor-pointer" onclick="openLightbox('https://picsum.photos/id/1/800/600')">
+                    <img src="https://picsum.photos/id/1/800/600" alt="College Campus" class="gallery-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="bg-ucc-gold text-ucc-dark text-[10px] font-black px-2 py-1 rounded">Higher Ed</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-black text-ucc-dark mb-2">Kashmir Women's College</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Unified ERP for 3000+ students, online fee collection, and exam management.</p>
+                    <div class="flex items-center justify-between mt-4">
+                        <span class="text-xs text-ucc-gold font-bold"><i class="fas fa-map-marker-alt mr-1"></i> Anantnag</span>
+                        <a href="#" class="text-[10px] font-black uppercase tracking-wider text-ucc-dark hover:text-ucc-gold transition">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 6 - Digital Library Network -->
+            <div class="gallery-card rounded-2xl overflow-hidden bg-white shadow-md" data-category="library">
+                <div class="relative overflow-hidden h-64 cursor-pointer" onclick="openLightbox('https://picsum.photos/id/2/800/600')">
+                    <img src="https://picsum.photos/id/2/800/600" alt="Modern Library" class="gallery-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="bg-ucc-gold text-ucc-dark text-[10px] font-black px-2 py-1 rounded">Digital Library</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-black text-ucc-dark mb-2">City Central Library Network</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">3 branches integrated with central catalog and unified membership.</p>
+                    <div class="flex items-center justify-between mt-4">
+                        <span class="text-xs text-ucc-gold font-bold"><i class="fas fa-map-marker-alt mr-1"></i> Srinagar</span>
+                        <a href="#" class="text-[10px] font-black uppercase tracking-wider text-ucc-dark hover:text-ucc-gold transition">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 7 - Coaching Center Chain -->
+            <div class="gallery-card rounded-2xl overflow-hidden bg-white shadow-md" data-category="coaching">
+                <div class="relative overflow-hidden h-64 cursor-pointer" onclick="openLightbox('https://picsum.photos/id/3/800/600')">
+                    <img src="https://picsum.photos/id/3/800/600" alt="Coaching Center" class="gallery-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="bg-ucc-gold text-ucc-dark text-[10px] font-black px-2 py-1 rounded">Multi-branch</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-black text-ucc-dark mb-2">Elite Academy (4 Branches)</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Centralized student database, performance tracking, and automated fee reminders.</p>
+                    <div class="flex items-center justify-between mt-4">
+                        <span class="text-xs text-ucc-gold font-bold"><i class="fas fa-map-marker-alt mr-1"></i> Pulwama</span>
+                        <a href="#" class="text-[10px] font-black uppercase tracking-wider text-ucc-dark hover:text-ucc-gold transition">View Details →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 8 - Computer Literacy Program -->
+            <div class="gallery-card rounded-2xl overflow-hidden bg-white shadow-md" data-category="computer">
+                <div class="relative overflow-hidden h-64 cursor-pointer" onclick="openLightbox('https://picsum.photos/id/4/800/600')">
+                    <img src="https://picsum.photos/id/4/800/600" alt="Computer Training" class="gallery-img w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="bg-ucc-gold text-ucc-dark text-[10px] font-black px-2 py-1 rounded">Skill Center</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-black text-ucc-dark mb-2">Digital India Mission</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Government-partnered program training 2000+ rural students using FyOrbit LMS.</p>
+                    <div class="flex items-center justify-between mt-4">
+                        <span class="text-xs text-ucc-gold font-bold"><i class="fas fa-map-marker-alt mr-1"></i> Bandipora</span>
+                        <a href="#" class="text-[10px] font-black uppercase tracking-wider text-ucc-dark hover:text-ucc-gold transition">View Details →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results Message -->
+        <div id="no-results" class="text-center py-16 hidden">
+            <div class="bg-white rounded-2xl p-8 inline-block shadow-md">
+                <i class="fas fa-folder-open text-5xl text-slate-300 mb-4"></i>
+                <p class="text-slate-500 font-medium text-lg">No projects found for this category.</p>
+                <p class="text-slate-400 text-sm mt-2">Try another filter.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Testimonial Section -->
+    <section class="bg-white py-20 px-[6%] border-t border-slate-100">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-black text-ucc-dark uppercase tracking-tighter">What Our <span class="text-ucc-gold">Clients Say</span></h2>
+                <p class="text-slate-500 max-w-2xl mx-auto mt-4">Trusted by leading institutions across India.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100">
+                    <i class="fas fa-quote-left text-3xl text-ucc-gold mb-4"></i>
+                    <p class="text-slate-600 leading-relaxed">FyOrbit transformed our school management. Attendance and fee collection are now fully automated — saving us 20+ hours weekly.</p>
+                    <div class="mt-6 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-ucc-dark rounded-full flex items-center justify-center text-white font-bold">RK</div>
+                        <div><h4 class="font-black text-ucc-dark">Rashid Khan</h4><p class="text-xs text-slate-400">Principal, Green Valley School</p></div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100">
+                    <i class="fas fa-quote-left text-3xl text-ucc-gold mb-4"></i>
+                    <p class="text-slate-600 leading-relaxed">The library automation suite is a game-changer. Our members love the online catalog, and admin work reduced by 70%.</p>
+                    <div class="mt-6 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-ucc-dark rounded-full flex items-center justify-center text-white font-bold">NA</div>
+                        <div><h4 class="font-black text-ucc-dark">Nisar Ahmad</h4><p class="text-xs text-slate-400">Librarian, District Library</p></div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100">
+                    <i class="fas fa-quote-left text-3xl text-ucc-gold mb-4"></i>
+                    <p class="text-slate-600 leading-relaxed">Batch tracking and test analytics helped us improve student outcomes. Highly recommended for coaching institutes.</p>
+                    <div class="mt-6 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-ucc-dark rounded-full flex items-center justify-center text-white font-bold">MH</div>
+                        <div><h4 class="font-black text-ucc-dark">Mehraj Hussain</h4><p class="text-xs text-slate-400">Director, Apex Learning</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-ucc-dark py-20 px-[6%]">
+        <div class="max-w-4xl mx-auto text-center">
+            <h3 class="text-3xl font-black text-white mb-4">Ready to join the success stories?</h3>
+            <p class="text-slate-400 mb-8">Get a personalized demo and see how FyOrbit can transform your institution.</p>
+            <a href="mailto:hello@fyorbit.com" class="inline-flex items-center gap-2 bg-ucc-gold text-ucc-dark px-8 py-4 rounded-full font-black uppercase text-sm hover:bg-white transition-all">
+                Schedule a Demo <i class="fas fa-calendar-check"></i>
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-ucc-dark text-slate-400 py-20 px-[6%] border-t-8 border-ucc-gold">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16">
+            <div>
+                <h4 class="text-white text-xl font-black mb-8 relative footer-h4-underline uppercase tracking-widest pb-4">FyOrbit</h4>
+                <p class="text-sm leading-relaxed mb-8 font-medium">Digital management ecosystem for schools, institutes, coaching centers, libraries, and computer hubs.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center hover:bg-ucc-gold hover:text-ucc-dark transition-all"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center hover:bg-ucc-gold hover:text-ucc-dark transition-all"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center hover:bg-ucc-gold hover:text-ucc-dark transition-all"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white text-xl font-black mb-8 relative footer-h4-underline uppercase tracking-widest pb-4">Quick Links</h4>
+                <ul class="space-y-4 font-black text-xs uppercase tracking-widest">
+                    <li><a href="../index.html" class="hover:text-ucc-gold transition">Home</a></li>
+                    <li><a href="services.html" class="hover:text-ucc-gold transition">Services</a></li>
+                    <li><a href="resources.html" class="hover:text-ucc-gold transition">Resources</a></li>
+                    <li><a href="showcase.html" class="text-ucc-gold">Showcase</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white text-xl font-black mb-8 relative footer-h4-underline uppercase tracking-widest pb-4">Get in Touch</h4>
+                <ul class="space-y-6 text-sm">
+                    <li class="flex gap-4"><i class="fas fa-map-marker-alt text-ucc-gold mt-1"></i><span>FyOrbit Innovation Hub, Handwara, Kupwara, J&K</span></li>
+                    <li class="flex gap-4"><i class="fas fa-phone-alt text-ucc-gold"></i><span class="font-bold">+91 70069 60788</span></li>
+                    <li class="flex gap-4"><i class="fas fa-envelope text-ucc-gold"></i><span>hello@fyorbit.com</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-white/5 text-center text-[10px] font-black uppercase tracking-[0.5em] opacity-40">
+            © 2026 FyOrbit — Digital Management for Schools, Institutes & Libraries. Built by Fasil Yousf.
+        </div>
+    </footer>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <span class="close">&times;</span>
+        <img id="lightbox-img" src="" alt="Full size view">
+    </div>
+
+    <script>
+        // Mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (hamburger) hamburger.addEventListener('click', () => mobileMenu.classList.toggle('active'));
+
+        // Counter animation
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = parseInt(counter.getAttribute('data-target'));
+                    const current = parseInt(counter.innerText);
+                    const increment = Math.ceil(target / 30);
+                    if (current < target) {
+                        counter.innerText = current + increment;
+                        setTimeout(updateCount, 30);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            });
+        };
+        animateCounters();
+
+        // Filter functionality
+        const filterBtns = document.querySelectorAll('.category-chip');
+        const galleryItems = document.querySelectorAll('.gallery-card');
+        const noResultsDiv = document.getElementById('no-results');
+
+        function filterGallery() {
+            const activeFilter = document.querySelector('.category-chip.active').getAttribute('data-filter');
+            let visibleCount = 0;
+            galleryItems.forEach(item => {
+                const category = item.getAttribute('data-category');
+                if (activeFilter === 'all' || category === activeFilter) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            noResultsDiv.classList.toggle('hidden', visibleCount > 0);
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-ucc-gold', 'text-ucc-dark');
+                    b.classList.add('bg-white', 'text-slate-700');
+                });
+                btn.classList.add('active', 'bg-ucc-gold', 'text-ucc-dark');
+                btn.classList.remove('bg-white', 'text-slate-700');
+                filterGallery();
+            });
+        });
+
+        // Lightbox functions
+        function openLightbox(imgSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = imgSrc;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        window.openLightbox = openLightbox;
+        window.closeLightbox = closeLightbox;
+    </script>
+</body>
+
+</html>

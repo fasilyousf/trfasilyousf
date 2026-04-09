@@ -1,121 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | UCC Handwara Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>FyOrbit | Sign Up – Students, Staff, Institute Heads</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
-        body { font-family: 'Outfit', sans-serif; }
-        .glass-container { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
-        .bg-animate {
-            background: linear-gradient(-45deg, #1a2233, #2c3e50, #1a2233, #f1c40f);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
+        * {
+            font-family: 'Outfit', sans-serif;
         }
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        body {
+            background: #f0f4f8;
         }
-        .input-focus:focus { border-color: #f1c40f; box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.1); }
-        .loader { border-top-color: #f1c40f; animation: spinner 1.5s linear infinite; }
-        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .role-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .role-card.active {
+            border-color: #f5b81b;
+            background-color: #fef9e6;
+            transform: scale(1.02);
+            box-shadow: 0 12px 24px -12px rgba(0,0,0,0.2);
+        }
+        .form-field-group {
+            transition: all 0.2s;
+        }
+        .error-text {
+            color: #dc2626;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+        input, select, textarea {
+            transition: all 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            box-shadow: 0 0 0 2px #f5b81b;
+            border-color: #f5b81b;
+            outline: none;
+        }
+        .btn-primary {
+            background: linear-gradient(105deg, #0b1120, #1e293b);
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(105deg, #f5b81b, #e67e22);
+            color: #0b1120;
+        }
+        .required-star::after {
+            content: "*";
+            color: #e53e3e;
+            margin-left: 4px;
+        }
+        .loader {
+            border-top-color: #f5b81b;
+            animation: spinner 0.8s linear infinite;
+        }
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
-
-    <script type="text/javascript">
-        (function () {
-            // Initializing with your Public Key
-            emailjs.init("BZ2E5BMbDJgulIhEo");
-        })();
-    </script>
 </head>
+<body class="antialiased">
 
-<body class="bg-animate min-h-screen flex items-center justify-center p-6 py-12">
-
-    <a href="../index.html"
-        class="absolute top-8 left-8 text-white/80 hover:text-white flex items-center gap-2 font-semibold transition">
-        <i class="fas fa-arrow-left"></i> Back to Home
-    </a>
-
-    <div class="w-full max-w-lg">
-        <div class="text-center mb-8">
-            <div class="inline-flex w-16 h-16 bg-[#f1c40f] rounded-2xl items-center justify-center shadow-xl mb-4 transform rotate-6">
-                <i class="fas fa-user-plus text-[#2c3e50] text-3xl"></i>
+    <!-- Header Mini (branding) -->
+    <div class="bg-[#0b1120] text-white py-4 px-6 shadow-lg">
+        <div class="max-w-6xl mx-auto flex items-center gap-3">
+            <div class="w-9 h-9 bg-[#f5b81b] rounded-xl flex items-center justify-center">
+                <i class="fas fa-digital-tiling text-[#0b1120] text-lg"></i>
             </div>
-            <h1 class="text-3xl font-extrabold text-white tracking-tight">Scholar <span class="text-[#f1c40f]">Registration</span></h1>
-            <p class="text-white/60 text-sm mt-2">United Community College Handwara</p>
+            <div class="text-xl font-black tracking-tight">Fy<span class="text-[#f5b81b]">Orbit</span></div>
+            <div class="ml-auto text-sm font-medium opacity-80">Digital Management Ecosystem</div>
         </div>
+    </div>
 
-        <div class="glass-container rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
-            <form id="registerForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Registration Form Container -->
+    <div class="max-w-4xl mx-auto px-4 py-12 md:py-16">
+        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+            <div class="bg-gradient-to-r from-[#0b1120] to-[#1a2538] px-6 py-8 md:px-10">
+                <h1 class="text-3xl md:text-4xl font-black text-white">Create your account</h1>
+                <p class="text-slate-300 mt-2 text-sm md:text-base">Join FyOrbit as a student, staff member, or institute head</p>
+            </div>
 
-                <div class="md:col-span-2">
-                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Full Legal Name</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400"><i class="fas fa-user"></i></span>
-                        <input type="text" id="regName" placeholder="Student Name" required
-                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
+            <div class="p-6 md:p-10">
+                <!-- Role Selection (Cards) -->
+                <div class="mb-10">
+                    <label class="block text-sm font-black uppercase tracking-wider text-gray-700 mb-4 required-star">I am registering as</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="role-card bg-gray-50 rounded-2xl p-4 text-center" data-role="student">
+                            <i class="fas fa-graduation-cap text-3xl text-[#f5b81b] mb-2"></i>
+                            <h3 class="font-black text-gray-800">Student</h3>
+                            <p class="text-xs text-gray-500">Learner, access courses & resources</p>
+                        </div>
+                        <div class="role-card bg-gray-50 rounded-2xl p-4 text-center" data-role="staff">
+                            <i class="fas fa-chalkboard-user text-3xl text-[#f5b81b] mb-2"></i>
+                            <h3 class="font-black text-gray-800">Staff</h3>
+                            <p class="text-xs text-gray-500">Teacher, admin, accountant</p>
+                        </div>
+                        <div class="role-card bg-gray-50 rounded-2xl p-4 text-center" data-role="institute_head">
+                            <i class="fas fa-building text-3xl text-[#f5b81b] mb-2"></i>
+                            <h3 class="font-black text-gray-800">Institute Head</h3>
+                            <p class="text-xs text-gray-500">School/Coaching Centre Owner</p>
+                        </div>
+                    </div>
+                    <input type="hidden" id="selectedRole" value="student">
+                    <div id="roleError" class="error-text hidden">Please select a role</div>
+                </div>
+
+                <!-- Common Fields Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 required-star">Full Name</label>
+                        <input type="text" id="fullName" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#f5b81b] outline-none" placeholder="e.g. Ayesha Khan">
+                        <div id="fullNameError" class="error-text hidden"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 required-star">Email Address</label>
+                        <input type="email" id="email" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#f5b81b]" placeholder="hello@example.com">
+                        <div id="emailError" class="error-text hidden"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 required-star">Mobile Number</label>
+                        <input type="tel" id="mobile" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3" placeholder="10-digit number">
+                        <div id="mobileError" class="error-text hidden"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 required-star">Password</label>
+                        <input type="password" id="password" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3" placeholder="Min. 8 characters">
+                        <div id="passwordError" class="error-text hidden"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 required-star">Confirm Password</label>
+                        <input type="password" id="confirmPassword" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3" placeholder="Retype password">
+                        <div id="confirmError" class="error-text hidden"></div>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Email Address</label>
-                    <input type="email" id="regEmail" placeholder="mail@example.com" required
-                        class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
+                <!-- ========= DYNAMIC ROLE-SPECIFIC FIELDS ========= -->
+                <div id="roleSpecificContainer" class="space-y-6 border-t border-gray-200 pt-6 mt-2">
+                    <!-- Student Fields (default visible) -->
+                    <div id="studentFields" class="role-fields">
+                        <h3 class="text-lg font-black text-gray-800 flex items-center gap-2"><i class="fas fa-user-graduate text-[#f5b81b]"></i> Student Details</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+                            <div><label class="text-sm font-bold required-star">Roll Number</label><input type="text" id="rollNo" class="w-full border rounded-xl px-4 py-2.5 mt-1" placeholder="e.g. 2024CS01"></div>
+                            <div><label class="text-sm font-bold required-star">Class/Grade</label><input type="text" id="classGrade" class="w-full border rounded-xl px-4 py-2.5 mt-1" placeholder="e.g. 10, 12"></div>
+                            <div><label class="text-sm font-bold">Section</label><input type="text" id="section" class="w-full border rounded-xl px-4 py-2.5 mt-1" placeholder="A / B"></div>
+                            <div><label class="text-sm font-bold required-star">Parent/Guardian Name</label><input type="text" id="parentName" class="w-full border rounded-xl px-4 py-2.5 mt-1" placeholder="Full name"></div>
+                            <div><label class="text-sm font-bold required-star">Parent Mobile</label><input type="tel" id="parentMobile" class="w-full border rounded-xl px-4 py-2.5 mt-1" placeholder="10-digit"></div>
+                            <div><label class="text-sm font-bold required-star">Date of Birth</label><input type="date" id="dob" class="w-full border rounded-xl px-4 py-2.5 mt-1"></div>
+                            <div class="md:col-span-2"><label class="text-sm font-bold required-star">Institute Code</label>
+                                <div class="flex gap-2"><input type="text" id="studentInstituteCode" class="flex-1 border rounded-xl px-4 py-2.5" placeholder="e.g. FYORBIT123"><button type="button" id="verifyStudentCode" class="bg-gray-200 px-4 rounded-xl text-sm font-bold hover:bg-[#f5b81b] transition">Verify</button></div>
+                                <div id="studentCodeMsg" class="text-xs mt-1 text-gray-500"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Staff Fields (hidden initially) -->
+                    <div id="staffFields" class="role-fields hidden">
+                        <h3 class="text-lg font-black text-gray-800 flex items-center gap-2"><i class="fas fa-briefcase text-[#f5b81b]"></i> Staff Details</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+                            <div><label class="text-sm font-bold required-star">Employee ID</label><input type="text" id="empId" class="w-full border rounded-xl px-4 py-2.5" placeholder="EMP-001"></div>
+                            <div><label class="text-sm font-bold required-star">Department</label><select id="department" class="w-full border rounded-xl px-4 py-2.5"><option value="">Select</option><option>Teaching</option><option>Administration</option><option>Accounts</option><option>Library</option><option>IT</option></select></div>
+                            <div><label class="text-sm font-bold required-star">Designation</label><input type="text" id="designation" class="w-full border rounded-xl px-4 py-2.5" placeholder="Teacher / Coordinator / Admin"></div>
+                            <div><label class="text-sm font-bold required-star">Joining Date</label><input type="date" id="joiningDate" class="w-full border rounded-xl px-4 py-2.5"></div>
+                            <div class="md:col-span-2"><label class="text-sm font-bold">Subjects Handled (if teacher)</label><input type="text" id="subjects" class="w-full border rounded-xl px-4 py-2.5" placeholder="Mathematics, Science"></div>
+                            <div class="md:col-span-2"><label class="text-sm font-bold required-star">Institute Code</label><div class="flex gap-2"><input type="text" id="staffInstituteCode" class="flex-1 border rounded-xl px-4 py-2.5" placeholder="Institute code"><button type="button" id="verifyStaffCode" class="bg-gray-200 px-4 rounded-xl text-sm font-bold hover:bg-[#f5b81b] transition">Verify</button></div><div id="staffCodeMsg" class="text-xs mt-1 text-gray-500"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Institute Head Fields (hidden initially) -->
+                    <div id="instituteHeadFields" class="role-fields hidden">
+                        <h3 class="text-lg font-black text-gray-800 flex items-center gap-2"><i class="fas fa-building text-[#f5b81b]"></i> Institute Profile</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+                            <div class="md:col-span-2"><label class="text-sm font-bold required-star">Institute Name</label><input type="text" id="instName" class="w-full border rounded-xl px-4 py-2.5" placeholder="e.g. Delhi Public School"></div>
+                            <div><label class="text-sm font-bold required-star">Registration Number</label><input type="text" id="regNumber" class="w-full border rounded-xl px-4 py-2.5" placeholder="UDISE / Board Code"></div>
+                            <div><label class="text-sm font-bold required-star">Institute Type</label><select id="instType" class="w-full border rounded-xl px-4 py-2.5"><option>School</option><option>College</option><option>Coaching Centre</option><option>Library</option><option>Computer Hub</option></select></div>
+                            <div class="md:col-span-2"><label class="text-sm font-bold required-star">Address</label><textarea id="address" rows="2" class="w-full border rounded-xl px-4 py-2.5" placeholder="Street, City, PIN, State"></textarea></div>
+                            <div><label class="text-sm font-bold">GST Number (optional)</label><input type="text" id="gst" class="w-full border rounded-xl px-4 py-2.5" placeholder="22AAAAA0000A1Z"></div>
+                            <div><label class="text-sm font-bold required-star">Your Designation</label><input type="text" id="headDesignation" class="w-full border rounded-xl px-4 py-2.5" placeholder="Director / Principal / Owner"></div>
+                            <div class="md:col-span-2"><label class="text-sm font-bold">Verification Document (Trust Deed / Registration)</label><input type="file" id="docUpload" class="w-full border rounded-xl px-4 py-2.5 bg-white" accept=".pdf,.jpg,.png"></div>
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Phone Number</label>
-                    <input type="tel" id="regPhone" placeholder="7006XXXXXX" required
-                        class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
+                <!-- Terms and Submit -->
+                <div class="mt-8 flex items-start gap-3">
+                    <input type="checkbox" id="terms" class="mt-1 w-5 h-5 accent-[#f5b81b]">
+                    <label for="terms" class="text-sm text-gray-600">I agree to the <a href="#" class="text-[#f5b81b] font-bold">Terms of Service</a> and <a href="#" class="text-[#f5b81b] font-bold">Privacy Policy</a>.</label>
                 </div>
+                <div id="termsError" class="error-text hidden">You must accept terms to register.</div>
 
-                <div class="md:col-span-2">
-                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Admission Code</label>
-                    <input type="text" id="regInstCode" placeholder="Enter UCC2026" required
-                        class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700 font-bold uppercase tracking-widest text-center">
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Create Password</label>
-                    <input type="password" id="regPass" placeholder="••••••••" required
-                        class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Confirm</label>
-                    <input type="password" id="regConfirmPass" placeholder="••••••••" required
-                        class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none input-focus transition-all text-slate-700">
-                </div>
-
-                <button type="submit" id="submitBtn"
-                    class="md:col-span-2 w-full py-4 bg-[#1a2233] text-white font-black rounded-2xl shadow-xl hover:bg-black transition-all flex items-center justify-center gap-3 uppercase tracking-[0.2em] text-xs">
-                    <span id="btnText">Initialize Account</span>
-                    <div id="btnLoader" class="loader hidden rounded-full border-2 border-t-2 border-white/20 h-4 w-4"></div>
+                <button id="registerBtn" class="btn-primary w-full mt-8 bg-[#0b1120] text-white py-4 rounded-xl font-black uppercase tracking-wider text-sm transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+                    <span id="btnText">Create Account</span>
+                    <i class="fas fa-arrow-right" id="btnIcon"></i>
+                    <div id="btnLoader" class="loader hidden rounded-full border-2 border-t-2 border-white/20 h-5 w-5"></div>
                 </button>
-            </form>
-
-            <div class="mt-8 text-center pt-6 border-t border-slate-100">
-                <p class="text-slate-400 font-bold text-[10px] uppercase tracking-widest">
-                    Already a scholar? <a href="login.html" class="text-[#f1c40f] hover:underline ml-1">Login</a>
-                </p>
+                <p class="text-center text-gray-500 text-xs mt-6">Already have an account? <a href="login.html" class="text-[#f5b81b] font-bold">Portal Login</a></p>
             </div>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <!-- Import Firebase modules -->
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+            }
+        }
+    </script>
 
+    <script type="module">
+        import { initializeApp } from "firebase/app";
+        import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+        import { getFirestore, doc, setDoc } from "firebase/firestore";
+
+        // Firebase configuration (same as previous)
         const firebaseConfig = {
             apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
             authDomain: "trfasilyousf1.firebaseapp.com",
@@ -129,75 +236,231 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        // Initialize EmailJS (public key from old code)
+        emailjs.init("BZ2E5BMbDJgulIhEo");
+
+        // DOM elements
+        const roleCards = document.querySelectorAll('.role-card');
+        const selectedRoleInput = document.getElementById('selectedRole');
+        const studentDiv = document.getElementById('studentFields');
+        const staffDiv = document.getElementById('staffFields');
+        const instituteDiv = document.getElementById('instituteHeadFields');
+        const roleErrorDiv = document.getElementById('roleError');
+        const registerBtn = document.getElementById('registerBtn');
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
+        const btnLoader = document.getElementById('btnLoader');
+
+        // Role switching
+        function setActiveRole(role) {
+            selectedRoleInput.value = role;
+            studentDiv.classList.add('hidden');
+            staffDiv.classList.add('hidden');
+            instituteDiv.classList.add('hidden');
+            if (role === 'student') studentDiv.classList.remove('hidden');
+            if (role === 'staff') staffDiv.classList.remove('hidden');
+            if (role === 'institute_head') instituteDiv.classList.remove('hidden');
+            roleCards.forEach(card => {
+                if (card.dataset.role === role) card.classList.add('active');
+                else card.classList.remove('active');
+            });
+            if(roleErrorDiv) roleErrorDiv.classList.add('hidden');
+        }
+
+        roleCards.forEach(card => {
+            card.addEventListener('click', () => setActiveRole(card.dataset.role));
+        });
+        setActiveRole('student');
+
+        // Institute verification (demo)
+        const validInstituteCodes = ['FYORBIT123', 'SCHOOL01', 'COACHING99', 'DELHI2024'];
+        function verifyInstituteCode(code, type) {
+            const msgDiv = type === 'student' ? document.getElementById('studentCodeMsg') : document.getElementById('staffCodeMsg');
+            if (!code.trim()) {
+                msgDiv.innerHTML = '<span class="text-red-500">❌ Please enter a code</span>';
+                return false;
+            }
+            if (validInstituteCodes.includes(code.trim().toUpperCase())) {
+                msgDiv.innerHTML = '<span class="text-green-600">✓ Code verified. Institute found.</span>';
+                return true;
+            } else {
+                msgDiv.innerHTML = '<span class="text-red-500">⚠️ Invalid code. Use demo: FYORBIT123 / SCHOOL01</span>';
+                return false;
+            }
+        }
+        document.getElementById('verifyStudentCode')?.addEventListener('click', () => {
+            verifyInstituteCode(document.getElementById('studentInstituteCode').value, 'student');
+        });
+        document.getElementById('verifyStaffCode')?.addEventListener('click', () => {
+            verifyInstituteCode(document.getElementById('staffInstituteCode').value, 'staff');
+        });
+
+        // Validation helpers
+        function showError(inputId, errorId, message) {
+            const errorDiv = document.getElementById(errorId);
+            if (errorDiv) {
+                errorDiv.innerText = message;
+                errorDiv.classList.remove('hidden');
+            }
+            const inputField = document.getElementById(inputId);
+            if(inputField && message) inputField.classList.add('border-red-500');
+            else if(inputField) inputField.classList.remove('border-red-500');
+        }
+        function validateEmail(email) { return /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(email); }
+        function validateMobile(mob) { return /^[0-9]{10}$/.test(mob); }
+        function validatePassword(pwd) { return pwd.length >= 8; }
+
+        function validateForm() {
+            let isValid = true;
+            const role = selectedRoleInput.value;
+            document.querySelectorAll('.error-text').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('input, select, textarea').forEach(el => el.classList.remove('border-red-500'));
+
+            const fullName = document.getElementById('fullName').value.trim();
+            if(!fullName) { showError('fullName', 'fullNameError', 'Full name required'); isValid=false; }
+            const email = document.getElementById('email').value.trim();
+            if(!email || !validateEmail(email)) { showError('email', 'emailError', 'Valid email required'); isValid=false; }
+            const mobile = document.getElementById('mobile').value.trim();
+            if(!mobile || !validateMobile(mobile)) { showError('mobile', 'mobileError', '10-digit mobile number'); isValid=false; }
+            const pwd = document.getElementById('password').value;
+            if(!validatePassword(pwd)) { showError('password', 'passwordError', 'Minimum 8 characters'); isValid=false; }
+            const confirm = document.getElementById('confirmPassword').value;
+            if(pwd !== confirm) { showError('confirmPassword', 'confirmError', 'Passwords do not match'); isValid=false; }
+            if(!document.getElementById('terms').checked) { document.getElementById('termsError').classList.remove('hidden'); isValid=false; }
+
+            if(role === 'student') {
+                if(!document.getElementById('rollNo').value.trim()) { showError('rollNo', 'fullNameError', 'Roll number required'); isValid=false; }
+                if(!document.getElementById('classGrade').value.trim()) { showError('classGrade', 'fullNameError', 'Class required'); isValid=false; }
+                if(!document.getElementById('parentName').value.trim()) { showError('parentName', 'fullNameError', 'Parent name required'); isValid=false; }
+                const parentMobile = document.getElementById('parentMobile').value.trim();
+                if(!parentMobile || !validateMobile(parentMobile)) { showError('parentMobile', 'fullNameError', 'Valid parent mobile required'); isValid=false; }
+                if(!document.getElementById('dob').value) { showError('dob', 'fullNameError', 'Date of birth required'); isValid=false; }
+                const instCode = document.getElementById('studentInstituteCode').value.trim();
+                if(!instCode) { showError('studentInstituteCode', 'fullNameError', 'Institute code required'); isValid=false; }
+                else if(!validInstituteCodes.includes(instCode.toUpperCase())) { document.getElementById('studentCodeMsg').innerHTML = '<span class="text-red-500">❌ Invalid institute code</span>'; isValid=false; }
+            }
+            else if(role === 'staff') {
+                if(!document.getElementById('empId').value.trim()) { showError('empId', 'fullNameError', 'Employee ID required'); isValid=false; }
+                if(!document.getElementById('department').value) { showError('department', 'fullNameError', 'Select department'); isValid=false; }
+                if(!document.getElementById('designation').value.trim()) { showError('designation', 'fullNameError', 'Designation required'); isValid=false; }
+                if(!document.getElementById('joiningDate').value) { showError('joiningDate', 'fullNameError', 'Joining date required'); isValid=false; }
+                const staffCode = document.getElementById('staffInstituteCode').value.trim();
+                if(!staffCode) { showError('staffInstituteCode', 'fullNameError', 'Institute code required'); isValid=false; }
+                else if(!validInstituteCodes.includes(staffCode.toUpperCase())) { document.getElementById('staffCodeMsg').innerHTML = '<span class="text-red-500">❌ Invalid institute code</span>'; isValid=false; }
+            }
+            else if(role === 'institute_head') {
+                if(!document.getElementById('instName').value.trim()) { showError('instName', 'fullNameError', 'Institute name required'); isValid=false; }
+                if(!document.getElementById('regNumber').value.trim()) { showError('regNumber', 'fullNameError', 'Registration number required'); isValid=false; }
+                if(!document.getElementById('address').value.trim()) { showError('address', 'fullNameError', 'Address required'); isValid=false; }
+                if(!document.getElementById('headDesignation').value.trim()) { showError('headDesignation', 'fullNameError', 'Your designation required'); isValid=false; }
+            }
+            return isValid;
+        }
+
+        function setLoading(isLoading) {
+            if (isLoading) {
+                registerBtn.disabled = true;
+                btnText.innerText = "Creating...";
+                btnIcon.classList.add('hidden');
+                btnLoader.classList.remove('hidden');
+            } else {
+                registerBtn.disabled = false;
+                btnText.innerText = "Create Account";
+                btnIcon.classList.remove('hidden');
+                btnLoader.classList.add('hidden');
+            }
+        }
+
+        // Prepare user data for Firestore
+        function buildUserData(uid, role) {
+            const base = {
+                uid,
+                fullName: document.getElementById('fullName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                mobile: document.getElementById('mobile').value.trim(),
+                role: role,
+                createdAt: new Date().toISOString(),
+                status: 'active'
+            };
+            if (role === 'student') {
+                base.rollNumber = document.getElementById('rollNo').value.trim();
+                base.classGrade = document.getElementById('classGrade').value.trim();
+                base.section = document.getElementById('section').value.trim();
+                base.parentName = document.getElementById('parentName').value.trim();
+                base.parentMobile = document.getElementById('parentMobile').value.trim();
+                base.dob = document.getElementById('dob').value;
+                base.instituteCode = document.getElementById('studentInstituteCode').value.trim();
+            } else if (role === 'staff') {
+                base.employeeId = document.getElementById('empId').value.trim();
+                base.department = document.getElementById('department').value;
+                base.designation = document.getElementById('designation').value.trim();
+                base.joiningDate = document.getElementById('joiningDate').value;
+                base.subjects = document.getElementById('subjects').value.trim();
+                base.instituteCode = document.getElementById('staffInstituteCode').value.trim();
+            } else if (role === 'institute_head') {
+                base.instituteName = document.getElementById('instName').value.trim();
+                base.registrationNumber = document.getElementById('regNumber').value.trim();
+                base.instituteType = document.getElementById('instType').value;
+                base.address = document.getElementById('address').value.trim();
+                base.gst = document.getElementById('gst').value.trim();
+                base.headDesignation = document.getElementById('headDesignation').value.trim();
+                base.verificationDoc = document.getElementById('docUpload').files.length > 0 ? document.getElementById('docUpload').files[0].name : 'pending';
+            }
+            return base;
+        }
+
+        // Send welcome email via EmailJS
+        async function sendWelcomeEmail(name, email, role) {
+            try {
+                const templateParams = {
+                    user_name: name,
+                    user_email: email,
+                    user_role: role,
+                };
+                await emailjs.send("service_qlu55cj", "template_8zpsoqv", templateParams);
+                console.log("Welcome email sent successfully");
+            } catch (err) {
+                console.error("EmailJS error:", err);
+                // Non-blocking, do not throw
+            }
+        }
+
+        // Main registration handler
+        registerBtn.addEventListener('click', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const loader = document.getElementById('btnLoader');
-            const txt = document.getElementById('btnText');
+            if (!validateForm()) return;
 
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const phone = document.getElementById('regPhone').value;
-            const pass = document.getElementById('regPass').value;
-            const instCode = document.getElementById('regInstCode').value.toUpperCase();
+            const role = selectedRoleInput.value;
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const fullName = document.getElementById('fullName').value.trim();
 
-            // Form Validations
-            if (instCode !== "UCC2026") {
-                alert("Invalid Admission Code!");
-                return;
-            }
-            if (pass !== document.getElementById('regConfirmPass').value) {
-                alert("Passwords do not match!");
-                return;
-            }
-
-            // Start Loader
-            btn.disabled = true;
-            txt.innerText = "Processing...";
-            loader.classList.remove('hidden');
+            setLoading(true);
 
             try {
-                // STEP 1: Create Account in Firebase Auth
-                const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                // 1. Create Firebase Auth user
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
 
-                // STEP 2: Save Data to Firestore
-                await setDoc(doc(db, "users", cred.user.uid), {
-                    fullName: name,
-                    email: email,
-                    phoneNumber: phone,
-                    role: "student",
-                    createdAt: new Date().toISOString(),
-                    status: "active"
-                });
+                // 2. Store user data in Firestore
+                const userData = buildUserData(user.uid, role);
+                await setDoc(doc(db, "users", user.uid), userData);
 
-                // STEP 3: Attempt Email (Fail-Safe)
-                try {
-                    const emailParams = {
-                        user_name: name,   // Matches {{user_name}} in your template
-                        user_email: email  // Matches {{user_email}} in your template
-                    };
-                    // Using your Service and Template ID
-                    await emailjs.send("service_qlu55cj", "template_8zpsoqv", emailParams);
-                    console.log("Welcome email sent!");
-                } catch (emailErr) {
-                    console.error("EmailJS Error:", emailErr);
-                }
+                // 3. Send welcome email (non-blocking)
+                await sendWelcomeEmail(fullName, email, role);
 
-                alert("Registration Successful! Welcome to UCC Handwara.");
+                // 4. Success
+                alert(`✅ Registration successful! Welcome ${fullName} (${role}). Redirecting to login...`);
                 window.location.href = "login.html";
 
-            } catch (err) {
-                console.error("Firebase Error:", err);
-                // Friendly error messages based on Firebase codes
-                let msg = "Registration Failed: " + (err.message || "Unknown error");
-                if (err.code === 'auth/email-already-in-use') msg = "This email is already registered.";
-                if (err.code === 'auth/weak-password') msg = "Password must be at least 6 characters.";
-                
-                alert(msg);
-            } finally {
-                btn.disabled = false;
-                txt.innerText = "Initialize Account";
-                loader.classList.add('hidden');
+            } catch (error) {
+                console.error("Registration error:", error);
+                let errorMsg = "Registration failed. Please try again.";
+                if (error.code === 'auth/email-already-in-use') errorMsg = "This email is already registered.";
+                else if (error.code === 'auth/weak-password') errorMsg = "Password must be at least 6 characters.";
+                else if (error.message) errorMsg = error.message;
+                alert(errorMsg);
+                setLoading(false);
             }
         });
     </script>

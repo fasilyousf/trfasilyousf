@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Admin Verification | UCC Nexus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Outfit', sans-serif; }
+        body { background: #0b1120; color: #ecf3f2; }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.68);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(241, 196, 15, 0.15);
+            transition: all 0.25s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(241, 196, 15, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+        }
+        .pending-glow {
+            animation: softPulse 2.2s infinite;
+        }
+        @keyframes softPulse {
+            0%,100% { opacity: 0.8; box-shadow: 0 0 8px rgba(241,196,15,0.3);}
+            50% { opacity: 1; box-shadow: 0 0 22px rgba(241,196,15,0.6);}
+        }
+        .step-badge {
+            background: linear-gradient(135deg, #f1c40f, #e67e22);
+            box-shadow: 0 6px 14px rgba(241,196,15,0.3);
+        }
+        .btn-gold {
+            background: linear-gradient(105deg, #f1c40f, #e67e22);
+            transition: all 0.2s;
+        }
+        .btn-gold:hover { transform: scale(1.02); box-shadow: 0 12px 22px -8px rgba(241,196,15,0.5); }
+        .btn-outline-gold {
+            border: 1px solid rgba(241,196,15,0.5);
+            background: rgba(241,196,15,0.05);
+        }
+        .btn-outline-gold:hover { background: rgba(241,196,15,0.15); border-color: #f1c40f; }
+        .toast-notify {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .loading-spinner { animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .float-icon { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
+        .gradient-text {
+            background: linear-gradient(120deg, #f1c40f, #ffb347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-5 relative overflow-x-hidden">
+    <div class="fixed inset-0 pointer-events-none overflow-hidden">
+        <div class="absolute top-20 left-10 w-72 h-72 bg-[#f1c40f]/5 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-orange-500/5 rounded-full blur-[120px]"></div>
+    </div>
+
+    <div class="w-full max-w-5xl mx-auto z-10">
+        <!-- Header brand (compact) -->
+        <div class="flex justify-between items-center mb-8 flex-wrap gap-4">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='../index.html'">
+                <div class="w-12 h-12 bg-gradient-to-br from-[#f1c40f] to-orange-500 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition">
+                    <i class="fas fa-crown text-slate-900 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-tight text-white">UCC <span class="text-[#f1c40f]">ADMIN</span></h1>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Verification Portal</p>
+                </div>
+            </div>
+            <button id="logoutBtn" class="bg-slate-800/80 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-5 py-2.5 rounded-xl font-bold text-xs uppercase transition-all flex items-center gap-2 backdrop-blur-sm">
+                <i class="fas fa-sign-out-alt"></i> Exit
+            </button>
+        </div>
+
+        <!-- Main verification card -->
+        <div class="glass-panel rounded-3xl p-6 md:p-10 border border-white/10 shadow-2xl">
+            <!-- Status header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 mb-8 pb-5 border-b border-white/10">
+                <div class="flex items-center gap-5">
+                    <div class="w-16 h-16 bg-gradient-to-br from-[#f1c40f]/20 to-orange-500/20 rounded-2xl flex items-center justify-center pending-glow">
+                        <i class="fas fa-user-shield text-3xl text-[#f1c40f] float-icon"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">Admin <span class="gradient-text">Verification</span></h2>
+                        <p class="text-slate-400 text-sm mt-1">Confirm your identity to access the full dashboard</p>
+                    </div>
+                </div>
+                <div class="bg-black/40 backdrop-blur-sm px-5 py-2 rounded-full border border-[#f1c40f]/30 flex items-center gap-2">
+                    <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#f1c40f] opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-[#f1c40f]"></span></span>
+                    <span class="text-[11px] font-black uppercase tracking-wider text-[#f1c40f]">Pending Approval</span>
+                </div>
+            </div>
+
+            <!-- Admin brief -->
+            <div class="flex flex-wrap items-center gap-6 bg-slate-900/40 rounded-2xl p-5 mb-8 border border-white/5">
+                <div class="flex items-center gap-4">
+                    <img id="adminAvatarImg" class="w-16 h-16 rounded-2xl object-cover border-2 border-[#f1c40f]/60 bg-slate-800 shadow-lg" src="https://via.placeholder.com/64" alt="Admin">
+                    <div>
+                        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Administrator</p>
+                        <h3 class="text-white font-black text-xl" id="adminName">Loading...</h3>
+                        <p class="text-slate-400 text-xs flex items-center gap-1 mt-0.5"><i class="fas fa-envelope text-[10px]"></i> <span id="adminEmail">—</span></p>
+                    </div>
+                </div>
+                <div class="flex-1 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+                <div class="flex gap-3">
+                    <button id="checkStatusBtn" class="btn-gold text-slate-900 px-5 py-2.5 rounded-xl font-black text-xs uppercase transition shadow-lg flex items-center gap-2">
+                        <i class="fas fa-sync-alt"></i> Verify Now
+                    </button>
+                    <button id="contactSupportBtn" class="btn-outline-gold text-[#f1c40f] px-5 py-2.5 rounded-xl font-bold text-xs uppercase flex items-center gap-2">
+                        <i class="fas fa-headset"></i> Help
+                    </button>
+                </div>
+            </div>
+
+            <!-- Two column: steps + support -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Left: steps -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="glass-card rounded-2xl p-6">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-10 h-10 bg-[#f1c40f]/10 rounded-xl flex items-center justify-center"><i class="fas fa-clipboard-list text-[#f1c40f] text-lg"></i></div>
+                            <h3 class="text-white font-black text-lg">How to get verified</h3>
+                        </div>
+                        <div class="space-y-5">
+                            <div class="flex gap-4 items-start">
+                                <div class="step-badge w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"><span class="text-slate-900 font-black text-base">1</span></div>
+                                <div><h4 class="font-bold text-white">Prepare your ID proof</h4><p class="text-slate-400 text-sm mt-0.5">Government-issued ID (Aadhar, PAN, Passport, or Driver's License).</p></div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div class="step-badge w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"><span class="text-slate-900 font-black text-base">2</span></div>
+                                <div><h4 class="font-bold text-white">Send request to super admin</h4><p class="text-slate-400 text-sm mt-0.5">Share your ID and admin email via the channels below.</p>
+                                    <div class="flex flex-wrap gap-3 mt-3">
+                                        <div onclick="copyEmailAndMail()" class="bg-slate-800/70 hover:bg-slate-700 rounded-xl px-4 py-2 border border-white/10 cursor-pointer transition flex items-center gap-2"><i class="fas fa-envelope text-[#f1c40f]"></i><span class="text-white text-sm">trfasilyousf@gmail.com</span><i class="fas fa-copy text-slate-500 text-xs"></i></div>
+                                        <div onclick="window.open('https://wa.me/917006960788', '_blank')" class="bg-slate-800/70 hover:bg-slate-700 rounded-xl px-4 py-2 border border-white/10 cursor-pointer transition flex items-center gap-2"><i class="fab fa-whatsapp text-green-400"></i><span class="text-white text-sm">+91 70069 60788</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div class="step-badge w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"><span class="text-slate-900 font-black text-base">3</span></div>
+                                <div><h4 class="font-bold text-white">Wait for approval (24-48h)</h4><p class="text-slate-400 text-sm mt-0.5">Once verified, you'll be redirected to the admin dashboard automatically.</p></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email template (admin-focused) -->
+                    <div class="glass-card rounded-2xl p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-[#f1c40f]/10 rounded-xl flex items-center justify-center"><i class="fas fa-envelope-open-text text-[#f1c40f] text-xl"></i></div>
+                            <div class="flex-1">
+                                <h4 class="font-black text-white uppercase text-sm tracking-wide">📧 Request template</h4>
+                                <div class="mt-3 bg-slate-900/70 rounded-xl p-4 font-mono text-xs text-slate-300 border border-white/10">
+                                    <p><span class="text-[#f1c40f] font-bold">Subject:</span> Admin Verification Request – [Your Name]</p>
+                                    <p class="mt-2">Dear Super Admin,<br>I request verification for my admin account. Attached: Government ID proof.<br><br>Name: ___________<br>Email: ___________<br>Role: ___________<br><br>Thank you.</p>
+                                </div>
+                                <button id="copyTemplateBtn" class="mt-3 text-xs text-[#f1c40f] hover:text-yellow-300 flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/5 transition"><i class="far fa-copy"></i> Copy template</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: progress & contact -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="glass-card rounded-2xl p-6">
+                        <div class="flex items-center gap-3 mb-4"><i class="fas fa-chart-simple text-[#f1c40f] text-xl"></i><h3 class="text-white font-black text-lg">Approval progress</h3></div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between text-xs text-slate-400"><span>ID submission</span><span class="text-[#f1c40f]">✓ Ready</span></div>
+                            <div class="flex justify-between text-xs text-slate-400"><span>Super admin review</span><span class="text-yellow-400">⏳ Pending</span></div>
+                            <div class="w-full bg-white/10 rounded-full h-2 mt-1"><div class="bg-gradient-to-r from-[#f1c40f] to-orange-400 h-2 rounded-full w-2/3"></div></div>
+                            <p class="text-[11px] text-slate-400 mt-2"><i class="far fa-clock mr-1"></i> Estimated: within 48 hours after request</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6">
+                        <div class="flex items-center gap-3 mb-4"><i class="fas fa-headset text-[#f1c40f] text-xl"></i><h3 class="text-white font-black text-lg">Direct support</h3></div>
+                        <div class="space-y-3">
+                            <div onclick="window.location.href='tel:+917006960788'" class="flex items-center justify-between bg-slate-800/40 rounded-xl p-3 cursor-pointer hover:bg-slate-700/50 transition"><div class="flex items-center gap-3"><i class="fas fa-phone-alt text-[#f1c40f]"></i><span class="text-sm font-medium">Call</span></div><span class="text-white font-mono text-sm">+91 70069 60788</span></div>
+                            <div onclick="window.open('https://wa.me/917006960788', '_blank')" class="flex items-center justify-between bg-slate-800/40 rounded-xl p-3 cursor-pointer hover:bg-slate-700/50 transition"><div class="flex items-center gap-3"><i class="fab fa-whatsapp text-green-400"></i><span class="text-sm font-medium">WhatsApp</span></div><span class="text-white font-mono text-sm">+91 70069 60788</span></div>
+                            <div onclick="copyEmailAndMail()" class="flex items-center justify-between bg-slate-800/40 rounded-xl p-3 cursor-pointer hover:bg-slate-700/50 transition"><div class="flex items-center gap-3"><i class="fas fa-envelope text-[#f1c40f]"></i><span class="text-sm font-medium">Email</span></div><span class="text-white font-mono text-sm">trfasilyousf@gmail.com</span></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6">
+                        <div class="flex items-center gap-2 mb-3"><i class="fas fa-check-double text-[#f1c40f]"></i><h3 class="font-black text-white text-sm uppercase tracking-wide">Checklist</h3></div>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-center gap-2"><i class="fas fa-check-circle text-[#f1c40f] text-xs"></i> Government ID (clear photo/scan)</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check-circle text-[#f1c40f] text-xs"></i> Active email used for admin account</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check-circle text-[#f1c40f] text-xs"></i> Contact number (optional but helpful)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer reassurance -->
+            <div class="mt-10 pt-5 border-t border-white/10 text-center text-[10px] text-slate-500">
+                <p>🔒 Your data is encrypted and used only for verification. No fees required.</p>
+            </div>
+        </div>
+        <div class="text-center mt-8 text-[10px] text-slate-500 uppercase tracking-wider">© 2026 United Community College Handwara | Admin Verification Portal</div>
+    </div>
+
+    <div id="toastContainer" class="fixed bottom-6 right-6 flex flex-col gap-2 z-[200]"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
+            authDomain: "trfasilyousf1.firebaseapp.com",
+            projectId: "trfasilyousf1",
+            storageBucket: "trfasilyousf1.firebasestorage.app",
+            messagingSenderId: "158147210589",
+            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        let currentUid = null;
+
+        function showToast(msg, isError = false) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `bg-slate-800 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-sm font-bold border-l-4 ${isError ? 'border-rose-500' : 'border-emerald-500'}`;
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-2"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        async function loadAdminData() {
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    currentUid = user.uid;
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    if (userDoc.exists()) {
+                        const data = userDoc.data();
+                        const fullName = data.fullName || data.name || "Admin User";
+                        const email = data.email || user.email;
+                        document.getElementById('adminName').innerText = fullName;
+                        document.getElementById('adminEmail').innerText = email;
+                        const avatar = document.getElementById('adminAvatarImg');
+                        if (data.photoURL) avatar.src = data.photoURL;
+                        else avatar.src = `https://ui-avatars.com/api/?background=f1c40f&color=0f172a&bold=true&name=${encodeURIComponent(fullName)}&size=64&rounded=true`;
+                        
+                        const isVerified = (data.role === 'admin' || data.isVerified === true || data.status === 'active' || data.verificationStatus === 'approved');
+                        if (isVerified) {
+                            showToast("✅ Already verified! Redirecting to dashboard...");
+                            setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+                        }
+                    } else {
+                        document.getElementById('adminName').innerText = user.displayName || "Admin";
+                        document.getElementById('adminEmail').innerText = user.email;
+                    }
+                } else {
+                    document.getElementById('adminName').innerText = "Not authenticated";
+                    document.getElementById('adminEmail').innerText = "Please login first";
+                    showToast("Session not found. Please login again.", true);
+                }
+            });
+        }
+
+        async function checkVerificationStatus() {
+            if (!currentUid) { showToast("Please wait, authenticating...", true); return; }
+            const btn = document.getElementById('checkStatusBtn');
+            const original = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner loading-spinner mr-2"></i> Checking...';
+            btn.disabled = true;
+            try {
+                const userDoc = await getDoc(doc(db, "users", currentUid));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const isVerified = (data.role === 'admin' || data.isVerified === true || data.status === 'active' || data.verificationStatus === 'approved');
+                    if (isVerified) {
+                        showToast("✅ Verification approved! Redirecting...");
+                        setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+                    } else {
+                        showToast("⏳ Still pending. Submit your ID to complete verification.", false);
+                    }
+                } else {
+                    showToast("Profile not found. Contact support.", true);
+                }
+            } catch(e) { showToast("Error checking status", true); }
+            finally { btn.innerHTML = original; btn.disabled = false; }
+        }
+
+        async function handleLogout() {
+            await signOut(auth);
+            localStorage.removeItem('unverifiedAdmin');
+            showToast("Logged out");
+            setTimeout(() => { window.location.href = "../auth/login.html"; }, 800);
+        }
+
+        function copyEmailTemplate() {
+            const template = `Subject: Admin Verification Request – [Your Name]\n\nDear Super Admin,\nI request verification for my admin account. Attached: Government ID proof.\n\nName: ___________\nEmail: ___________\nRole: ___________\n\nThank you.`;
+            navigator.clipboard.writeText(template);
+            showToast("Template copied!");
+        }
+
+        window.copyEmailAndMail = () => {
+            navigator.clipboard.writeText("trfasilyousf@gmail.com");
+            showToast("Email address copied! Opening mail client...");
+            setTimeout(() => {
+                window.location.href = "mailto:trfasilyousf@gmail.com?subject=Admin%20Verification%20Request%20-%20New%20Admin";
+            }, 300);
+        };
+
+        document.getElementById('checkStatusBtn')?.addEventListener('click', checkVerificationStatus);
+        document.getElementById('contactSupportBtn')?.addEventListener('click', () => {
+            showToast("📞 +91 70069 60788 | 💬 WhatsApp: same | ✉️ trfasilyousf@gmail.com");
+        });
+        document.getElementById('logoutBtn')?.addEventListener('click', handleLogout);
+        document.getElementById('copyTemplateBtn')?.addEventListener('click', copyEmailTemplate);
+        
+        loadAdminData();
+        setInterval(() => { if(currentUid) checkVerificationStatus(); }, 35000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>FyOrbit Resources | Guides, Case Studies & Templates</title>
+    <link rel="shortcut icon" href="../assets/img/icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+            background: #f4f7fc;
+            color: #0f172a; /* global dark text for maximum readability */
+        }
+
+        /* Override any possible white-on-white issues */
+        .bg-white, .resource-card, .category-chip, input, textarea, button {
+            color: #0f172a;
+        }
+
+        .bg-ucc-dark {
+            background-color: #0b1120;
+        }
+
+        .text-ucc-gold {
+            color: #f5b81b;
+        }
+
+        .bg-ucc-gold {
+            background-color: #f5b81b;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s;
+            font-weight: 700;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: #f5b81b;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        #mobile-menu {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            background: #0f172a;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(245,184,27,0.2);
+        }
+
+        #mobile-menu.active {
+            max-height: 480px;
+            opacity: 1;
+            padding: 1.8rem 1.5rem;
+        }
+
+        .footer-h4-underline::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 48px;
+            height: 3px;
+            background-color: #f5b81b;
+            border-radius: 10px;
+        }
+
+        /* Enhanced Resource Card with stronger contrast */
+        .resource-card {
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: #ffffff;
+            box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            border-radius: 28px;
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #f5b81b, #e67e22, #f5b81b);
+            transform: scaleX(0);
+            transition: transform 0.45s ease;
+            transform-origin: left;
+        }
+
+        .resource-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 28px 36px -16px rgba(0, 0, 0, 0.2);
+            border-color: rgba(245, 184, 27, 0.3);
+        }
+
+        .category-chip {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+
+        .category-chip.active {
+            background-color: #f5b81b !important;
+            color: #0b1120 !important;
+            border-color: #f5b81b !important;
+            box-shadow: 0 8px 18px -6px rgba(245, 184, 27, 0.5);
+        }
+
+        .search-glow:focus {
+            box-shadow: 0 0 0 4px rgba(245, 184, 27, 0.25);
+            border-color: #f5b81b;
+            outline: none;
+        }
+
+        /* Enhanced Read More Button */
+        .btn-readmore {
+            background: linear-gradient(105deg, #111827 0%, #1e293b 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            border: none;
+        }
+
+        .btn-readmore::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(105deg, #f5b81b, #f39c12);
+            transition: all 0.35s ease;
+            z-index: -1;
+            border-radius: 16px;
+        }
+
+        .btn-readmore:hover::after {
+            height: 100%;
+        }
+
+        .btn-readmore:hover {
+            color: #0b1120 !important;
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+        /* custom badge style */
+        .resource-badge-custom {
+            backdrop-filter: blur(4px);
+            font-weight: 800;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+        .float-icon {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* extra contrast utilities */
+        .text-strong {
+            color: #0a0f1e;
+        }
+        .card-desc {
+            color: #1e293b;
+            line-height: 1.5;
+            font-weight: 450;
+        }
+        .meta-text {
+            color: #475569;
+            font-weight: 500;
+        }
+        footer .footer-link {
+            color: #cbd5e1;
+            transition: 0.2s;
+        }
+        footer .footer-link:hover {
+            color: #f5b81b;
+        }
+        .no-results-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-ucc-dark text-white sticky top-0 z-[100] px-[5%] py-4 shadow-2xl border-b border-white/10">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Branding -->
+            <div class="flex items-center gap-3 group cursor-pointer" onclick="window.location.href='../index.html'">
+                <div class="w-10 h-10 bg-ucc-gold rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-6 transition duration-300">
+                    <i class="fas fa-digital-tiling text-[#0b1120] text-xl"></i>
+                </div>
+                <div class="logo text-xl md:text-2xl font-black tracking-tighter">
+                    Fy<span class="text-ucc-gold">Orbit</span>
+                </div>
+            </div>
+
+            <nav class="hidden lg:flex items-center gap-8 font-bold text-[12px] tracking-[0.2em]">
+                <a href="../index.html" class="nav-link hover:text-ucc-gold transition">HOME</a>
+                <a href="services.html" class="nav-link hover:text-ucc-gold transition">SERVICES</a>
+                <a href="resources.html" class="text-ucc-gold nav-link">RESOURCES</a>
+                <a href="showcase.html" class="nav-link hover:text-ucc-gold transition">SHOWCASE</a>
+                <a href="about.html" class="nav-link hover:text-ucc-gold transition">ABOUT</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <a href="../auth/login.html" class="bg-ucc-gold hover:bg-white text-ucc-dark px-6 py-2.5 rounded-full font-black text-xs uppercase transition-all shadow-lg active:scale-95">
+                    Portal Login
+                </a>
+                <button class="lg:hidden text-ucc-gold text-2xl focus:outline-none" id="hamburger"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="lg:hidden absolute top-full left-0 w-full shadow-2xl">
+            <ul class="flex flex-col gap-5 font-black tracking-wider uppercase text-sm">
+                <li><a href="../index.html" class="hover:text-ucc-gold transition block">Home</a></li>
+                <li><a href="services.html" class="hover:text-ucc-gold transition block">Services</a></li>
+                <li><a href="resources.html" class="text-ucc-gold block">Resources</a></li>
+                <li><a href="showcase.html" class="hover:text-ucc-gold transition block">Showcase</a></li>
+                <li><a href="about.html" class="hover:text-ucc-gold transition block">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section - High contrast improvements -->
+    <section class="bg-ucc-dark text-white py-20 px-[6%] text-center relative overflow-hidden">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-white/10 text-ucc-gold border border-ucc-gold/30 px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-[0.3em] mb-6 inline-block backdrop-blur-sm">
+                <i class="fas fa-database mr-2"></i> Knowledge Hub
+            </span>
+            <h1 class="text-5xl md:text-7xl font-black mb-6 uppercase tracking-tighter leading-tight">
+                Resource <span class="text-ucc-gold">Library</span>
+            </h1>
+            <p class="text-slate-200 text-lg font-medium mb-10 max-w-2xl mx-auto drop-shadow-md">Whitepapers, implementation guides, case studies & templates — everything you need to power your institution's digital transformation.</p>
+            
+            <div class="relative group max-w-xl mx-auto">
+                <i class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-ucc-gold transition text-lg"></i>
+                <input type="text" id="resourceSearch" placeholder="Search resources (ERP, Library, Coaching, Automation, Templates)..." 
+                    class="w-full pl-14 pr-6 py-5 rounded-2xl text-slate-800 bg-white shadow-2xl outline-none transition-all text-base font-semibold search-glow">
+            </div>
+            <!-- dynamic results count -->
+            <div class="mt-5 text-sm text-slate-300 font-medium" id="resultCountBadge">Showing all resources</div>
+        </div>
+        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-ucc-gold/5 rounded-full blur-3xl"></div>
+        <div class="absolute top-10 right-10 w-52 h-52 bg-indigo-500/10 rounded-full blur-2xl float-icon"></div>
+    </section>
+
+    <!-- Category Filters (enhanced contrast) -->
+    <div class="max-w-7xl mx-auto px-[6%] pt-10 pb-4 flex flex-wrap gap-3 justify-center border-b border-slate-200">
+        <button class="category-chip active px-7 py-2.5 rounded-full text-xs font-black uppercase tracking-wider shadow-sm transition-all" data-filter="all">All Resources</button>
+        <button class="category-chip px-7 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-white text-slate-800 border border-slate-300 hover:bg-slate-100 transition-all" data-filter="guide">📘 Guides & Whitepapers</button>
+        <button class="category-chip px-7 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-white text-slate-800 border border-slate-300 hover:bg-slate-100 transition-all" data-filter="template">📊 Templates & Tools</button>
+        <button class="category-chip px-7 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-white text-slate-800 border border-slate-300 hover:bg-slate-100 transition-all" data-filter="case">🏫 Case Studies</button>
+        <button class="category-chip px-7 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-white text-slate-800 border border-slate-300 hover:bg-slate-100 transition-all" data-filter="video">🎥 Video Library</button>
+    </div>
+
+    <main class="py-14 px-[6%] max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-9" id="resources-container">
+            
+            <!-- Resource 1: Digital Transformation Whitepaper -->
+            <div class="resource-card p-7 flex flex-col justify-between" data-category="guide">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-14 h-14 bg-gradient-to-br from-blue-100 to-blue-200 text-blue-800 flex items-center justify-center rounded-2xl shadow-md">
+                            <i class="fas fa-file-alt text-2xl"></i>
+                        </div>
+                        <span class="text-[11px] font-black uppercase tracking-wider text-blue-800 bg-blue-100 px-3 py-1.5 rounded-full">Whitepaper</span>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-900 mt-2 mb-3 leading-tight">Digital Transformation in Education</h3>
+                    <p class="card-desc text-slate-700 text-sm mb-4">Comprehensive guide to implementing ERP for schools and colleges. Covers automation, data migration, and ROI metrics.</p>
+                    <div class="flex items-center gap-4 text-xs meta-text mb-6">
+                        <span><i class="far fa-calendar-alt mr-1"></i> Mar 2026</span>
+                        <span><i class="far fa-clock mr-1"></i> 12 min read</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-readmore inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest text-white transition-all">Read More <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+
+            <!-- Resource 2: Library Automation Playbook -->
+            <div class="resource-card p-7 flex flex-col justify-between" data-category="guide">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-14 h-14 bg-gradient-to-br from-amber-100 to-amber-200 text-amber-800 flex items-center justify-center rounded-2xl shadow-md">
+                            <i class="fas fa-book-open text-2xl"></i>
+                        </div>
+                        <span class="text-[11px] font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1.5 rounded-full">Guide</span>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-900 mt-2 mb-3 leading-tight">Smart Library Automation Playbook</h3>
+                    <p class="card-desc text-slate-700 text-sm mb-4">Step-by-step implementation for digital cataloging, RFID integration, and OPAC portals. Reduce manual work by 75%.</p>
+                    <div class="flex items-center gap-4 text-xs meta-text mb-6">
+                        <span><i class="far fa-calendar-alt mr-1"></i> Feb 2026</span>
+                        <span><i class="far fa-clock mr-1"></i> 18 min read</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-readmore inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest text-white transition-all">Read More <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+
+            <!-- Resource 3: Coaching ROI Calculator (Template) -->
+            <div class="resource-card p-7 flex flex-col justify-between border-l-4 border-emerald-500" data-category="template">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-14 h-14 bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-800 flex items-center justify-center rounded-2xl shadow-md">
+                            <i class="fas fa-calculator text-2xl"></i>
+                        </div>
+                        <span class="text-[11px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1.5 rounded-full">Excel Tool</span>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-900 mt-2 mb-3 leading-tight">Coaching Center ROI Calculator</h3>
+                    <p class="card-desc text-slate-700 text-sm mb-4">Interactive spreadsheet to estimate savings from automation, batch management, and fee collection. Instant download.</p>
+                    <div class="flex items-center gap-4 text-xs meta-text mb-6">
+                        <span><i class="far fa-calendar-alt mr-1"></i> Jan 2026</span>
+                        <span><i class="far fa-clock mr-1"></i> Interactive</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-readmore inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest text-white transition-all">Get Template <i class="fas fa-download text-xs"></i></a>
+            </div>
+
+            <!-- Resource 4: Case Study - Green Valley School -->
+            <div class="resource-card p-7 flex flex-col justify-between" data-category="case">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-14 h-14 bg-gradient-to-br from-purple-100 to-purple-200 text-purple-800 flex items-center justify-center rounded-2xl shadow-md">
+                            <i class="fas fa-school text-2xl"></i>
+                        </div>
+                        <span class="text-[11px] font-black uppercase tracking-wider text-purple-800 bg-purple-100 px-3 py-1.5 rounded-full">Case Study</span>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-900 mt-2 mb-3 leading-tight">Green Valley School: ERP Transformation</h3>
+                    <p class="card-desc text-slate-700 text-sm mb-4">How a 2000+ student school reduced admin work by 60% using FyOrbit Institute Suite. Real metrics and success story.</p>
+                    <div class="flex items-center gap-4 text-xs meta-text mb-6">
+                        <span><i class="far fa-calendar-alt mr-1"></i> Apr 2026</span>
+                        <span><i class="far fa-clock mr-1"></i> 8 min read</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-readmore inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest text-white transition-all">Read Case <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+
+            <!-- Resource 5: Video Tutorial - Library Management -->
+            <div class="resource-card p-7 flex flex-col justify-between" data-category="video">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-14 h-14 bg-gradient-to-br from-rose-100 to-rose-200 text-rose-700 flex items-center justify-center rounded-2xl shadow-md">
+                            <i class="fas fa-video text-2xl"></i>
+                        </div>
+                        <span class="text-[11px] font-black uppercase tracking-wider text-rose-700 bg-rose-100 px-3 py-1.5 rounded-full">Video</span>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-900 mt-2 mb-3 leading-tight">Library Automation Walkthrough</h3>
+                    <p class="card-desc text-slate-700 text-sm mb-4">15-min video: cataloging, member check-in/out, and generating reports with FyOrbit Library Suite. Watch demo.</p>
+                    <div class="flex items-center gap-4 text-xs meta-text mb-6">
+                        <span><i class="far fa-calendar-alt mr-1"></i> Mar 2026</span>
+                        <span><i class="far fa-clock mr-1"></i> 15 min watch</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-readmore inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest text-white transition-all">Watch Now <i class="fas fa-play text-xs"></i></a>
+            </div>
+
+            <!-- Resource 6: Digital Admission Form Kit (Template) -->
+            <div class="resource-card p-7 flex flex-col justify-between" data-category="template">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-14 h-14 bg-gradient-to-br from-teal-100 to-teal-200 text-teal-800 flex items-center justify-center rounded-2xl shadow-md">
+                            <i class="fas fa-file-signature text-2xl"></i>
+                        </div>
+                        <span class="text-[11px] font-black uppercase tracking-wider text-teal-800 bg-teal-100 px-3 py-1.5 rounded-full">Template</span>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-900 mt-2 mb-3 leading-tight">Digital Admission Form Kit</h3>
+                    <p class="card-desc text-slate-700 text-sm mb-4">Ready-to-use HTML/PDF forms with backend integration guide for coaching centers and schools. Customizable fields.</p>
+                    <div class="flex items-center gap-4 text-xs meta-text mb-6">
+                        <span><i class="far fa-calendar-alt mr-1"></i> Feb 2026</span>
+                        <span><i class="far fa-clock mr-1"></i> Setup guide</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-readmore inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest text-white transition-all">Download Kit <i class="fas fa-download text-xs"></i></a>
+            </div>
+
+            <!-- Resource 7: Data Security Whitepaper -->
+            <div class="resource-card p-7 flex flex-col justify-between" data-category="guide">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-14 h-14 bg-gradient-to-br from-indigo-100 to-indigo-200 text-indigo-800 flex items-center justify-center rounded-2xl shadow-md">
+                            <i class="fas fa-shield-alt text-2xl"></i>
+                        </div>
+                        <span class="text-[11px] font-black uppercase tracking-wider text-indigo-800 bg-indigo-100 px-3 py-1.5 rounded-full">Whitepaper</span>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-900 mt-2 mb-3 leading-tight">GDPR & Data Privacy for Institutes</h3>
+                    <p class="card-desc text-slate-700 text-sm mb-4">Essential guidelines for protecting student and staff data in digital management systems. Compliance checklist included.</p>
+                    <div class="flex items-center gap-4 text-xs meta-text mb-6">
+                        <span><i class="far fa-calendar-alt mr-1"></i> Jan 2026</span>
+                        <span><i class="far fa-clock mr-1"></i> 20 min read</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-readmore inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest text-white transition-all">Read More <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+
+            <!-- Resource 8: Case Study - TechHub Computer Center -->
+            <div class="resource-card p-7 flex flex-col justify-between" data-category="case">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-14 h-14 bg-gradient-to-br from-cyan-100 to-cyan-200 text-cyan-800 flex items-center justify-center rounded-2xl shadow-md">
+                            <i class="fas fa-microchip text-2xl"></i>
+                        </div>
+                        <span class="text-[11px] font-black uppercase tracking-wider text-cyan-800 bg-cyan-100 px-3 py-1.5 rounded-full">Case Study</span>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-900 mt-2 mb-3 leading-tight">TechHub: Computer Hub Efficiency</h3>
+                    <p class="card-desc text-slate-700 text-sm mb-4">How FyOrbit Computer Hub Manager streamlined course registrations, inventory tracking, and boosted revenue by 34%.</p>
+                    <div class="flex items-center gap-4 text-xs meta-text mb-6">
+                        <span><i class="far fa-calendar-alt mr-1"></i> Apr 2026</span>
+                        <span><i class="far fa-clock mr-1"></i> 7 min read</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-readmore inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest text-white transition-all">Read Case <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+
+            <!-- Bonus Resource 9: ERP Implementation Checklist (Template) extra resource for visibility -->
+            <div class="resource-card p-7 flex flex-col justify-between" data-category="template">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-14 h-14 bg-gradient-to-br from-sky-100 to-sky-200 text-sky-800 flex items-center justify-center rounded-2xl shadow-md">
+                            <i class="fas fa-check-double text-2xl"></i>
+                        </div>
+                        <span class="text-[11px] font-black uppercase tracking-wider text-sky-800 bg-sky-100 px-3 py-1.5 rounded-full">Checklist</span>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-900 mt-2 mb-3 leading-tight">ERP Implementation Checklist</h3>
+                    <p class="card-desc text-slate-700 text-sm mb-4">70-point readiness checklist for schools and institutes. Pre-deployment, go-live, and post-launch phases.</p>
+                    <div class="flex items-center gap-4 text-xs meta-text mb-6">
+                        <span><i class="far fa-calendar-alt mr-1"></i> May 2026</span>
+                        <span><i class="far fa-clock mr-1"></i> Printable PDF</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-readmore inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest text-white transition-all">Download <i class="fas fa-download text-xs"></i></a>
+            </div>
+        </div>
+
+        <div id="no-results" class="text-center py-16 hidden">
+            <div class="no-results-card max-w-md mx-auto shadow-md">
+                <i class="fas fa-folder-open text-5xl text-slate-400 mb-4"></i>
+                <p class="text-slate-800 font-bold text-xl">No resources match</p>
+                <p class="text-slate-500 text-base mt-2">Try adjusting filters or search keywords.</p>
+                <button id="resetFiltersBtn" class="mt-6 bg-ucc-gold text-ucc-dark px-6 py-2 rounded-full font-black text-sm">Reset filters</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- CTA Section with high contrast -->
+    <section class="bg-white py-20 px-[6%] border-t border-slate-200">
+        <div class="max-w-4xl mx-auto bg-gradient-to-br from-[#0b1120] to-[#111827] p-12 rounded-[3rem] text-center shadow-2xl relative overflow-hidden">
+            <div class="relative z-10">
+                <h3 class="text-3xl md:text-4xl font-black text-ucc-gold mb-4 uppercase">Need a custom solution?</h3>
+                <p class="text-slate-200 font-medium mb-8 max-w-lg mx-auto">Request personalized templates, implementation roadmap, or a consultation call with our experts.</p>
+                <div class="flex flex-wrap gap-5 justify-center">
+                    <a href="mailto:hello@fyorbit.com" class="inline-flex items-center gap-2 bg-ucc-gold text-ucc-dark px-8 py-4 rounded-full font-black uppercase text-sm hover:bg-white transition-all shadow-lg">
+                        Contact Resource Team <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="../auth/login.html" class="inline-flex items-center gap-2 bg-white/10 text-white px-8 py-4 rounded-full font-black uppercase text-sm hover:bg-ucc-gold hover:text-ucc-dark transition-all">
+                        Client Portal <i class="fas fa-lock"></i>
+                    </a>
+                </div>
+            </div>
+            <i class="fas fa-chalkboard-user absolute -bottom-16 -right-16 text-9xl text-white/5 rotate-12"></i>
+        </div>
+    </section>
+
+    <footer class="bg-ucc-dark text-slate-300 py-20 px-[6%] border-t-8 border-ucc-gold">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16">
+            <div>
+                <h4 class="text-white text-xl font-black mb-8 relative footer-h4-underline uppercase tracking-widest pb-4">FyOrbit</h4>
+                <p class="text-sm leading-relaxed mb-8 font-medium text-slate-300">Digital management ecosystem for schools, institutes, coaching centers, libraries, and computer hubs. Built to automate, innovate, and accelerate.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center hover:bg-ucc-gold hover:text-ucc-dark transition-all text-white"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center hover:bg-ucc-gold hover:text-ucc-dark transition-all text-white"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center hover:bg-ucc-gold hover:text-ucc-dark transition-all text-white"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white text-xl font-black mb-8 relative footer-h4-underline uppercase tracking-widest pb-4">Resource Hub</h4>
+                <ul class="space-y-4 font-black text-xs uppercase tracking-widest">
+                    <li><a href="../index.html" class="footer-link hover:text-ucc-gold transition">Portal Home</a></li>
+                    <li><a href="services.html" class="footer-link hover:text-ucc-gold transition">Our Services</a></li>
+                    <li><a href="resources.html" class="text-ucc-gold">Resource Library</a></li>
+                    <li><a href="../auth/login.html" class="footer-link hover:text-white transition">Client Login</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white text-xl font-black mb-8 relative footer-h4-underline uppercase tracking-widest pb-4">Get in Touch</h4>
+                <ul class="space-y-6 text-sm">
+                    <li class="flex gap-4"><i class="fas fa-map-marker-alt text-ucc-gold mt-1"></i><span>FyOrbit Innovation Hub, Handwara, Kupwara, J&K - 193221</span></li>
+                    <li class="flex gap-4"><i class="fas fa-phone-alt text-ucc-gold"></i><span class="font-bold">+91 70069 60788</span></li>
+                    <li class="flex gap-4"><i class="fas fa-envelope text-ucc-gold"></i><span>hello@fyorbit.com</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-white/10 text-center text-[10px] font-black uppercase tracking-[0.5em] opacity-60 text-slate-400">
+            © 2026 FyOrbit — Digital Management for Schools, Institutes & Libraries. Built by Fasil Yousf.
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (hamburger) {
+            hamburger.addEventListener('click', () => mobileMenu.classList.toggle('active'));
+        }
+        // close mobile menu on link click
+        const mobileLinks = document.querySelectorAll('#mobile-menu a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+        const searchInput = document.getElementById('resourceSearch');
+        const resourceCards = document.querySelectorAll('.resource-card');
+        const categoryBtns = document.querySelectorAll('.category-chip');
+        const noResultsDiv = document.getElementById('no-results');
+        const resultCountSpan = document.getElementById('resultCountBadge');
+        const resetBtn = document.getElementById('resetFiltersBtn');
+
+        let activeCategory = 'all';
+
+        function updateResultCount(visible) {
+            if (resultCountSpan) {
+                if (visible === 0) resultCountSpan.innerText = 'No matching resources';
+                else resultCountSpan.innerText = `Showing ${visible} resource${visible !== 1 ? 's' : ''}`;
+            }
+        }
+
+        function filterResources() {
+            const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
+            let visibleCount = 0;
+
+            resourceCards.forEach(card => {
+                const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                const desc = card.querySelector('p')?.textContent.toLowerCase() || '';
+                const category = card.getAttribute('data-category');
+                
+                const matchesSearch = title.includes(searchTerm) || desc.includes(searchTerm);
+                const matchesCategory = (activeCategory === 'all') || (category === activeCategory);
+                
+                if (matchesSearch && matchesCategory) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            if (noResultsDiv) {
+                if (visibleCount === 0) {
+                    noResultsDiv.classList.remove('hidden');
+                } else {
+                    noResultsDiv.classList.add('hidden');
+                }
+            }
+            updateResultCount(visibleCount);
+        }
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-ucc-gold', 'text-ucc-dark');
+                    b.classList.add('bg-white', 'text-slate-800');
+                });
+                btn.classList.add('active', 'bg-ucc-gold', 'text-ucc-dark');
+                btn.classList.remove('bg-white', 'text-slate-800');
+                
+                activeCategory = btn.getAttribute('data-filter');
+                filterResources();
+            });
+        });
+
+        if (searchInput) {
+            searchInput.addEventListener('input', filterResources);
+        }
+
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                if (searchInput) searchInput.value = '';
+                const allBtn = document.querySelector('.category-chip[data-filter="all"]');
+                if (allBtn) allBtn.click();
+                filterResources();
+            });
+        }
+
+        filterResources();
+    </script>
+</body>
+</html>

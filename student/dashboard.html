@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Student Dashboard | Tr Fasil Yousf</title>
+    <title>Student Dashboard | UCC Handwara</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
     <style>
         * { font-family: 'Outfit', sans-serif; }
         body { background: linear-gradient(145deg, #f0f4fa 0%, #eef2f6 100%); }
@@ -39,8 +38,8 @@
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #f1c40f; border-radius: 10px; }
-        .read-more-btn { transition: all 0.2s; }
-        .notice-item { transition: all 0.2s; }
+        .toast { position: fixed; bottom: 20px; right: 20px; z-index: 1000; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
 </head>
 <body class="flex min-h-screen">
@@ -74,7 +73,7 @@
         </nav>
 
         <div class="p-6 border-t border-white/5">
-            <button onclick="window.logout && window.logout()" class="w-full flex items-center gap-4 p-4 text-rose-500 font-black text-xs uppercase hover:bg-rose-500/10 rounded-2xl transition">
+            <button id="logoutBtn" class="w-full flex items-center gap-4 p-4 text-rose-500 font-black text-xs uppercase hover:bg-rose-500/10 rounded-2xl transition">
                 <i class="fas fa-power-off"></i> <span>Sign Out</span>
             </button>
         </div>
@@ -105,7 +104,7 @@
             </div>
         </header>
 
-        <!-- Announcements Section - 3 Cards Grid -->
+        <!-- Announcements Section -->
         <div class="mb-12">
             <div class="flex justify-between items-center mb-6">
                 <div>
@@ -125,13 +124,13 @@
 
         <!-- Stats Row -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12">
-            <a href="#" class="stat-card glass-card p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border-b-4 border-emerald-500 block group">
+            <div class="stat-card glass-card p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border-b-4 border-emerald-500">
                 <div class="w-12 h-12 md:w-14 md:h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 text-xl md:text-2xl shadow-inner">
                     <i class="fas fa-fingerprint"></i>
                 </div>
                 <h3 class="text-slate-400 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em]">Attendance</h3>
                 <p class="text-4xl md:text-5xl font-black text-slate-800 mt-2" id="quickAttendance">0%</p>
-            </a>
+            </div>
             <div class="stat-card glass-card p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border-b-4 border-blue-500">
                 <div class="w-12 h-12 md:w-14 md:h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 text-xl md:text-2xl shadow-inner">
                     <i class="fas fa-rupee-sign"></i>
@@ -145,7 +144,7 @@
                     <i class="fas fa-bolt"></i>
                 </div>
                 <h3 class="text-slate-400 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em]">Exam Grade</h3>
-                <p class="text-4xl md:text-5xl font-black text-slate-800 mt-2">A+</p>
+                <p class="text-4xl md:text-5xl font-black text-slate-800 mt-2" id="examGrade">A+</p>
             </div>
         </div>
 
@@ -153,7 +152,7 @@
         <div class="mt-8">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-xl md:text-2xl font-black text-slate-800">My Enrolled Courses</h3>
-                <a href="#" class="text-xs font-bold text-emerald-600 hover:underline">View All</a>
+                <a href="courses.html" class="text-xs font-bold text-emerald-600 hover:underline">View All</a>
             </div>
             <div id="coursesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="text-center py-10 text-slate-400">Loading courses...</div>
@@ -161,8 +160,17 @@
         </div>
     </main>
 
+    <!-- Toast Notifications -->
+    <div id="errorToast" class="toast hidden bg-red-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
+        <i class="fas fa-exclamation-circle text-xl"></i>
+        <div>
+            <p class="font-bold">Error!</p>
+            <p class="text-sm" id="errorToastMessage"></p>
+        </div>
+    </div>
+
     <!-- Announcement Detail Modal -->
-    <div id="announcementModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" style="animation: fadeIn 0.2s ease;">
+    <div id="announcementModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4">
         <div class="glass-card w-full max-w-2xl rounded-3xl shadow-2xl max-h-[85vh] flex flex-col">
             <div class="p-6 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white/95 backdrop-blur-sm rounded-t-3xl">
                 <div>
@@ -184,7 +192,7 @@
     </div>
 
     <!-- All Notices Modal -->
-    <div id="allNoticesModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" style="animation: fadeIn 0.2s ease;">
+    <div id="allNoticesModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4">
         <div class="glass-card w-full max-w-2xl rounded-3xl shadow-2xl max-h-[85vh] flex flex-col">
             <div class="p-6 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white/95 backdrop-blur-sm rounded-t-3xl">
                 <div>
@@ -207,7 +215,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
@@ -217,11 +225,19 @@
             messagingSenderId: "158147210589",
             appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
         };
+        
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let allNotices = [];
+        let currentUserData = null;
+
+        function showToast(message) {
+            const toast = document.getElementById('errorToast');
+            document.getElementById('errorToastMessage').innerText = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 4000);
+        }
 
         function formatDate(timestamp) {
             if (!timestamp) return 'Just now';
@@ -235,104 +251,172 @@
             return { text: '🟢 LOW', class: 'priority-low', badge: 'bg-emerald-100 text-emerald-700' };
         }
 
-        const DEMO_NOTICES = [
-            { id: "demo1", title: "📢 Mid-Term Examinations Schedule", message: "Mid-term examinations will commence from April 15th, 2026. All students are requested to check the detailed timetable on the notice board. Admit cards will be available from April 10th.", createdAt: new Date(2026, 3, 1), priority: "high" },
-            { id: "demo2", title: "🎓 Scholarship Application Open", message: "Merit-based scholarship applications are now open for eligible students. Last date to apply is April 30th, 2026. Please contact the administration office for more details.", createdAt: new Date(2026, 3, 5), priority: "medium" },
-            { id: "demo3", title: "📚 Library Summer Hours", message: "Library will remain open from 9 AM to 7 PM during summer break. Extended hours for exam preparation.", createdAt: new Date(2026, 3, 8), priority: "low" },
-            { id: "demo4", title: "🏆 Cultural Fest 2026", message: "Annual cultural fest 'UCC Fiesta' scheduled for May 10-12. Registration for events open until April 25th.", createdAt: new Date(2026, 3, 3), priority: "medium" },
-            { id: "demo5", title: "⚠️ Holiday Notice - Eid ul-Fitr", message: "Institute will remain closed from April 9th to April 11th on account of Eid ul-Fitr. Classes resume on April 12th.", createdAt: new Date(2026, 3, 2), priority: "high" }
-        ];
+        // Load ONLY the current user's data
+        async function loadUserData(uid) {
+            const userDocRef = doc(db, "users", uid);
+            const userDoc = await getDoc(userDocRef);
+            
+            if (!userDoc.exists()) {
+                showToast("User profile not found. Please contact support.");
+                await signOut(auth);
+                window.location.href = "../auth/login.html";
+                return null;
+            }
+            
+            const userData = userDoc.data();
+            
+            // SECURITY: Verify this is a student account
+            if (userData.role !== 'student') {
+                showToast("Access denied. Student privileges required.");
+                await signOut(auth);
+                window.location.href = "../auth/login.html";
+                return null;
+            }
+            
+            // SECURITY: Verify account is active
+            if (userData.status !== 'active') {
+                showToast("Your account is not active. Please contact support.");
+                await signOut(auth);
+                window.location.href = "../auth/login.html";
+                return null;
+            }
+            
+            return userData;
+        }
 
-        async function loadAllNotices() {
+        // Load notices (public - any authenticated user can read)
+        async function loadNotices() {
             try {
-                const q = query(collection(db, "notices"), orderBy("createdAt", "desc"));
-                const snap = await getDocs(q);
-                allNotices = [];
-                snap.forEach(doc => { allNotices.push({ id: doc.id, ...doc.data() }); });
-                if (allNotices.length === 0) {
-                    allNotices = [...DEMO_NOTICES];
-                    allNotices.sort((a, b) => b.createdAt - a.createdAt);
-                }
-                return allNotices;
-            } catch (err) {
-                console.error("Error loading notices:", err);
-                allNotices = [...DEMO_NOTICES];
-                allNotices.sort((a, b) => b.createdAt - a.createdAt);
-                return allNotices;
+                const noticesQuery = query(collection(db, "notices"), orderBy("createdAt", "desc"), limit(10));
+                const snapshot = await getDocs(noticesQuery);
+                const notices = [];
+                snapshot.forEach(doc => {
+                    notices.push({ id: doc.id, ...doc.data() });
+                });
+                return notices;
+            } catch (error) {
+                console.error("Error loading notices:", error);
+                return [];
             }
         }
 
-        // Helper to safely encode text for data attributes
-        function encodeForData(str) {
-            if (!str) return '';
-            return encodeURIComponent(str);
-        }
-        function decodeFromData(str) {
-            if (!str) return '';
-            return decodeURIComponent(str);
+        // Load attendance for current user only
+        async function loadAttendance(uid) {
+            try {
+                const attendanceQuery = query(collection(db, "attendance"), where("studentId", "==", uid));
+                const snapshot = await getDocs(attendanceQuery);
+                let present = 0;
+                let total = 0;
+                snapshot.forEach(doc => {
+                    total++;
+                    if (doc.data().status === 'present') present++;
+                });
+                const percentage = total > 0 ? Math.round((present / total) * 100) : 0;
+                document.getElementById('quickAttendance').innerText = percentage + '%';
+                if (percentage < 75) {
+                    document.getElementById('quickAttendance').className = "text-4xl md:text-5xl font-black text-rose-500 mt-2";
+                }
+                return { present, total, percentage };
+            } catch (error) {
+                console.error("Error loading attendance:", error);
+                return { present: 0, total: 0, percentage: 0 };
+            }
         }
 
-        // Display 3 latest announcements with data attributes (no inline onclick)
-        async function displayAnnouncementsGrid() {
+        // Load enrolled courses for current user
+        async function loadEnrolledCourses(userData) {
+            const container = document.getElementById('coursesContainer');
+            const enrolledCourses = userData.enrolledCourses || [];
+            
+            if (enrolledCourses.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center py-10 text-slate-400">No courses enrolled yet</div>';
+                return;
+            }
+            
+            try {
+                const coursesHtml = [];
+                for (const courseId of enrolledCourses.slice(0, 3)) {
+                    const courseDoc = await getDoc(doc(db, "courses", courseId));
+                    if (courseDoc.exists()) {
+                        const course = courseDoc.data();
+                        coursesHtml.push(`
+                            <div class="glass-card rounded-2xl overflow-hidden shadow-md course-card">
+                                <div class="h-24 bg-gradient-to-r from-slate-800 to-slate-700 flex items-center justify-center">
+                                    <i class="fas fa-chalkboard-user text-3xl text-ucc-gold opacity-80"></i>
+                                </div>
+                                <div class="p-5">
+                                    <h4 class="font-black text-slate-800 text-base">${escapeHtml(course.courseName)}</h4>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold mt-1">${escapeHtml(courseId.slice(0, 8))}</p>
+                                </div>
+                            </div>
+                        `);
+                    }
+                }
+                container.innerHTML = coursesHtml.join('') || '<div class="col-span-full text-center py-10 text-slate-400">Course details not available</div>';
+            } catch (error) {
+                console.error("Error loading courses:", error);
+                container.innerHTML = '<div class="col-span-full text-center py-10 text-slate-400">Error loading courses</div>';
+            }
+        }
+
+        // Load fee status from user's payments subcollection
+        async function loadFeeStatus(uid, userData) {
+            try {
+                const paymentsQuery = query(collection(db, "users", uid, "payments"));
+                const snapshot = await getDocs(paymentsQuery);
+                let totalPaid = 0;
+                snapshot.forEach(doc => {
+                    totalPaid += doc.data().amount || 0;
+                });
+                
+                const totalFee = userData.totalFee || 0;
+                const due = totalFee - totalPaid;
+                
+                document.getElementById('feeDisplay').innerHTML = `
+                    <p class='text-sm font-bold text-slate-500'>Total: ₹${totalFee.toLocaleString()}</p>
+                    <p class='text-sm font-bold text-emerald-600'>Paid: ₹${totalPaid.toLocaleString()}</p>
+                `;
+                
+                const badge = document.getElementById('feeStatusBadge');
+                if (due <= 0) {
+                    badge.innerText = "Paid ✓";
+                    badge.className = "fee-badge fee-paid";
+                } else {
+                    badge.innerText = "Due: ₹" + due.toLocaleString();
+                    badge.className = "fee-badge fee-due";
+                }
+            } catch (error) {
+                console.error("Error loading fee status:", error);
+            }
+        }
+
+        // Display announcements
+        async function displayAnnouncements() {
             const container = document.getElementById('announcementsGrid');
-            const notices = await loadAllNotices();
-            const latestThree = notices.slice(0, 3);
-            if (latestThree.length === 0) {
+            const notices = await loadNotices();
+            
+            if (notices.length === 0) {
                 container.innerHTML = '<div class="col-span-full text-center py-10 text-slate-400">No announcements available</div>';
                 return;
             }
-            container.innerHTML = latestThree.map(notice => {
+            
+            const latestNotices = notices.slice(0, 3);
+            container.innerHTML = latestNotices.map(notice => {
                 const priority = getPriorityInfo(notice.priority);
-                const encodedTitle = encodeForData(notice.title);
-                const encodedMsg = encodeForData(notice.message);
-                const encodedDate = encodeForData(formatDate(notice.createdAt));
                 return `
-                    <div class="glass-card rounded-2xl p-5 announcement-card ${priority.class} hover:shadow-xl transition-all">
+                    <div class="glass-card rounded-2xl p-5 announcement-card ${priority.class} hover:shadow-xl transition-all cursor-pointer" 
+                         data-title="${escapeHtml(notice.title)}" 
+                         data-message="${escapeHtml(notice.message)}" 
+                         data-date="${formatDate(notice.createdAt)}" 
+                         data-priority="${notice.priority || 'low'}">
                         <div class="flex justify-between items-start mb-3">
                             <span class="text-[9px] font-black px-2 py-1 rounded-full ${priority.badge}">${priority.text}</span>
                             <span class="text-[9px] text-slate-400"><i class="far fa-calendar-alt mr-1"></i>${formatDate(notice.createdAt)}</span>
                         </div>
                         <h4 class="font-black text-slate-800 text-base mb-3 line-clamp-2">${escapeHtml(notice.title)}</h4>
-                        <button class="read-more-btn mt-2 text-[#f1c40f] text-xs font-bold hover:underline flex items-center gap-1"
-                            data-title="${encodedTitle}"
-                            data-message="${encodedMsg}"
-                            data-date="${encodedDate}"
-                            data-priority="${notice.priority}">
+                        <button class="read-more-btn mt-2 text-[#f1c40f] text-xs font-bold hover:underline flex items-center gap-1">
                             Read More <i class="fas fa-arrow-right text-[9px]"></i>
                         </button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Render all notices for modal (using data-attributes, no inline onclick)
-        async function renderAllNoticesModal() {
-            const container = document.getElementById('allNoticesList');
-            const notices = await loadAllNotices();
-            if (notices.length === 0) {
-                container.innerHTML = '<div class="text-center py-10 text-slate-400"><i class="fas fa-inbox text-3xl mb-2 opacity-50"></i><p>No announcements available</p></div>';
-                return;
-            }
-            container.innerHTML = notices.map(notice => {
-                const priority = getPriorityInfo(notice.priority);
-                const encodedTitle = encodeForData(notice.title);
-                const encodedMsg = encodeForData(notice.message);
-                const encodedDate = encodeForData(formatDate(notice.createdAt));
-                return `
-                    <div class="notice-item p-4 rounded-xl border-l-2 border-slate-200 bg-white/50 hover:bg-white transition-all cursor-pointer"
-                        data-title="${encodedTitle}"
-                        data-message="${encodedMsg}"
-                        data-date="${encodedDate}"
-                        data-priority="${notice.priority}">
-                        <div class="flex justify-between items-start mb-2 flex-wrap gap-2">
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <span class="text-[9px] font-black px-2 py-1 rounded-full ${priority.badge}">${priority.text}</span>
-                                <span class="text-[9px] text-slate-400"><i class="far fa-calendar-alt mr-1"></i>${formatDate(notice.createdAt)}</span>
-                            </div>
-                        </div>
-                        <h4 class="font-black text-slate-800 text-base mt-2">${escapeHtml(notice.title)}</h4>
-                        <p class="text-slate-500 text-sm mt-1 line-clamp-2">${escapeHtml(notice.message.substring(0, 100))}${notice.message.length > 100 ? '...' : ''}</p>
-                        <button class="read-more-btn mt-2 text-[#f1c40f] text-xs font-bold hover:underline">Read full announcement →</button>
                     </div>
                 `;
             }).join('');
@@ -343,177 +427,169 @@
             return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
         }
 
-        // Show detailed modal using data from element
-        function showAnnouncementDetail(titleEnc, messageEnc, dateStr, priority) {
-            const title = decodeFromData(titleEnc);
-            const message = decodeFromData(messageEnc);
+        // Modal handlers
+        function showAnnouncementDetail(title, message, date, priority) {
             const priorityInfo = getPriorityInfo(priority);
             document.getElementById('modalNoticeTitle').innerText = title;
             document.getElementById('modalNoticeMessage').innerText = message;
-            document.getElementById('modalNoticeDate').innerHTML = `<i class="far fa-calendar-alt mr-1"></i> ${decodeFromData(dateStr)}`;
+            document.getElementById('modalNoticeDate').innerHTML = `<i class="far fa-calendar-alt mr-1"></i> ${date}`;
             document.getElementById('modalNoticePriority').innerHTML = `<span class="text-[9px] font-black px-2 py-1 rounded-full ${priorityInfo.badge}">${priorityInfo.text} PRIORITY</span>`;
             document.getElementById('announcementModal').classList.remove('hidden');
         }
 
-        // Event delegation for dynamic read more buttons and notice items
-        function bindGlobalAnnouncementHandlers() {
-            // For grid and modal list: read-more-btn click
-            document.body.addEventListener('click', (e) => {
-                const btn = e.target.closest('.read-more-btn');
-                if (btn) {
-                    e.preventDefault();
-                    const title = btn.getAttribute('data-title');
-                    const message = btn.getAttribute('data-message');
-                    const date = btn.getAttribute('data-date');
-                    const priority = btn.getAttribute('data-priority');
-                    if (title && message) {
-                        showAnnouncementDetail(title, message, date, priority);
-                    }
+        // Event delegation for announcements
+        document.body.addEventListener('click', (e) => {
+            const card = e.target.closest('.announcement-card');
+            if (card && !e.target.closest('.read-more-btn')) {
+                showAnnouncementDetail(
+                    card.dataset.title,
+                    card.dataset.message,
+                    card.dataset.date,
+                    card.dataset.priority
+                );
+            }
+            
+            const btn = e.target.closest('.read-more-btn');
+            if (btn) {
+                const card = btn.closest('.announcement-card');
+                if (card) {
+                    showAnnouncementDetail(
+                        card.dataset.title,
+                        card.dataset.message,
+                        card.dataset.date,
+                        card.dataset.priority
+                    );
+                }
+            }
+        });
+
+        // All notices modal
+        async function showAllNotices() {
+            const modal = document.getElementById('allNoticesModal');
+            const container = document.getElementById('allNoticesList');
+            const notices = await loadNotices();
+            
+            if (notices.length === 0) {
+                container.innerHTML = '<div class="text-center py-10 text-slate-400">No announcements available</div>';
+            } else {
+                container.innerHTML = notices.map(notice => {
+                    const priority = getPriorityInfo(notice.priority);
+                    return `
+                        <div class="p-4 rounded-xl border-l-2 border-slate-200 bg-white/50 hover:bg-white transition-all cursor-pointer"
+                             data-title="${escapeHtml(notice.title)}"
+                             data-message="${escapeHtml(notice.message)}"
+                             data-date="${formatDate(notice.createdAt)}"
+                             data-priority="${notice.priority || 'low'}">
+                            <div class="flex justify-between items-start mb-2 flex-wrap gap-2">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-[9px] font-black px-2 py-1 rounded-full ${priority.badge}">${priority.text}</span>
+                                    <span class="text-[9px] text-slate-400"><i class="far fa-calendar-alt mr-1"></i>${formatDate(notice.createdAt)}</span>
+                                </div>
+                            </div>
+                            <h4 class="font-black text-slate-800 text-base mt-2">${escapeHtml(notice.title)}</h4>
+                            <p class="text-slate-500 text-sm mt-1 line-clamp-2">${escapeHtml(notice.message.substring(0, 100))}${notice.message.length > 100 ? '...' : ''}</p>
+                        </div>
+                    `;
+                }).join('');
+            }
+            modal.classList.remove('hidden');
+        }
+
+        // Initialize dashboard
+        async function initDashboard() {
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    window.location.href = "../auth/login.html";
                     return;
                 }
-                // Also support clicking on the whole notice-item (for accessibility)
-                const item = e.target.closest('.notice-item');
-                if (item && !e.target.closest('.read-more-btn')) {
-                    const title = item.getAttribute('data-title');
-                    const message = item.getAttribute('data-message');
-                    const date = item.getAttribute('data-date');
-                    const priority = item.getAttribute('data-priority');
-                    if (title && message) {
-                        showAnnouncementDetail(title, message, date, priority);
+                
+                try {
+                    // Load user data (security check happens inside)
+                    currentUserData = await loadUserData(user.uid);
+                    if (!currentUserData) return;
+                    
+                    // Update UI with user data
+                    document.getElementById('displayUsername').innerText = currentUserData.fullName || "Student";
+                    document.getElementById('userEmail').innerText = user.email;
+                    document.getElementById('userAvatar').src = currentUserData.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUserData.fullName || 'S')}&background=f1c40f&color=1a2233&rounded=true&bold=true`;
+                    
+                    // Load all dashboard data
+                    await Promise.all([
+                        loadAttendance(user.uid),
+                        loadEnrolledCourses(currentUserData),
+                        loadFeeStatus(user.uid, currentUserData),
+                        displayAnnouncements()
+                    ]);
+                    
+                    // Set exam grade if available
+                    if (currentUserData.examGrade) {
+                        document.getElementById('examGrade').innerText = currentUserData.examGrade;
                     }
+                    
+                } catch (error) {
+                    console.error("Dashboard error:", error);
+                    showToast("Error loading dashboard data. Please refresh.");
                 }
             });
         }
 
-        // Modal controls
-        function openAllNoticesModal() {
-            document.getElementById('allNoticesModal').classList.remove('hidden');
-            renderAllNoticesModal();
-        }
-        function closeAllNoticesModal() { document.getElementById('allNoticesModal').classList.add('hidden'); }
-        function closeAnnouncementModal() { document.getElementById('announcementModal').classList.add('hidden'); }
-
-        // Dashboard data functions
-        async function getUserWithRetry(uid, retries = 2) {
-            for (let i = 0; i <= retries; i++) {
+        // Logout function
+        async function logout() {
+            if (confirm("Are you sure you want to sign out?")) {
                 try {
-                    const docSnap = await getDoc(doc(db, "users", uid));
-                    return docSnap;
-                } catch (err) {
-                    if (i === retries) throw err;
-                    await new Promise(r => setTimeout(r, 800));
+                    await signOut(auth);
+                    window.location.href = "../index.html";
+                } catch (error) {
+                    showToast("Error signing out. Please try again.");
                 }
             }
         }
 
-        async function loadAllCoursesMap() {
-            try {
-                const coursesSnap = await getDocs(collection(db, "courses"));
-                const map = new Map();
-                coursesSnap.forEach(doc => { map.set(doc.id, { courseName: doc.data().courseName, courseFee: doc.data().courseFee }); });
-                return map;
-            } catch (err) { return new Map(); }
-        }
-
-        async function loadFeeStatus(uid, enrolledCourseIds, coursesMap) {
-            let totalFee = 0;
-            enrolledCourseIds.forEach(cid => {
-                const course = coursesMap.get(cid);
-                if (course) totalFee += course.courseFee;
-            });
-            let totalPaid = 0;
-            try {
-                const paymentsSnap = await getDocs(collection(db, "users", uid, "payments"));
-                paymentsSnap.forEach(p => totalPaid += p.data().amount || 0);
-            } catch (e) {}
-            const due = totalFee - totalPaid;
-            document.getElementById('feeDisplay').innerHTML = `<p class='text-sm font-bold text-slate-500'>Total: ₹${totalFee.toLocaleString()}</p><p class='text-sm font-bold text-emerald-600'>Paid: ₹${totalPaid.toLocaleString()}</p>`;
-            const b = document.getElementById('feeStatusBadge');
-            if (due <= 0) { b.innerText = "Paid ✓"; b.className = "fee-badge fee-paid"; }
-            else { b.innerText = "Due: ₹" + due.toLocaleString(); b.className = "fee-badge fee-due"; }
-        }
-
-        async function loadQuickAttendance(uid) {
-            try {
-                const q = query(collection(db, "attendance"), where("studentId", "==", uid));
-                const snap = await getDocs(q);
-                let p = 0, total = 0;
-                snap.forEach(d => { total++; if (d.data().status && d.data().status.toLowerCase() === 'present') p++; });
-                const percent = total > 0 ? Math.round((p / total) * 100) : 0;
-                const display = document.getElementById('quickAttendance');
-                display.innerText = percent + "%";
-                display.className = percent < 75 ? "text-4xl md:text-5xl font-black text-rose-500 mt-2" : "text-4xl md:text-5xl font-black text-emerald-600 mt-2";
-            } catch (e) {}
-        }
-
-        async function loadCourses(courseIds, coursesMap) {
-            const container = document.getElementById('coursesContainer');
-            if (!courseIds.length) { container.innerHTML = "<div class='col-span-full text-center py-10 text-slate-400'>No courses enrolled yet</div>"; return; }
-            const courses = [];
-            for (let id of courseIds.slice(0, 6)) {
-                if (coursesMap.has(id)) courses.push({ id, ...coursesMap.get(id) });
-            }
-            if (courses.length === 0) { container.innerHTML = "<div class='col-span-full text-center py-10 text-slate-400'>Course details loading...</div>"; return; }
-            container.innerHTML = courses.map(c => `
-                <div class="glass-card rounded-2xl overflow-hidden shadow-md course-card">
-                    <div class="h-24 bg-gradient-to-r from-slate-800 to-slate-700 flex items-center justify-center">
-                        <i class="fas fa-chalkboard-user text-3xl text-ucc-gold opacity-80"></i>
-                    </div>
-                    <div class="p-5">
-                        <h4 class="font-black text-slate-800 text-base">${escapeHtml(c.courseName)}</h4>
-                        <p class="text-[10px] text-slate-400 uppercase font-bold mt-1">${escapeHtml(c.id.slice(0, 8))}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Main Auth & Data Load
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                try {
-                    const userDoc = await getUserWithRetry(user.uid, 2);
-                    if (userDoc.exists()) {
-                        const data = userDoc.data();
-                        document.getElementById('displayUsername').innerText = data.fullName || "Student";
-                        document.getElementById('userEmail').innerText = user.email;
-                        document.getElementById('userAvatar').src = data.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.fullName || 'S')}&background=f1c40f&color=1a2233&rounded=true&bold=true`;
-                        const coursesMap = await loadAllCoursesMap();
-                        await loadQuickAttendance(user.uid);
-                        await loadFeeStatus(user.uid, data.enrolledCourses || [], coursesMap);
-                        await loadCourses(data.enrolledCourses || [], coursesMap);
-                        await displayAnnouncementsGrid();
-                        bindGlobalAnnouncementHandlers();
-                    }
-                } catch (err) { console.error(err); }
-            } else {
-                window.location.href = "../auth/login.html";
-            }
+        // Event listeners
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        document.getElementById('viewAllAnnouncementsBtn').addEventListener('click', showAllNotices);
+        document.getElementById('closeAnnouncementModal').addEventListener('click', () => {
+            document.getElementById('announcementModal').classList.add('hidden');
         });
-
-        // Event Listeners
-        document.getElementById('viewAllAnnouncementsBtn').addEventListener('click', openAllNoticesModal);
-        document.getElementById('closeAllNoticesModal').addEventListener('click', closeAllNoticesModal);
-        document.getElementById('closeAllModalFooter').addEventListener('click', closeAllNoticesModal);
-        document.getElementById('closeAnnouncementModal').addEventListener('click', closeAnnouncementModal);
-        document.getElementById('closeModalFooter').addEventListener('click', closeAnnouncementModal);
-        document.getElementById('allNoticesModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('allNoticesModal')) closeAllNoticesModal();
+        document.getElementById('closeModalFooter').addEventListener('click', () => {
+            document.getElementById('announcementModal').classList.add('hidden');
         });
+        document.getElementById('closeAllNoticesModal').addEventListener('click', () => {
+            document.getElementById('allNoticesModal').classList.add('hidden');
+        });
+        document.getElementById('closeAllModalFooter').addEventListener('click', () => {
+            document.getElementById('allNoticesModal').classList.add('hidden');
+        });
+        
+        // Close modals on backdrop click
         document.getElementById('announcementModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('announcementModal')) closeAnnouncementModal();
+            if (e.target === document.getElementById('announcementModal')) {
+                document.getElementById('announcementModal').classList.add('hidden');
+            }
+        });
+        document.getElementById('allNoticesModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('allNoticesModal')) {
+                document.getElementById('allNoticesModal').classList.add('hidden');
+            }
         });
 
-        window.logout = async () => { if (confirm("Sign out from UCC Portal?")) { await signOut(auth); window.location.href = "../index.html"; } };
-
-        // Mobile Sidebar Toggle
+        // Mobile sidebar
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebarOverlay');
         const openBtn = document.getElementById('openSidebar');
         const closeBtn = document.getElementById('closeSidebar');
-        function toggleSidebar() { sidebar.classList.toggle('active'); overlay.classList.toggle('active'); }
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+        
         if (openBtn) openBtn.addEventListener('click', toggleSidebar);
         if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
         if (overlay) overlay.addEventListener('click', toggleSidebar);
+
+        // Start the dashboard
+        initDashboard();
     </script>
 </body>
 </html>
