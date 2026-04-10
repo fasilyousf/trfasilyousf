@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Assignments | FyOrbit Teacher</title>
+    <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --solid-blue: #1e3a8a;
+            --solid-blue-light: #2563eb;
+            --accent-yellow: #eab308;
+            --accent-yellow-dark: #ca8a04;
+            --pure-white: #ffffff;
+            --gray-bg: #f4f7fc;
+            --border-light: #e2e8f0;
+        }
+        * { font-family: 'Outfit', sans-serif; }
+        body { background: var(--gray-bg); scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--solid-blue); border-radius: 10px; }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--solid-blue-light), var(--accent-yellow));
+            transition: all 0.3s ease;
+            color: white;
+            font-weight: 700;
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, var(--accent-yellow), var(--solid-blue-light));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(37, 99, 235, 0.3);
+        }
+        .bg-gradient-blue-yellow {
+            background: linear-gradient(135deg, var(--solid-blue-light), var(--accent-yellow));
+        }
+        .sidebar-solid {
+            background-color: var(--solid-blue);
+            color: white;
+        }
+        .sidebar-solid .sidebar-link {
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            font-weight: 600;
+            color: #e0e7ff;
+            margin: 4px 0;
+        }
+        .sidebar-solid .sidebar-link i { color: #bfdbfe; width: 24px; }
+        .sidebar-solid .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-left-color: var(--accent-yellow);
+            color: white;
+        }
+        .sidebar-solid .sidebar-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-left-color: var(--accent-yellow);
+            color: white;
+            font-weight: 700;
+        }
+        .sidebar-solid .sidebar-link.active i { color: var(--accent-yellow); }
+        .avatar-gradient {
+            background: linear-gradient(145deg, var(--solid-blue-light), var(--accent-yellow));
+        }
+        .mobile-sidebar-solid {
+            background-color: var(--solid-blue);
+            color: white;
+        }
+        .assignment-card {
+            transition: all 0.2s;
+        }
+        .assignment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        }
+        .filter-select {
+            background-color: white;
+            border: 1px solid var(--border-light);
+            border-radius: 0.75rem;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+        }
+        .due-badge {
+            background: #fee2e2;
+            color: #dc2626;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+        }
+        .completed-badge {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-select {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<div class="flex h-screen overflow-hidden">
+    <!-- DESKTOP SIDEBAR (same as students page) -->
+    <aside class="sidebar-solid w-72 flex-shrink-0 hidden lg:flex flex-col shadow-2xl">
+        <div class="p-6 border-b border-white/20">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shadow-md">
+                    <img src="../assets/img/slogo.png" alt="Logo" class="w-full h-full object-cover rounded-xl">
+                </div>
+                <div class="text-xl font-black tracking-tighter text-white">Fy<span class="text-yellow-300">Orbit</span></div>
+            </div>
+            <div class="flex items-center gap-3" id="teacherInfoDesktop">
+                <div class="w-12 h-12 rounded-full avatar-gradient flex items-center justify-center font-black text-white text-lg shadow-sm" id="teacherInitial">T</div>
+                <div>
+                    <p class="font-bold text-white" id="teacherName">Loading...</p>
+                    <p class="text-xs text-blue-200">Teacher</p>
+                </div>
+            </div>
+        </div>
+        <nav class="flex-1 py-8 px-4 space-y-1">
+            <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold uppercase tracking-wider">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="students.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold uppercase tracking-wider">
+                <i class="fas fa-users"></i> My Students
+            </a>
+            <a href="classes.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold uppercase tracking-wider">
+                <i class="fas fa-chalkboard"></i> Classes
+            </a>
+            <a href="attendance.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold uppercase tracking-wider">
+                <i class="fas fa-calendar-check"></i> Attendance
+            </a>
+            <a href="assignments.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold uppercase tracking-wider">
+                <i class="fas fa-tasks"></i> Assignments
+            </a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold uppercase tracking-wider">
+                <i class="fas fa-calendar-alt"></i> Schedule
+            </a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold uppercase tracking-wider">
+                <i class="fas fa-chart-line"></i> Performance
+            </a>
+            <a href="profile.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold uppercase tracking-wider">
+                <i class="fas fa-cog"></i> Profile
+            </a>
+        </nav>
+        <div class="p-6 border-t border-white/20">
+            <a href="#" class="flex items-center gap-3 text-blue-200 hover:text-yellow-300 transition" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto">
+        <header class="bg-white sticky top-0 z-10 shadow-sm border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+            <button class="lg:hidden text-slate-800 text-2xl" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+            <h1 class="text-xl font-black text-slate-800 lg:text-2xl tracking-tight">📝 Assignments</h1>
+            <div class="flex items-center gap-4">
+                <i class="fas fa-bell text-slate-400 hover:text-blue-600 cursor-pointer text-xl"></i>
+                <div class="hidden sm:flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full shadow-sm">
+                    <span class="text-sm font-semibold text-slate-700" id="headerTeacherName">Teacher</span>
+                    <div class="w-8 h-8 rounded-full avatar-gradient flex items-center justify-center text-white font-bold text-sm" id="headerInitial">T</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MOBILE SIDEBAR (same style) -->
+        <div id="mobileSidebar" class="mobile-sidebar-solid lg:hidden shadow-xl border-t border-white/20 rounded-b-2xl transition-all duration-300" style="max-height:0; overflow:hidden; opacity:0; padding:0;">
+            <div class="px-4 py-3 border-b border-white/20">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center"><img src="../assets/img/slogo.png" class="w-full h-full object-cover rounded-xl"></div>
+                    <div class="text-lg font-black text-white">Fy<span class="text-yellow-300">Orbit</span></div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full avatar-gradient flex items-center justify-center font-bold text-white" id="mobileTeacherInitial">T</div>
+                    <div><p class="font-bold text-sm text-white" id="mobileTeacherName">Teacher</p><p class="text-xs text-blue-200">Educator</p></div>
+                </div>
+            </div>
+            <nav class="py-4 space-y-1">
+                <a href="dashboard.html" class="flex items-center gap-3 px-4 py-2 text-sm text-blue-100 hover:bg-white/15 rounded-md mx-2">📊 Dashboard</a>
+                <a href="students.html" class="flex items-center gap-3 px-4 py-2 text-sm text-blue-100 hover:bg-white/15 rounded-md mx-2">👥 My Students</a>
+                <a href="classes.html" class="flex items-center gap-3 px-4 py-2 text-sm text-blue-100 hover:bg-white/15 rounded-md mx-2">📚 Classes</a>
+                <a href="attendance.html" class="flex items-center gap-3 px-4 py-2 text-sm text-blue-100 hover:bg-white/15 rounded-md mx-2">✅ Attendance</a>
+                <a href="assignments.html" class="flex items-center gap-3 px-4 py-2 text-sm font-bold bg-white/20 text-yellow-300 rounded-md mx-2">📝 Assignments</a>
+                <hr class="border-white/20 my-2 mx-2">
+                <a href="#" class="flex items-center gap-3 px-4 py-2 text-sm text-blue-200 hover:text-yellow-300" id="mobileLogoutBtn">🚪 Logout</a>
+            </nav>
+        </div>
+
+        <div class="p-6 lg:p-8">
+            <!-- Banner -->
+            <div class="bg-gradient-blue-yellow rounded-2xl p-5 text-white mb-6 shadow-lg flex justify-between items-center flex-wrap">
+                <div>
+                    <h2 class="text-xl font-black">📚 Create & Manage Assignments</h2>
+                    <p class="text-white/80 text-sm">Post homework, tests, and projects for your students.</p>
+                </div>
+                <button id="createAssignmentBtn" class="bg-white/20 backdrop-blur-sm px-5 py-2 rounded-xl text-sm font-bold hover:bg-white/30 transition mt-2 sm:mt-0"><i class="fas fa-plus-circle mr-1"></i> New Assignment</button>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-white rounded-2xl shadow-sm p-5 mb-6 border border-gray-100">
+                <div class="flex flex-wrap items-end gap-4">
+                    <div class="flex-1 min-w-[150px]">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Filter by Class</label>
+                        <select id="filterClass" class="filter-select w-full">
+                            <option value="all">All Classes</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 min-w-[150px]">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Filter by Batch</label>
+                        <select id="filterBatch" class="filter-select w-full">
+                            <option value="all">All Batches</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button id="resetFilters" class="bg-gray-100 text-slate-700 px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-100 transition"><i class="fas fa-undo-alt mr-1"></i> Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assignments List -->
+            <div id="assignmentsContainer" class="space-y-4">
+                <div class="text-center py-10 text-slate-400">Loading assignments...</div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- MODAL: Create/Edit Assignment -->
+<div id="assignmentModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden transition-all">
+    <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl mx-4">
+        <h3 class="text-xl font-black text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-tasks text-blue-600"></i> <span id="modalTitle">Create Assignment</span></h3>
+        <div class="space-y-4">
+            <input type="text" id="assignTitle" placeholder="Assignment Title" class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-blue-500 focus:border-blue-500">
+            <textarea id="assignDesc" rows="3" placeholder="Description / Instructions" class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+            <div class="grid grid-cols-2 gap-3">
+                <select id="assignClass" class="w-full border border-gray-300 rounded-xl px-4 py-2">
+                    <option value="">Select Class</option><option>Class 9</option><option>Class 10</option><option>Class 11</option><option>Class 12</option>
+                </select>
+                <input type="text" id="assignBatch" placeholder="Batch (e.g., 2026)" class="w-full border border-gray-300 rounded-xl px-4 py-2">
+            </div>
+            <input type="date" id="assignDueDate" class="w-full border border-gray-300 rounded-xl px-4 py-2">
+        </div>
+        <div class="flex justify-end gap-3 mt-6">
+            <button id="closeModalBtn" class="px-4 py-2 bg-gray-200 rounded-xl">Cancel</button>
+            <button id="saveAssignmentBtn" class="btn-gradient px-5 py-2 rounded-xl">Save Assignment</button>
+        </div>
+        <input type="hidden" id="editId" value="">
+    </div>
+</div>
+
+<!-- Firebase & Logic -->
+<script type="importmap">
+    {
+        "imports": {
+            "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
+            "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
+            "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+        }
+    }
+</script>
+
+<script type="module">
+    import { initializeApp } from "firebase/app";
+    import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+    import { getFirestore, collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc, orderBy, getDoc } from "firebase/firestore";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
+        authDomain: "trfasilyousf1.firebaseapp.com",
+        projectId: "trfasilyousf1",
+        storageBucket: "trfasilyousf1.firebasestorage.app",
+        messagingSenderId: "158147210589",
+        appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let teacherInstituteCode = null;
+    let teacherName = "";
+    let allAssignments = [];
+
+    // DOM elements
+    const assignmentsContainer = document.getElementById('assignmentsContainer');
+    const filterClass = document.getElementById('filterClass');
+    const filterBatch = document.getElementById('filterBatch');
+    const resetFilters = document.getElementById('resetFilters');
+
+    // Load assignments from Firestore
+    async function loadAssignments() {
+        if (!teacherInstituteCode) return [];
+        const q = query(collection(db, "assignments"), where("instituteCode", "==", teacherInstituteCode), orderBy("dueDate", "asc"));
+        const snap = await getDocs(q);
+        const assignments = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        allAssignments = assignments;
+        populateFilters(assignments);
+        renderAssignments(assignments);
+        return assignments;
+    }
+
+    function populateFilters(assignments) {
+        const classes = new Set(assignments.map(a => a.class).filter(Boolean));
+        const batches = new Set(assignments.map(a => a.batch).filter(Boolean));
+        filterClass.innerHTML = '<option value="all">All Classes</option>' + Array.from(classes).sort().map(c => `<option value="${c}">${c}</option>`).join('');
+        filterBatch.innerHTML = '<option value="all">All Batches</option>' + Array.from(batches).sort().map(b => `<option value="${b}">${b}</option>`).join('');
+    }
+
+    function renderAssignments(assignments) {
+        if (!assignments.length) {
+            assignmentsContainer.innerHTML = `<div class="bg-white rounded-2xl shadow-sm p-10 text-center"><i class="fas fa-tasks text-4xl text-slate-300 mb-2"></i><p class="text-slate-500">No assignments yet. Click "New Assignment" to create one.</p></div>`;
+            return;
+        }
+        assignmentsContainer.innerHTML = assignments.map(a => {
+            const isOverdue = a.dueDate && new Date(a.dueDate) < new Date() && a.status !== 'completed';
+            return `
+                <div class="assignment-card bg-white rounded-2xl shadow-sm p-5 border-l-4 ${a.status === 'completed' ? 'border-green-500' : 'border-yellow-400'} transition">
+                    <div class="flex justify-between items-start flex-wrap gap-2">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <h3 class="text-lg font-bold text-slate-800">${escapeHtml(a.title)}</h3>
+                                <span class="text-xs font-bold px-2 py-1 rounded-full ${a.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}">
+                                    ${a.status === 'completed' ? '✓ Completed' : 'Pending'}
+                                </span>
+                                ${isOverdue ? '<span class="due-badge"><i class="fas fa-exclamation-triangle mr-1"></i>Overdue</span>' : ''}
+                            </div>
+                            <p class="text-slate-600 text-sm mt-2">${escapeHtml(a.description || 'No description')}</p>
+                            <div class="flex flex-wrap gap-3 mt-3 text-xs text-slate-500">
+                                <span><i class="fas fa-graduation-cap mr-1"></i> ${a.class || '—'}</span>
+                                <span><i class="fas fa-calendar-alt mr-1"></i> Batch: ${a.batch || '—'}</span>
+                                <span><i class="far fa-calendar mr-1"></i> Due: ${a.dueDate ? new Date(a.dueDate).toLocaleDateString() : 'No due date'}</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <select class="status-select border border-gray-300 rounded-full px-2 py-1 text-xs font-bold" data-id="${a.id}" data-current="${a.status || 'pending'}">
+                                <option value="pending" ${a.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                <option value="completed" ${a.status === 'completed' ? 'selected' : ''}>Completed</option>
+                            </select>
+                            <button class="edit-assignment text-blue-600 hover:text-blue-800 transition" data-id="${a.id}" data-title="${escapeHtml(a.title)}" data-desc="${escapeHtml(a.description || '')}" data-class="${a.class || ''}" data-batch="${a.batch || ''}" data-due="${a.dueDate || ''}"><i class="fas fa-edit"></i></button>
+                            <button class="delete-assignment text-red-500 hover:text-red-700 transition" data-id="${a.id}"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Attach event listeners for status change
+        document.querySelectorAll('.status-select').forEach(select => {
+            select.addEventListener('change', async (e) => {
+                const id = select.dataset.id;
+                const newStatus = select.value;
+                await updateDoc(doc(db, "assignments", id), { status: newStatus });
+                loadAssignments();
+            });
+        });
+        // Edit buttons
+        document.querySelectorAll('.edit-assignment').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.id;
+                const title = btn.dataset.title;
+                const desc = btn.dataset.desc;
+                const classVal = btn.dataset.class;
+                const batch = btn.dataset.batch;
+                const due = btn.dataset.due;
+                document.getElementById('editId').value = id;
+                document.getElementById('assignTitle').value = title;
+                document.getElementById('assignDesc').value = desc;
+                document.getElementById('assignClass').value = classVal;
+                document.getElementById('assignBatch').value = batch;
+                document.getElementById('assignDueDate').value = due;
+                document.getElementById('modalTitle').innerText = 'Edit Assignment';
+                document.getElementById('assignmentModal').classList.remove('hidden');
+            });
+        });
+        // Delete buttons
+        document.querySelectorAll('.delete-assignment').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                if (confirm('Delete this assignment?')) {
+                    await deleteDoc(doc(db, "assignments", btn.dataset.id));
+                    loadAssignments();
+                }
+            });
+        });
+    }
+
+    function applyFilters() {
+        let filtered = [...allAssignments];
+        const classVal = filterClass.value;
+        const batchVal = filterBatch.value;
+        if (classVal !== 'all') filtered = filtered.filter(a => a.class === classVal);
+        if (batchVal !== 'all') filtered = filtered.filter(a => a.batch === batchVal);
+        renderAssignments(filtered);
+    }
+
+    filterClass.addEventListener('change', applyFilters);
+    filterBatch.addEventListener('change', applyFilters);
+    resetFilters.addEventListener('click', () => { filterClass.value = 'all'; filterBatch.value = 'all'; applyFilters(); });
+
+    // Modal logic
+    const modal = document.getElementById('assignmentModal');
+    const createBtn = document.getElementById('createAssignmentBtn');
+    const closeModal = document.getElementById('closeModalBtn');
+    const saveBtn = document.getElementById('saveAssignmentBtn');
+    const editIdField = document.getElementById('editId');
+
+    createBtn.onclick = () => {
+        editIdField.value = '';
+        document.getElementById('assignTitle').value = '';
+        document.getElementById('assignDesc').value = '';
+        document.getElementById('assignClass').value = '';
+        document.getElementById('assignBatch').value = '';
+        document.getElementById('assignDueDate').value = '';
+        document.getElementById('modalTitle').innerText = 'Create Assignment';
+        modal.classList.remove('hidden');
+    };
+    closeModal.onclick = () => modal.classList.add('hidden');
+    saveBtn.onclick = async () => {
+        const title = document.getElementById('assignTitle').value.trim();
+        const desc = document.getElementById('assignDesc').value.trim();
+        const classVal = document.getElementById('assignClass').value;
+        const batch = document.getElementById('assignBatch').value.trim();
+        const dueDate = document.getElementById('assignDueDate').value;
+        if (!title) { alert("Please enter a title"); return; }
+        const data = {
+            title, description: desc, class: classVal, batch, dueDate,
+            instituteCode: teacherInstituteCode,
+            status: 'pending',
+            updatedAt: new Date().toISOString()
+        };
+        const editId = editIdField.value;
+        if (editId) {
+            await updateDoc(doc(db, "assignments", editId), data);
+        } else {
+            data.createdAt = new Date().toISOString();
+            await addDoc(collection(db, "assignments"), data);
+        }
+        modal.classList.add('hidden');
+        loadAssignments();
+    };
+
+    // Authentication & UI init
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) { window.location.href = "../auth/login.html"; return; }
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (!userDoc.exists() || userDoc.data().role !== 'staff') { await signOut(auth); window.location.href = "../auth/login.html"; return; }
+        const data = userDoc.data();
+        teacherName = data.fullName || "Teacher";
+        teacherInstituteCode = data.instituteCode;
+        document.getElementById('teacherName').innerText = teacherName;
+        document.getElementById('headerTeacherName').innerText = teacherName.split(' ')[0];
+        document.getElementById('teacherInitial').innerText = teacherName.charAt(0).toUpperCase();
+        document.getElementById('headerInitial').innerText = teacherName.charAt(0).toUpperCase();
+        document.getElementById('mobileTeacherName').innerText = teacherName;
+        document.getElementById('mobileTeacherInitial').innerText = teacherName.charAt(0).toUpperCase();
+        if (!teacherInstituteCode) { assignmentsContainer.innerHTML = '<div class="text-center text-red-500">Institute not linked. Contact admin.</div>'; return; }
+        await loadAssignments();
+    });
+
+    // Logout + Mobile toggle
+    const logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
+    document.getElementById('logoutBtn')?.addEventListener('click', logout);
+    document.getElementById('mobileLogoutBtn')?.addEventListener('click', logout);
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileSide = document.getElementById('mobileSidebar');
+    if (mobileBtn && mobileSide) {
+        mobileBtn.addEventListener('click', () => {
+            const isOpen = mobileSide.style.maxHeight === '500px';
+            mobileSide.style.maxHeight = isOpen ? '0' : '500px';
+            mobileSide.style.opacity = isOpen ? '0' : '1';
+            mobileSide.style.padding = isOpen ? '0' : '0 0 1rem 0';
+        });
+        document.querySelectorAll('#mobileSidebar a').forEach(link => link.addEventListener('click', () => {
+            mobileSide.style.maxHeight = '0'; mobileSide.style.opacity = '0'; mobileSide.style.padding = '0';
+        }));
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+    }
+</script>
+</body>
+</html>
