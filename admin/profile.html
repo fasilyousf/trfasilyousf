@@ -417,7 +417,8 @@
             if (!user) return;
             const userDocRef = doc(db, "users", user.uid);
             const docSnap = await getDoc(userDocRef);
-            if (docSnap.exists() && docSnap.data().role === 'admin') {
+            // FIX: corrected role check (undefined variable removed)
+            if (docSnap.exists() && (docSnap.data().role === 'admin' || docSnap.data().role === 'institute_head')) {
                 currentAdminData = docSnap.data();
                 currentAdminUser = user;
                 const fullName = currentAdminData.fullName || "Administrator";
@@ -558,9 +559,15 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists() && userDoc.data().role === 'admin') await loadProfile(user);
-                else { await signOut(auth); window.location.href = "../auth/login.html"; }
-            } else window.location.href = "../auth/login.html";
+                if (userDoc.exists() && (userDoc.data().role === 'admin' || userDoc.data().role === 'institute_head')) {
+                    await loadProfile(user);
+                } else {
+                    await signOut(auth);
+                    window.location.href = "../auth/login.html";
+                }
+            } else {
+                window.location.href = "../auth/login.html";
+            }
         });
 
         document.getElementById('mobileMenuButton').onclick = () => {

@@ -561,10 +561,11 @@
             document.getElementById('mobileSidebarOverlay').classList.add('hidden'); 
         };
         
+        // ✅ FIXED: Allow both 'admin' and 'institute_head' roles
         onAuthStateChanged(auth, async (user) => {
             if (user) { 
                 const userDoc = await getDoc(doc(db, "users", user.uid)); 
-                if (userDoc.exists() && userDoc.data().role === 'admin') {
+                if (userDoc.exists() && (userDoc.data().role === 'admin' || role === 'institute_head' || userDoc.data().role === 'institute_head')) {
                     currentAdminUser = user;
                     currentAdminData = userDoc.data();
                     const fullName = currentAdminData.fullName || "Administrator";
@@ -574,8 +575,13 @@
                     const photoURL = currentAdminData.photoURL || null;
                     updateAdminAvatarUI(photoURL, fullName);
                     initPage(); 
-                } else { await signOut(auth); window.location.href = "../auth/login.html"; }
-            } else { window.location.href = "../auth/login.html"; }
+                } else { 
+                    await signOut(auth); 
+                    window.location.href = "../auth/login.html"; 
+                }
+            } else { 
+                window.location.href = "../auth/login.html"; 
+            }
         });
     </script>
 </body>

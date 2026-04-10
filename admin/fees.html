@@ -591,7 +591,7 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists() && userDoc.data().role === 'admin') {
+                if (userDoc.exists() && userDoc.data().role === 'admin' || role === 'institute_head') {
                     currentAdminUser = user;
                     currentAdminData = userDoc.data();
                     const fullName = currentAdminData.fullName || "Admin";

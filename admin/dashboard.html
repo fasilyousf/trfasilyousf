@@ -87,7 +87,6 @@
             border-color: rgba(241, 196, 15, 0.5);
         }
 
-        /* Admin Avatar Styling */
         .admin-avatar-container {
             position: relative;
             cursor: pointer;
@@ -128,7 +127,6 @@
             color: #0f172a;
         }
 
-        /* Student Avatar Upload Styling */
         .avatar-preview {
             width: 80px;
             height: 80px;
@@ -168,7 +166,6 @@
             display: inline-block;
         }
 
-        /* Blue accent buttons */
         .btn-primary {
             background: linear-gradient(135deg, #3b82f6, #2563eb);
             transition: all 0.2s;
@@ -184,6 +181,22 @@
         .btn-outline-blue:hover {
             background: #3b82f6;
             color: white;
+        }
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+        }
+        .code-block {
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            border: 1px solid #334155;
         }
 
         @media (max-width: 640px) {
@@ -249,7 +262,6 @@
                 <div class="flex items-center gap-4">
                     <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
                     
-                    <!-- Admin Avatar with Cloudinary Upload -->
                     <div class="admin-avatar-container" id="adminAvatarWrapper">
                         <img id="adminAvatarImg" class="admin-avatar-img" src="https://via.placeholder.com/64" alt="Admin Avatar">
                         <div id="adminCameraBadge" class="admin-camera-badge">
@@ -270,6 +282,27 @@
                         <i class="fas fa-plus"></i> <span>Enroll</span>
                     </button>
                 </div>
+            </div>
+
+            <!-- Status warning banner (shown if admin status is not active OR list permission missing) -->
+            <div id="statusWarning" class="hidden mt-4 p-3 rounded-xl bg-amber-500/20 border border-amber-500/50 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-exclamation-triangle text-amber-400 text-xl"></i>
+                        <div>
+                            <p class="text-sm font-bold text-white">Firestore Permission Issue Detected</p>
+                            <p class="text-xs text-slate-300" id="warningMessage">Missing <code class="bg-slate-800 px-1 rounded">allow list</code> rule for admins.</p>
+                        </div>
+                    </div>
+                    <button id="copyRuleBtn" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold transition">
+                        <i class="fas fa-copy mr-1"></i> Copy Fix
+                    </button>
+                </div>
+                <div class="code-block text-xs text-slate-300">
+                    // Add this inside your `match /users/{userId}` block:<br>
+                    allow list: if isVerifiedAdmin();
+                </div>
+                <p class="text-[10px] text-slate-400">After updating rules, click Refresh.</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
@@ -303,7 +336,6 @@
             </div>
         </div>
 
-        <!-- Hidden File Input for Admin Photo -->
         <input type="file" id="adminPhotoUpload" accept="image/jpeg,image/png,image/webp" class="hidden">
 
         <div class="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center mb-6">
@@ -342,7 +374,6 @@
         </div>
     </main>
 
-    <!-- Add/Enroll Student Modal with Photo Upload -->
     <div id="addModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[150] flex items-center justify-center p-4 modal-backdrop">
         <div class="glass-panel w-full max-w-xl rounded-3xl md:rounded-[3rem] p-6 md:p-10 shadow-2xl border border-white/20 modal-card">
             <div class="flex justify-between items-start mb-6">
@@ -353,7 +384,6 @@
                 <button onclick="closeAddModal()" class="text-slate-500 hover:text-white text-2xl"><i class="fas fa-times-circle"></i></button>
             </div>
             
-            <!-- Avatar Upload Section -->
             <div class="flex justify-center mb-6">
                 <div class="avatar-container">
                     <img id="studentAvatarPreview" class="avatar-preview" src="https://via.placeholder.com/80" alt="Student Avatar">
@@ -376,7 +406,6 @@
         </div>
     </div>
 
-    <!-- Toast Container -->
     <div id="toastContainer" class="fixed bottom-6 right-6 flex flex-col gap-2 z-[200]"></div>
 
     <script type="module">
@@ -397,7 +426,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Cloudinary Configuration (unchanged)
         const CLOUD_NAME = "dholrawub";
         const UPLOAD_PRESET = "portal_profile";
 
@@ -505,7 +533,25 @@
                 snap.forEach(d => { studentsData.push({ id: d.id, ...d.data() }); });
                 renderTable(studentsData);
                 updateStats();
-            } catch (e) { console.error(e); showToast("Failed to load students", true); }
+                return true;
+            } catch (e) {
+                console.error("Error loading students:", e);
+                if (e.code === 'permission-denied') {
+                    // Show the warning banner with specific instruction
+                    document.getElementById('statusWarning').classList.remove('hidden');
+                    document.getElementById('warningMessage').innerHTML = 'Missing <code class="bg-slate-800 px-1 rounded">allow list: if isVerifiedAdmin();</code> in your Firestore rules.';
+                    document.getElementById('studentTableBody').innerHTML = `
+                        <tr><td colspan="6" class="p-8 text-center text-amber-400">
+                            <i class="fas fa-shield-alt text-4xl mb-3 block"></i>
+                            Permission denied. Firestore rules need an <code class="bg-slate-800 px-1 rounded">allow list</code> rule for admins.<br>
+                            <span class="text-xs">Click "Copy Fix" above and update your rules.</span>
+                        </td></tr>
+                    `;
+                } else {
+                    showToast("Failed to load students: " + e.message, true);
+                }
+                return false;
+            }
         }
 
         function renderTable(data) {
@@ -564,7 +610,12 @@
             }
         };
 
-        window.refreshDashboard = async () => { await loadAllCourses(); await loadStudents(); showToast("Dashboard refreshed"); };
+        window.refreshDashboard = async () => { 
+            await loadAllCourses(); 
+            await loadStudents(); 
+            showToast("Dashboard refreshed");
+        };
+        
         window.openAddModal = () => {
             document.getElementById('addName').value = '';
             document.getElementById('addEmail').value = '';
@@ -574,8 +625,11 @@
             pendingPhotoFile = null;
             document.getElementById('addModal').classList.remove('hidden');
         };
+        
         window.closeAddModal = () => document.getElementById('addModal').classList.add('hidden');
+        
         window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
+        
         window.exportToCSV = () => {
             if (studentsData.length === 0) { showToast("No student data to export", true); return; }
             const headers = ["Full Name", "Email", "Student ID", "Enrollment Date", "Total Fee (₹)", "Courses Enrolled"];
@@ -612,7 +666,7 @@
                 else await updateProfile(newUser, { displayName: name });
                 await setDoc(doc(db, "users", newUser.uid), {
                     fullName: name, email: email, role: "student", feeTotal: feeTotal, feePaid: 0,
-                    enrolledCourses: [], createdAt: new Date().toISOString(), profilePic: profilePicUrl || null, uid: newUser.uid
+                    enrolledCourses: [], createdAt: new Date().toISOString(), profilePic: profilePicUrl || null, uid: newUser.uid, status: "active"
                 });
                 showToast(`✅ ${name} enrolled successfully!`);
                 closeAddModal();
@@ -639,24 +693,54 @@
             }
         });
 
+        // Copy rule fix to clipboard
+        document.getElementById('copyRuleBtn').addEventListener('click', () => {
+            const ruleText = `allow list: if isVerifiedAdmin();`;
+            navigator.clipboard.writeText(ruleText).then(() => {
+                showToast("Rule copied! Add it inside your 'match /users/{userId}' block.");
+            }).catch(() => {
+                alert("Copy manually: " + ruleText);
+            });
+        });
+
+        // Fix admin status button (for completeness, but the main issue is list permission)
+        document.getElementById('fixStatusBtn')?.addEventListener('click', async () => {
+            if (!currentAdminUser) return;
+            try {
+                await updateDoc(doc(db, "users", currentAdminUser.uid), { status: "active" });
+                showToast("Admin status updated to 'active'! Refreshing...");
+                setTimeout(() => window.location.reload(), 1500);
+            } catch (err) {
+                showToast("Failed to update status: " + err.message, true);
+            }
+        });
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists() && userDoc.data().role === 'admin') {
+                if (userDoc.exists() && (userDoc.data().role === 'admin' || userDoc.data().role === 'institute_head')) {
                     currentAdminUser = user;
                     currentAdminData = userDoc.data();
                     const fullName = currentAdminData.fullName || "Admin";
                     const email = currentAdminData.email;
                     const photoURL = currentAdminData.photoURL || null;
+                    const adminStatus = currentAdminData.status || "not set";
+                    
                     document.getElementById('adminName').innerText = "Welcome, " + fullName;
                     document.getElementById('adminEmail').innerText = email;
                     updateAdminAvatarUI(photoURL, fullName);
                     setupAdminAvatarUpload();
                     setupStudentAvatarUpload();
+                    
                     await loadAllCourses();
                     await loadStudents();
-                } else { await signOut(auth); window.location.href = "../auth/login.html"; }
-            } else { window.location.href = "../auth/login.html"; }
+                } else {
+                    await signOut(auth);
+                    window.location.href = "../auth/login.html";
+                }
+            } else {
+                window.location.href = "../auth/login.html";
+            }
         });
     </script>
 </body>

@@ -28,10 +28,6 @@
             background: linear-gradient(105deg, #f5b81b, #e67e22);
             color: #0b1120;
         }
-        .demo-badge {
-            background: #fef9e6;
-            border-left: 4px solid #f5b81b;
-        }
         .loader {
             border-top-color: #f5b81b;
             animation: spinner 0.8s linear infinite;
@@ -56,11 +52,10 @@
     <!-- Header Mini (branding) -->
     <div class="bg-[#0b1120] text-white py-4 px-6 shadow-lg">
         <div class="max-w-6xl mx-auto flex items-center gap-3">
-             <div
-                    class="w-10 h-10  rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300 overflow-hidden">
-                    <img src="../assets/img/slogo.png" alt="FyOrbit Logo" class="w-full h-full object-cover">
-                </div>
-            <div  class="text-xl font-black tracking-tight"><a href="../index.html">Fy<span class="text-[#f5b81b]">Orbit</span></a></div>
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300 overflow-hidden">
+                <img src="../assets/img/slogo.png" alt="FyOrbit Logo" class="w-full h-full object-cover">
+            </div>
+            <div class="text-xl font-black tracking-tight"><a href="../index.html">Fy<span class="text-[#f5b81b]">Orbit</span></a></div>
             <div class="ml-auto text-sm font-medium opacity-80">Digital Management Ecosystem</div>
         </div>
     </div>
@@ -75,20 +70,6 @@
             </div>
 
             <div class="p-6 md:p-8">
-                <!-- Demo credentials hint -->
-                <!-- <div class="demo-badge rounded-xl p-3 mb-6 text-sm">
-                    <div class="flex items-start gap-2">
-                        <i class="fas fa-info-circle text-[#f5b81b] mt-0.5"></i>
-                        <div class="text-gray-700">
-                            <span class="font-bold">Demo Credentials</span><br>
-                            Email: <span class="font-mono">student@fyorbit.com</span> / 
-                            Password: <span class="font-mono">demo1234</span><br>
-                            (Role-based dashboard)
-                        </div>
-                    </div>
-                </div> -->
-
-                <!-- Login Form -->
                 <div class="space-y-5">
                     <div>
                         <label class="block text-sm font-bold text-gray-700 required-star">Email Address</label>
@@ -104,7 +85,7 @@
                         <label class="flex items-center gap-2">
                             <input type="checkbox" id="rememberMe" class="accent-[#f5b81b]"> <span class="text-gray-600">Remember me</span>
                         </label>
-                        <a href="#" id="forgotPasswordLink" class="text-[#f5b81b] font-bold hover:underline">Forgot password?</a>
+                        <a href="forgot-password.html" class="text-[#f5b81b] font-bold hover:underline">Forgot password?</a>
                     </div>
                     <button id="loginBtn" class="btn-login w-full py-3.5 rounded-xl font-black uppercase tracking-wider text-white transition-all shadow-lg flex items-center justify-center gap-2">
                         <span id="btnText">Sign In</span>
@@ -134,10 +115,9 @@
 
     <script type="module">
         import { initializeApp } from "firebase/app";
-        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+        import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
         import { getFirestore, doc, getDoc } from "firebase/firestore";
 
-        // Firebase configuration (from old code)
         const firebaseConfig = {
             apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
             authDomain: "trfasilyousf1.firebaseapp.com",
@@ -148,12 +128,10 @@
             measurementId: "G-JJ5GE7HS02"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // DOM elements
         const loginBtn = document.getElementById('loginBtn');
         const emailInput = document.getElementById('loginEmail');
         const passwordInput = document.getElementById('loginPassword');
@@ -163,9 +141,7 @@
         const btnIcon = document.getElementById('btnIcon');
         const btnLoader = document.getElementById('btnLoader');
         const rememberCheckbox = document.getElementById('rememberMe');
-        const forgotLink = document.getElementById('forgotPasswordLink');
 
-        // Load remembered email from localStorage
         if (localStorage.getItem('rememberedEmail')) {
             emailInput.value = localStorage.getItem('rememberedEmail');
             rememberCheckbox.checked = true;
@@ -175,12 +151,10 @@
             element.innerText = message;
             element.classList.remove('hidden');
         }
-
         function hideError(element) {
             element.classList.add('hidden');
             element.innerText = '';
         }
-
         function setLoading(isLoading) {
             if (isLoading) {
                 loginBtn.disabled = true;
@@ -194,18 +168,14 @@
                 btnLoader.classList.add('hidden');
             }
         }
-
-        // Validate form
         function validateForm() {
             let isValid = true;
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
-
             hideError(emailError);
             hideError(passwordError);
             emailInput.classList.remove('border-red-500');
             passwordInput.classList.remove('border-red-500');
-
             if (!email) {
                 showError(emailError, "Email address is required");
                 emailInput.classList.add('border-red-500');
@@ -215,7 +185,6 @@
                 emailInput.classList.add('border-red-500');
                 isValid = false;
             }
-
             if (!password) {
                 showError(passwordError, "Password is required");
                 passwordInput.classList.add('border-red-500');
@@ -225,51 +194,39 @@
                 passwordInput.classList.add('border-red-500');
                 isValid = false;
             }
-
             return isValid;
         }
 
-        // Handle login
         async function handleLogin(e) {
             e.preventDefault();
             if (!validateForm()) return;
-
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
-
             setLoading(true);
-
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-
-                // Remember me logic
                 if (rememberCheckbox.checked) {
                     localStorage.setItem('rememberedEmail', email);
                 } else {
                     localStorage.removeItem('rememberedEmail');
                 }
-
-                // Fetch user role from Firestore (collection "users")
                 const userDocRef = doc(db, "users", user.uid);
                 const userDoc = await getDoc(userDocRef);
-
-                let role = 'student'; // default role
+                let role = 'student';
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
                     role = userData.role || 'student';
                 }
-
-                // Redirect based on role
-                // Admin / Institute Head -> admin dashboard, Staff -> staff dashboard, Student -> student dashboard
                 if (role === 'admin' || role === 'institute_head') {
                     window.location.href = "../admin/dashboard.html";
-                } else if (role === 'staff') {
-                    window.location.href = "../staff/dashboard.html";
-                } else {
+                } 
+                else if (role === 'staff' || role === 'teacher') {
+                    window.location.href = "../teacher/dashboard.html";
+                } 
+                else {
                     window.location.href = "../student/dashboard.html";
                 }
-
             } catch (error) {
                 console.error("Login error:", error.code);
                 let errorMsg = "Login failed. Please check your credentials.";
@@ -283,39 +240,10 @@
             }
         }
 
-        // Forgot password handler
-        async function handleForgotPassword(e) {
-            e.preventDefault();
-            const email = emailInput.value.trim();
-            if (!email) {
-                alert("Please enter your email address first.");
-                return;
-            }
-            if (!/^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(email)) {
-                alert("Please enter a valid email address.");
-                return;
-            }
-            try {
-                await sendPasswordResetEmail(auth, email);
-                alert("Password reset link sent to your email. Check your inbox.");
-            } catch (error) {
-                console.error("Reset error:", error);
-                alert("Error: " + (error.message || "Could not send reset email."));
-            }
-        }
-
-        // Event listeners
         loginBtn.addEventListener('click', handleLogin);
-        forgotLink.addEventListener('click', handleForgotPassword);
-
-        // Allow Enter key submission
-        const inputs = [emailInput, passwordInput];
-        inputs.forEach(input => {
+        [emailInput, passwordInput].forEach(input => {
             input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleLogin(e);
-                }
+                if (e.key === 'Enter') handleLogin(e);
             });
         });
     </script>
