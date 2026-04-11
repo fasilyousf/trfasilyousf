@@ -289,7 +289,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, getDocs, collection, addDoc, query, orderBy, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, getDocs, collection, addDoc, query, orderBy, setDoc, updateDoc, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
@@ -312,6 +312,7 @@
         let allCoursesMap = new Map();
         let currentAdminUser = null;
         let currentAdminData = null;
+        let currentInstituteCode = null;
 
         function showToast(msg, isError = false) {
             const container = document.getElementById('toastContainer');
@@ -385,36 +386,44 @@
         }
 
         async function loadCourses() {
-            const snap = await getDocs(collection(db, "courses"));
-            allCoursesMap.clear();
-            snap.forEach(docSnap => {
-                const data = docSnap.data();
-                allCoursesMap.set(docSnap.id, { courseName: data.courseName || "Course", courseFee: data.courseFee || 0 });
-            });
-            if (allCoursesMap.size === 0) {
-                allCoursesMap.set("default1", { courseName: "English Proficiency", courseFee: 12000 });
-                allCoursesMap.set("default2", { courseName: "Academic Writing", courseFee: 8000 });
-                allCoursesMap.set("default3", { courseName: "Public Speaking", courseFee: 6000 });
+            if (!currentInstituteCode) return;
+            try {
+                const q = query(collection(db, "courses"), where("instituteCode", "==", currentInstituteCode));
+                const snap = await getDocs(q);
+                allCoursesMap.clear();
+                snap.forEach(docSnap => {
+                    const data = docSnap.data();
+                    allCoursesMap.set(docSnap.id, { courseName: data.courseName || "Course", courseFee: data.courseFee || 0 });
+                });
+                // No default courses – if none exist, totalFee will rely on student's feeTotal field
+            } catch (err) {
+                console.error("Error loading courses:", err);
             }
         }
 
         function computeTotalFromCourses(enrolledCourses) {
             if (!enrolledCourses) return 0;
             let total = 0;
-            for (let cid of enrolledCourses) if (allCoursesMap.has(cid)) total += allCoursesMap.get(cid).courseFee;
+            for (let cid of enrolledCourses) {
+                if (allCoursesMap.has(cid)) total += allCoursesMap.get(cid).courseFee;
+            }
             return total;
         }
 
         async function loadStudents() {
-            const usersSnap = await getDocs(collection(db, "users"));
-            const students = [];
-            for (const userDoc of usersSnap.docs) {
-                const data = userDoc.data();
-                if (data.role === 'student') {
+            if (!currentInstituteCode) return;
+            try {
+                const q = query(collection(db, "users"), where("role", "==", "student"), where("instituteCode", "==", currentInstituteCode));
+                const usersSnap = await getDocs(q);
+                const students = [];
+                for (const userDoc of usersSnap.docs) {
+                    const data = userDoc.data();
                     const studentId = userDoc.id;
                     const enrolled = data.enrolledCourses || [];
                     let totalFee = data.feeTotal ? data.feeTotal : computeTotalFromCourses(enrolled);
                     if (data.customTotalFee && typeof data.customTotalFee === 'number') totalFee = data.customTotalFee;
+                    
+                    // Get payments from subcollection
                     const paymentsSnap = await getDocs(query(collection(db, "users", studentId, "payments"), orderBy("date", "desc")));
                     let paid = 0;
                     paymentsSnap.forEach(p => { paid += p.data().amount; });
@@ -424,9 +433,12 @@
                         totalFee: totalFee, paid: paid, due: due, customOverride: data.customTotalFee ? true : false
                     });
                 }
+                allStudents = students;
+                applyFilterAndRender();
+            } catch (err) {
+                console.error("Error loading students:", err);
+                showToast("Failed to load students", true);
             }
-            allStudents = students;
-            applyFilterAndRender();
         }
 
         function applyFilterAndRender() {
@@ -517,7 +529,15 @@
             const btn = document.getElementById('submitPaymentBtn');
             btn.disabled = true; btn.innerText = "Processing...";
             try {
-                await addDoc(collection(db, "users", studentId, "payments"), { amount, date: document.getElementById('paymentDate').value, method: document.getElementById('paymentMethod').value, notes: document.getElementById('paymentNotes').value, timestamp: new Date().toISOString() });
+                await addDoc(collection(db, "users", studentId, "payments"), { 
+                    amount, 
+                    date: document.getElementById('paymentDate').value, 
+                    method: document.getElementById('paymentMethod').value, 
+                    notes: document.getElementById('paymentNotes').value, 
+                    timestamp: new Date().toISOString(),
+                    instituteCode: currentInstituteCode,
+                    recordedBy: currentAdminUser?.uid
+                });
                 showToast("Payment recorded successfully");
                 closePaymentModal();
                 await refreshData();
@@ -555,7 +575,12 @@
             if (isNaN(newFee) || newFee < 0) { showToast("Invalid fee amount", true); return; }
             const reason = document.getElementById('overrideReason').value;
             try {
-                await updateDoc(doc(db, "users", studentId), { customTotalFee: newFee, feeOverrideReason: reason, feeOverrideDate: new Date().toISOString() });
+                await updateDoc(doc(db, "users", studentId), { 
+                    customTotalFee: newFee, 
+                    feeOverrideReason: reason, 
+                    feeOverrideDate: new Date().toISOString(),
+                    instituteCode: currentInstituteCode // ensure it's present
+                });
                 showToast(`Fee updated to ₹${newFee.toLocaleString()}`);
                 closeFeeOverrideModal();
                 await refreshData();
@@ -582,18 +607,25 @@
             showToast("CSV exported");
         };
 
-        window.refreshData = async () => { await loadCourses(); await loadStudents(); showToast("Data refreshed"); };
+        window.refreshData = async () => { 
+            await loadCourses(); 
+            await loadStudents(); 
+            showToast("Data refreshed"); 
+        };
+        
         document.getElementById('searchStudent').addEventListener('input', applyFilterAndRender);
         document.getElementById('statusFilter').addEventListener('change', applyFilterAndRender);
         
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
 
+        // Authentication – only institute_head allowed
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists() && userDoc.data().role === 'admin' || role === 'institute_head') {
+                if (userDoc.exists() && userDoc.data().role === 'institute_head') {
                     currentAdminUser = user;
                     currentAdminData = userDoc.data();
+                    currentInstituteCode = currentAdminData.instituteCode;
                     const fullName = currentAdminData.fullName || "Admin";
                     const email = currentAdminData.email;
                     const photoURL = currentAdminData.photoURL || null;
@@ -603,8 +635,13 @@
                     setupAdminAvatarUpload();
                     await loadCourses(); 
                     await loadStudents();
-                } else { await signOut(auth); window.location.href = "../auth/login.html"; }
-            } else { window.location.href = "../auth/login.html"; }
+                } else { 
+                    await signOut(auth); 
+                    window.location.href = "../auth/login.html"; 
+                }
+            } else { 
+                window.location.href = "../auth/login.html"; 
+            }
         });
         
         window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };

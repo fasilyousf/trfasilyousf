@@ -266,7 +266,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, orderBy, query, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, orderBy, query, serverTimestamp, getDoc, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
@@ -289,6 +289,7 @@
         let currentAdminName = "Admin";
         let currentAdminUser = null;
         let currentAdminData = null;
+        let currentInstituteCode = null;
         let deleteTargetId = null;
 
         function showToast(message, isError = false) {
@@ -381,8 +382,14 @@
         }
 
         async function loadNotices() {
+            if (!currentInstituteCode) return;
             try {
-                const q = query(collection(db, "notices"), orderBy("createdAt", "desc"));
+                // Query notices filtered by instituteCode, ordered by createdAt desc
+                const q = query(
+                    collection(db, "notices"),
+                    where("instituteCode", "==", currentInstituteCode),
+                    orderBy("createdAt", "desc")
+                );
                 const snap = await getDocs(q);
                 allNotices = [];
                 snap.forEach(doc => { allNotices.push({ id: doc.id, ...doc.data() }); });
@@ -390,7 +397,16 @@
                 updateStats();
             } catch (err) {
                 console.error("Error loading notices:", err);
-                document.getElementById('noticesContainer').innerHTML = '<div class="p-8 text-center text-rose-400">Failed to load notices. <button onclick="loadNotices()" class="underline">Retry</button></div>';
+                if (err.code === 'failed-precondition' && err.message.includes('index')) {
+                    document.getElementById('noticesContainer').innerHTML = `
+                        <div class="p-8 text-center text-amber-400">
+                            <i class="fas fa-database text-4xl mb-3 block"></i>
+                            Missing Firestore index. Please create the required index.<br>
+                            <span class="text-xs">Click <a href="https://console.firebase.google.com/project/trfasilyousf1/firestore/indexes" target="_blank" class="underline">here</a> to create it automatically.</span>
+                        </div>`;
+                } else {
+                    document.getElementById('noticesContainer').innerHTML = '<div class="p-8 text-center text-rose-400">Failed to load notices. <button onclick="loadNotices()" class="underline">Retry</button></div>';
+                }
             }
         }
 
@@ -492,6 +508,7 @@
 
         document.getElementById('noticeForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            if (!currentInstituteCode) { showToast("Institute code missing. Please re-login.", true); return; }
             const id = document.getElementById('noticeId').value;
             const title = document.getElementById('noticeTitle').value.trim();
             const message = document.getElementById('noticeMessage').value.trim();
@@ -504,7 +521,14 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
             try {
-                const noticeData = { title, message, priority, status, author: currentAdminName };
+                const noticeData = { 
+                    title, 
+                    message, 
+                    priority, 
+                    status, 
+                    author: currentAdminName,
+                    instituteCode: currentInstituteCode
+                };
                 if (id) {
                     await updateDoc(doc(db, "notices", id), noticeData);
                     showToast("Notice updated successfully!");
@@ -534,13 +558,14 @@
             document.getElementById('mobileSidebarOverlay').classList.add('hidden');
         };
 
-        // ✅ FIXED: Allow both 'admin' and 'institute_head' roles
+        // Authentication – only institute_head allowed
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists() && (userDoc.data().role === 'admin' || userDoc.data().role === 'institute_head')) {
+                if (userDoc.exists() && userDoc.data().role === 'institute_head') {
                     currentAdminUser = user;
                     currentAdminData = userDoc.data();
+                    currentInstituteCode = currentAdminData.instituteCode;
                     currentAdminName = currentAdminData.fullName || "Admin";
                     const email = user.email || currentAdminData.email;
                     const photoURL = currentAdminData.photoURL || null;

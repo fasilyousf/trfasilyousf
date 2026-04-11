@@ -217,7 +217,7 @@
         <div class="p-6 border-b border-white/5">
             <div class="flex items-center gap-3">
                 <div
-                    class="w-10 h-10  rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300 overflow-hidden">
+                    class="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300 overflow-hidden">
                     <img src="../assets/img/slogo.png" alt="FyOrbit Logo" class="w-full h-full object-cover">
                 </div>
                 <div>
@@ -284,25 +284,24 @@
                 </div>
             </div>
 
-            <!-- Status warning banner (shown if admin status is not active OR list permission missing) -->
+            <!-- Status warning banner for missing index or permission -->
             <div id="statusWarning" class="hidden mt-4 p-3 rounded-xl bg-amber-500/20 border border-amber-500/50 flex flex-col gap-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <i class="fas fa-exclamation-triangle text-amber-400 text-xl"></i>
                         <div>
-                            <p class="text-sm font-bold text-white">Firestore Permission Issue Detected</p>
-                            <p class="text-xs text-slate-300" id="warningMessage">Missing <code class="bg-slate-800 px-1 rounded">allow list</code> rule for admins.</p>
+                            <p class="text-sm font-bold text-white">Firestore Issue Detected</p>
+                            <p class="text-xs text-slate-300" id="warningMessage">Please create the required composite index.</p>
                         </div>
                     </div>
-                    <button id="copyRuleBtn" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold transition">
-                        <i class="fas fa-copy mr-1"></i> Copy Fix
+                    <button id="copyIndexLink" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-bold transition">
+                        <i class="fas fa-external-link-alt mr-1"></i> Create Index
                     </button>
                 </div>
                 <div class="code-block text-xs text-slate-300">
-                    // Add this inside your `match /users/{userId}` block:<br>
-                    allow list: if isVerifiedAdmin();
+                    Composite index needed: <strong>users (role Asc, instituteCode Asc)</strong>
                 </div>
-                <p class="text-[10px] text-slate-400">After updating rules, click Refresh.</p>
+                <p class="text-[10px] text-slate-400">After index is created, click Refresh.</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
@@ -433,6 +432,7 @@
         let allCourses = [];
         let currentAdminUser = null;
         let currentAdminData = null;
+        let currentInstituteCode = null;
         let pendingPhotoFile = null;
 
         function showToast(message, isError = false) {
@@ -526,8 +526,10 @@
         }
 
         async function loadStudents() {
+            if (!currentInstituteCode) return false;
             try {
-                const q = query(collection(db, "users"), where("role", "==", "student"));
+                // Query students filtered by instituteCode
+                const q = query(collection(db, "users"), where("role", "==", "student"), where("instituteCode", "==", currentInstituteCode));
                 const snap = await getDocs(q);
                 studentsData = [];
                 snap.forEach(d => { studentsData.push({ id: d.id, ...d.data() }); });
@@ -536,15 +538,14 @@
                 return true;
             } catch (e) {
                 console.error("Error loading students:", e);
-                if (e.code === 'permission-denied') {
-                    // Show the warning banner with specific instruction
+                if (e.code === 'permission-denied' || (e.message && e.message.includes('index'))) {
                     document.getElementById('statusWarning').classList.remove('hidden');
-                    document.getElementById('warningMessage').innerHTML = 'Missing <code class="bg-slate-800 px-1 rounded">allow list: if isVerifiedAdmin();</code> in your Firestore rules.';
+                    document.getElementById('warningMessage').innerHTML = 'Missing Firestore composite index on <strong>users (role Asc, instituteCode Asc)</strong>.';
                     document.getElementById('studentTableBody').innerHTML = `
                         <tr><td colspan="6" class="p-8 text-center text-amber-400">
-                            <i class="fas fa-shield-alt text-4xl mb-3 block"></i>
-                            Permission denied. Firestore rules need an <code class="bg-slate-800 px-1 rounded">allow list</code> rule for admins.<br>
-                            <span class="text-xs">Click "Copy Fix" above and update your rules.</span>
+                            <i class="fas fa-database text-4xl mb-3 block"></i>
+                            Missing composite index. Please create it using the button above.<br>
+                            <span class="text-xs">After index creation, refresh the page.</span>
                         </td></tr>
                     `;
                 } else {
@@ -552,6 +553,17 @@
                 }
                 return false;
             }
+        }
+
+        async function loadAllCourses() {
+            if (!currentInstituteCode) return;
+            try {
+                const q = query(collection(db, "courses"), where("instituteCode", "==", currentInstituteCode));
+                const coursesSnap = await getDocs(q);
+                allCourses = [];
+                coursesSnap.forEach(doc => { allCourses.push({ id: doc.id, ...doc.data() }); });
+                updateStats();
+            } catch(e) { console.error(e); }
         }
 
         function renderTable(data) {
@@ -589,15 +601,6 @@
                     </td>
                 </tr>`;
             }).join('');
-        }
-
-        async function loadAllCourses() {
-            try {
-                const coursesSnap = await getDocs(collection(db, "courses"));
-                allCourses = [];
-                coursesSnap.forEach(doc => { allCourses.push({ id: doc.id, ...doc.data() }); });
-                updateStats();
-            } catch(e) { console.error(e); }
         }
 
         window.deleteStudent = async (studentId, studentName) => {
@@ -666,7 +669,8 @@
                 else await updateProfile(newUser, { displayName: name });
                 await setDoc(doc(db, "users", newUser.uid), {
                     fullName: name, email: email, role: "student", feeTotal: feeTotal, feePaid: 0,
-                    enrolledCourses: [], createdAt: new Date().toISOString(), profilePic: profilePicUrl || null, uid: newUser.uid, status: "active"
+                    enrolledCourses: [], createdAt: new Date().toISOString(), profilePic: profilePicUrl || null, uid: newUser.uid, status: "active",
+                    instituteCode: currentInstituteCode
                 });
                 showToast(`✅ ${name} enrolled successfully!`);
                 closeAddModal();
@@ -693,38 +697,22 @@
             }
         });
 
-        // Copy rule fix to clipboard
-        document.getElementById('copyRuleBtn').addEventListener('click', () => {
-            const ruleText = `allow list: if isVerifiedAdmin();`;
-            navigator.clipboard.writeText(ruleText).then(() => {
-                showToast("Rule copied! Add it inside your 'match /users/{userId}' block.");
-            }).catch(() => {
-                alert("Copy manually: " + ruleText);
-            });
+        // Open Firestore index creation page
+        document.getElementById('copyIndexLink').addEventListener('click', () => {
+            window.open('https://console.firebase.google.com/project/trfasilyousf1/firestore/indexes', '_blank');
         });
 
-        // Fix admin status button (for completeness, but the main issue is list permission)
-        document.getElementById('fixStatusBtn')?.addEventListener('click', async () => {
-            if (!currentAdminUser) return;
-            try {
-                await updateDoc(doc(db, "users", currentAdminUser.uid), { status: "active" });
-                showToast("Admin status updated to 'active'! Refreshing...");
-                setTimeout(() => window.location.reload(), 1500);
-            } catch (err) {
-                showToast("Failed to update status: " + err.message, true);
-            }
-        });
-
+        // Authentication and data loading
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists() && (userDoc.data().role === 'admin' || userDoc.data().role === 'institute_head')) {
                     currentAdminUser = user;
                     currentAdminData = userDoc.data();
+                    currentInstituteCode = currentAdminData.instituteCode;
                     const fullName = currentAdminData.fullName || "Admin";
                     const email = currentAdminData.email;
                     const photoURL = currentAdminData.photoURL || null;
-                    const adminStatus = currentAdminData.status || "not set";
                     
                     document.getElementById('adminName').innerText = "Welcome, " + fullName;
                     document.getElementById('adminEmail').innerText = email;

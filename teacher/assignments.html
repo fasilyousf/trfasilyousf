@@ -101,12 +101,31 @@
             border-radius: 20px;
             font-weight: 700;
         }
+        .avatar-upload-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+        .avatar-upload-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
 <div class="flex h-screen overflow-hidden">
-    <!-- DESKTOP SIDEBAR (same as students page) -->
+    <!-- DESKTOP SIDEBAR -->
     <aside class="sidebar-solid w-72 flex-shrink-0 hidden lg:flex flex-col shadow-2xl">
         <div class="p-6 border-b border-white/20">
             <div class="flex items-center gap-3 mb-8">
@@ -116,7 +135,9 @@
                 <div class="text-xl font-black tracking-tighter text-white">Fy<span class="text-yellow-300">Orbit</span></div>
             </div>
             <div class="flex items-center gap-3" id="teacherInfoDesktop">
-                <div class="w-12 h-12 rounded-full avatar-gradient flex items-center justify-center font-black text-white text-lg shadow-sm" id="teacherInitial">T</div>
+                <div class="w-12 h-12 rounded-full avatar-gradient flex items-center justify-center font-black text-white text-lg shadow-sm cursor-pointer" id="teacherAvatar" onclick="openAvatarUpload()">
+                    <span id="teacherInitial">T</span>
+                </div>
                 <div>
                     <p class="font-bold text-white" id="teacherName">Loading...</p>
                     <p class="text-xs text-blue-200">Teacher</p>
@@ -163,14 +184,16 @@
             <h1 class="text-xl font-black text-slate-800 lg:text-2xl tracking-tight">📝 Assignments</h1>
             <div class="flex items-center gap-4">
                 <i class="fas fa-bell text-slate-400 hover:text-blue-600 cursor-pointer text-xl"></i>
-                <div class="hidden sm:flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full shadow-sm">
+                <div class="hidden sm:flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full shadow-sm cursor-pointer" onclick="openAvatarUpload()">
                     <span class="text-sm font-semibold text-slate-700" id="headerTeacherName">Teacher</span>
-                    <div class="w-8 h-8 rounded-full avatar-gradient flex items-center justify-center text-white font-bold text-sm" id="headerInitial">T</div>
+                    <div class="w-8 h-8 rounded-full avatar-gradient flex items-center justify-center text-white font-bold text-sm" id="headerAvatar">
+                        <span id="headerInitial">T</span>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <!-- MOBILE SIDEBAR (same style) -->
+        <!-- MOBILE SIDEBAR -->
         <div id="mobileSidebar" class="mobile-sidebar-solid lg:hidden shadow-xl border-t border-white/20 rounded-b-2xl transition-all duration-300" style="max-height:0; overflow:hidden; opacity:0; padding:0;">
             <div class="px-4 py-3 border-b border-white/20">
                 <div class="flex items-center gap-3 mb-4">
@@ -178,7 +201,9 @@
                     <div class="text-lg font-black text-white">Fy<span class="text-yellow-300">Orbit</span></div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full avatar-gradient flex items-center justify-center font-bold text-white" id="mobileTeacherInitial">T</div>
+                    <div class="w-10 h-10 rounded-full avatar-gradient flex items-center justify-center font-bold text-white cursor-pointer" id="mobileTeacherAvatar" onclick="openAvatarUpload()">
+                        <span id="mobileTeacherInitial">T</span>
+                    </div>
                     <div><p class="font-bold text-sm text-white" id="mobileTeacherName">Teacher</p><p class="text-xs text-blue-200">Educator</p></div>
                 </div>
             </div>
@@ -232,6 +257,19 @@
     </main>
 </div>
 
+<!-- Avatar Upload Modal -->
+<div id="avatarModal" class="avatar-upload-modal">
+    <div class="avatar-upload-card">
+        <h3 class="text-xl font-black text-slate-800 mb-2">Update Profile Photo</h3>
+        <p class="text-slate-500 text-sm mb-4">Click below to upload</p>
+        <input type="file" id="teacherPhotoUpload" accept="image/jpeg,image/png,image/webp" class="hidden">
+        <button onclick="document.getElementById('teacherPhotoUpload').click()" class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold">Choose File</button>
+        <div class="mt-4">
+            <button onclick="closeAvatarUpload()" class="text-slate-500 text-sm">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL: Create/Edit Assignment -->
 <div id="assignmentModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden transition-all">
     <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl mx-4">
@@ -261,15 +299,17 @@
         "imports": {
             "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
             "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
-            "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+            "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js",
+            "firebase/storage": "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js"
         }
     }
 </script>
 
 <script type="module">
     import { initializeApp } from "firebase/app";
-    import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+    import { getAuth, onAuthStateChanged, signOut, updateProfile } from "firebase/auth";
     import { getFirestore, collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc, orderBy, getDoc } from "firebase/firestore";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
@@ -282,9 +322,11 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const storage = getStorage(app);
 
     let teacherInstituteCode = null;
     let teacherName = "";
+    let teacherUid = null;
     let allAssignments = [];
 
     // DOM elements
@@ -293,16 +335,92 @@
     const filterBatch = document.getElementById('filterBatch');
     const resetFilters = document.getElementById('resetFilters');
 
-    // Load assignments from Firestore
+    // Avatar upload functions
+    window.openAvatarUpload = () => {
+        document.getElementById('avatarModal').style.display = 'flex';
+    };
+    window.closeAvatarUpload = () => {
+        document.getElementById('avatarModal').style.display = 'none';
+    };
+    const photoInput = document.getElementById('teacherPhotoUpload');
+    if (photoInput) {
+        photoInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file || !teacherUid) return;
+            const storageRef = ref(storage, `teachers/${teacherUid}/profile.jpg`);
+            try {
+                await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(storageRef);
+                await updateProfile(auth.currentUser, { photoURL: downloadURL });
+                await updateDoc(doc(db, "users", teacherUid), { photoURL: downloadURL });
+                updateAvatarUI(downloadURL);
+                showToast("Profile photo updated!");
+            } catch (err) {
+                console.error(err);
+                showToast("Upload failed: " + err.message, true);
+            }
+            closeAvatarUpload();
+            photoInput.value = '';
+        });
+    }
+    function updateAvatarUI(photoURL) {
+        const elements = ['teacherAvatar', 'headerAvatar', 'mobileTeacherAvatar'];
+        const initials = document.getElementById('teacherInitial');
+        const headerInit = document.getElementById('headerInitial');
+        const mobileInit = document.getElementById('mobileTeacherInitial');
+        if (photoURL) {
+            elements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.style.backgroundImage = `url(${photoURL})`;
+                    el.style.backgroundSize = 'cover';
+                    el.style.backgroundPosition = 'center';
+                    const span = el.querySelector('span') || (id === 'teacherAvatar' ? initials : (id === 'headerAvatar' ? headerInit : mobileInit));
+                    if (span) span.style.display = 'none';
+                }
+            });
+        } else {
+            const initial = teacherName?.charAt(0).toUpperCase() || 'T';
+            if (initials) { initials.style.display = 'flex'; initials.innerText = initial; }
+            if (headerInit) { headerInit.style.display = 'flex'; headerInit.innerText = initial; }
+            if (mobileInit) { mobileInit.style.display = 'flex'; mobileInit.innerText = initial; }
+            elements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.style.backgroundImage = '';
+                    el.style.backgroundSize = '';
+                }
+            });
+        }
+    }
+    function showToast(msg, isError = false) {
+        const toast = document.createElement('div');
+        toast.className = `fixed bottom-6 right-6 px-5 py-3 rounded-xl shadow-2xl z-[200] text-sm font-bold backdrop-blur-md ${isError ? 'bg-rose-500 text-white' : 'bg-emerald-500 text-slate-900'}`;
+        toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-2"></i> ${msg}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Load assignments from Firestore (with institute isolation)
     async function loadAssignments() {
         if (!teacherInstituteCode) return [];
-        const q = query(collection(db, "assignments"), where("instituteCode", "==", teacherInstituteCode), orderBy("dueDate", "asc"));
-        const snap = await getDocs(q);
-        const assignments = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        allAssignments = assignments;
-        populateFilters(assignments);
-        renderAssignments(assignments);
-        return assignments;
+        try {
+            const q = query(collection(db, "assignments"), where("instituteCode", "==", teacherInstituteCode), orderBy("dueDate", "asc"));
+            const snap = await getDocs(q);
+            const assignments = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            allAssignments = assignments;
+            populateFilters(assignments);
+            renderAssignments(assignments);
+            return assignments;
+        } catch (err) {
+            console.error(err);
+            if (err.code === 'failed-precondition' && err.message.includes('index')) {
+                assignmentsContainer.innerHTML = `<div class="bg-white rounded-2xl shadow-sm p-10 text-center text-amber-600"><i class="fas fa-database text-4xl mb-2"></i><p>Missing Firestore index. Please create the required index for assignments.</p><a href="https://console.firebase.google.com/project/trfasilyousf1/firestore/indexes" target="_blank" class="text-blue-600 underline">Click here to create it</a></div>`;
+            } else {
+                assignmentsContainer.innerHTML = `<div class="text-center text-red-500">Error loading assignments: ${err.message}</div>`;
+            }
+            return [];
+        }
     }
 
     function populateFilters(assignments) {
@@ -350,7 +468,7 @@
             `;
         }).join('');
 
-        // Attach event listeners for status change
+        // Status change
         document.querySelectorAll('.status-select').forEach(select => {
             select.addEventListener('change', async (e) => {
                 const id = select.dataset.id;
@@ -359,7 +477,7 @@
                 loadAssignments();
             });
         });
-        // Edit buttons
+        // Edit
         document.querySelectorAll('.edit-assignment').forEach(btn => {
             btn.addEventListener('click', () => {
                 const id = btn.dataset.id;
@@ -378,7 +496,7 @@
                 document.getElementById('assignmentModal').classList.remove('hidden');
             });
         });
-        // Delete buttons
+        // Delete
         document.querySelectorAll('.delete-assignment').forEach(btn => {
             btn.addEventListener('click', async () => {
                 if (confirm('Delete this assignment?')) {
@@ -426,29 +544,44 @@
         const classVal = document.getElementById('assignClass').value;
         const batch = document.getElementById('assignBatch').value.trim();
         const dueDate = document.getElementById('assignDueDate').value;
-        if (!title) { alert("Please enter a title"); return; }
+        if (!title) { showToast("Please enter a title", true); return; }
         const data = {
-            title, description: desc, class: classVal, batch, dueDate,
+            title,
+            description: desc,
+            class: classVal,
+            batch,
+            dueDate,
             instituteCode: teacherInstituteCode,
             status: 'pending',
             updatedAt: new Date().toISOString()
         };
         const editId = editIdField.value;
-        if (editId) {
-            await updateDoc(doc(db, "assignments", editId), data);
-        } else {
-            data.createdAt = new Date().toISOString();
-            await addDoc(collection(db, "assignments"), data);
+        try {
+            if (editId) {
+                await updateDoc(doc(db, "assignments", editId), data);
+                showToast("Assignment updated");
+            } else {
+                data.createdAt = new Date().toISOString();
+                await addDoc(collection(db, "assignments"), data);
+                showToast("Assignment created");
+            }
+            modal.classList.add('hidden');
+            await loadAssignments();
+        } catch (err) {
+            showToast("Error: " + err.message, true);
         }
-        modal.classList.add('hidden');
-        loadAssignments();
     };
 
     // Authentication & UI init
     onAuthStateChanged(auth, async (user) => {
         if (!user) { window.location.href = "../auth/login.html"; return; }
+        teacherUid = user.uid;
         const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (!userDoc.exists() || userDoc.data().role !== 'staff') { await signOut(auth); window.location.href = "../auth/login.html"; return; }
+        if (!userDoc.exists() || (userDoc.data().role !== 'staff' && userDoc.data().role !== 'teacher')) {
+            await signOut(auth);
+            window.location.href = "../auth/login.html";
+            return;
+        }
         const data = userDoc.data();
         teacherName = data.fullName || "Teacher";
         teacherInstituteCode = data.instituteCode;
@@ -458,7 +591,12 @@
         document.getElementById('headerInitial').innerText = teacherName.charAt(0).toUpperCase();
         document.getElementById('mobileTeacherName').innerText = teacherName;
         document.getElementById('mobileTeacherInitial').innerText = teacherName.charAt(0).toUpperCase();
-        if (!teacherInstituteCode) { assignmentsContainer.innerHTML = '<div class="text-center text-red-500">Institute not linked. Contact admin.</div>'; return; }
+        if (data.photoURL) updateAvatarUI(data.photoURL);
+        else updateAvatarUI(null);
+        if (!teacherInstituteCode) {
+            assignmentsContainer.innerHTML = '<div class="text-center text-red-500">Institute not linked. Contact admin.</div>';
+            return;
+        }
         await loadAssignments();
     });
 

@@ -104,7 +104,6 @@
             background: linear-gradient(135deg, #ea580c, #c2410c);
             transform: scale(1.02);
         }
-        /* Ensure logout button is visible and clickable */
         .sidebar-solid .logout-link {
             color: #ffffff !important;
             font-weight: 700;
@@ -128,6 +127,27 @@
         .quick-btn:hover {
             transform: translateY(-2px);
         }
+        
+        /* Avatar upload modal (simple) */
+        .avatar-upload-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+        .avatar-upload-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -143,7 +163,9 @@
                 <div class="text-xl font-black tracking-tighter text-white">Fy<span class="text-yellow-300">Orbit</span></div>
             </div>
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-full avatar-gradient flex items-center justify-center font-black text-white text-lg shadow-sm" id="teacherInitial">T</div>
+                <div class="w-12 h-12 rounded-full avatar-gradient flex items-center justify-center font-black text-white text-lg shadow-sm cursor-pointer" id="teacherAvatar" onclick="openAvatarUpload()">
+                    <span id="teacherInitial">T</span>
+                </div>
                 <div>
                     <p class="font-bold text-white" id="teacherName">Loading...</p>
                     <p class="text-xs text-blue-200">Teacher</p>
@@ -177,7 +199,6 @@
             </a>
         </nav>
         <div class="p-5 border-t border-white/20">
-            <!-- Logout button with improved visibility -->
             <a href="#" id="logoutBtn" class="logout-link flex items-center gap-3 px-4 py-3 text-white font-bold text-sm uppercase tracking-wider transition">
                 <i class="fas fa-sign-out-alt"></i> Sign Out
             </a>
@@ -199,7 +220,9 @@
                 <i class="fas fa-bell text-slate-400 hover:text-blue-600 cursor-pointer text-lg sm:text-xl"></i>
                 <div class="hidden sm:flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full shadow-sm">
                     <span class="text-sm font-semibold text-slate-700" id="headerTeacherName">Teacher</span>
-                    <div class="w-8 h-8 rounded-full avatar-gradient flex items-center justify-center text-white font-bold text-sm" id="headerInitial">T</div>
+                    <div class="w-8 h-8 rounded-full avatar-gradient flex items-center justify-center text-white font-bold text-sm cursor-pointer" id="headerAvatar" onclick="openAvatarUpload()">
+                        <span id="headerInitial">T</span>
+                    </div>
                 </div>
             </div>
         </header>
@@ -214,7 +237,9 @@
                     <div class="text-lg font-black text-white">Fy<span class="text-yellow-300">Orbit</span></div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full avatar-gradient flex items-center justify-center font-bold text-white" id="mobileTeacherInitial">T</div>
+                    <div class="w-10 h-10 rounded-full avatar-gradient flex items-center justify-center font-bold text-white cursor-pointer" id="mobileTeacherAvatar" onclick="openAvatarUpload()">
+                        <span id="mobileTeacherInitial">T</span>
+                    </div>
                     <div><p class="font-bold text-sm text-white" id="mobileTeacherName">Teacher</p><p class="text-xs text-blue-200">Educator</p></div>
                 </div>
             </div>
@@ -274,20 +299,35 @@
     </main>
 </div>
 
+<!-- Simple Avatar Upload Modal (matches admin style but minimal) -->
+<div id="avatarModal" class="avatar-upload-modal">
+    <div class="avatar-upload-card">
+        <h3 class="text-xl font-black text-slate-800 mb-2">Update Profile Photo</h3>
+        <p class="text-slate-500 text-sm mb-4">Click below to upload</p>
+        <input type="file" id="teacherPhotoUpload" accept="image/jpeg,image/png,image/webp" class="hidden">
+        <button onclick="document.getElementById('teacherPhotoUpload').click()" class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold">Choose File</button>
+        <div class="mt-4">
+            <button onclick="closeAvatarUpload()" class="text-slate-500 text-sm">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <script type="importmap">
     {
         "imports": {
             "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
             "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js",
-            "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+            "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js",
+            "firebase/storage": "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js"
         }
     }
 </script>
 
 <script type="module">
     import { initializeApp } from "firebase/app";
-    import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-    import { getFirestore, doc, getDoc, collection, query, where, getDocs, setDoc } from "firebase/firestore";
+    import { getAuth, onAuthStateChanged, signOut, updateProfile } from "firebase/auth";
+    import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
@@ -301,54 +341,102 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const storage = getStorage(app);
 
     let teacherInstituteCode = null;
     let teacherFullName = null;
     let teacherUid = null;
+    let teacherData = null;
 
-    async function fetchInstituteName(instituteCode, uid) {
-        if (!instituteCode) return null;
-        try {
-            const teacherDoc = await getDoc(doc(db, "users", uid));
-            if (teacherDoc.exists()) {
-                const teacherData = teacherDoc.data();
-                if (teacherData.instituteName) return teacherData.instituteName;
-                const altFields = ["schoolName", "institutionName", "school"];
-                for (const f of altFields) if (teacherData[f]) return teacherData[f];
+    // Avatar upload
+    window.openAvatarUpload = () => {
+        document.getElementById('avatarModal').style.display = 'flex';
+    };
+    window.closeAvatarUpload = () => {
+        document.getElementById('avatarModal').style.display = 'none';
+    };
+    
+    const photoInput = document.getElementById('teacherPhotoUpload');
+    if (photoInput) {
+        photoInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file || !teacherUid) return;
+            const storageRef = ref(storage, `teachers/${teacherUid}/profile.jpg`);
+            try {
+                await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(storageRef);
+                await updateProfile(auth.currentUser, { photoURL: downloadURL });
+                await updateDoc(doc(db, "users", teacherUid), { photoURL: downloadURL });
+                updateAvatarUI(downloadURL);
+                showToast("Profile photo updated!");
+            } catch (err) {
+                console.error(err);
+                showToast("Upload failed: " + err.message, true);
             }
-        } catch (err) {}
-        try {
-            const docRef = doc(db, "institute_codes", instituteCode);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) return docSnap.data().instituteName || docSnap.data().name || null;
-        } catch (err) {}
-        return null;
+            closeAvatarUpload();
+            photoInput.value = '';
+        });
+    }
+    
+    function updateAvatarUI(photoURL) {
+        const elements = ['teacherAvatar', 'headerAvatar', 'mobileTeacherAvatar'];
+        const initials = document.getElementById('teacherInitial');
+        const headerInit = document.getElementById('headerInitial');
+        const mobileInit = document.getElementById('mobileTeacherInitial');
+        if (photoURL) {
+            elements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.style.backgroundImage = `url(${photoURL})`;
+                    el.style.backgroundSize = 'cover';
+                    el.style.backgroundPosition = 'center';
+                    // Hide the text span
+                    const span = el.querySelector('span') || (id === 'teacherAvatar' ? initials : (id === 'headerAvatar' ? headerInit : mobileInit));
+                    if (span) span.style.display = 'none';
+                }
+            });
+        } else {
+            // fallback to initials
+            const initial = teacherFullName?.charAt(0).toUpperCase() || 'T';
+            if (initials) { initials.style.display = 'flex'; initials.innerText = initial; }
+            if (headerInit) { headerInit.style.display = 'flex'; headerInit.innerText = initial; }
+            if (mobileInit) { mobileInit.style.display = 'flex'; mobileInit.innerText = initial; }
+            elements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.style.backgroundImage = '';
+                    el.style.backgroundSize = '';
+                }
+            });
+        }
+    }
+    
+    function showToast(msg, isError = false) {
+        const toast = document.createElement('div');
+        toast.className = `fixed bottom-6 right-6 px-5 py-3 rounded-xl shadow-2xl z-[200] text-sm font-bold backdrop-blur-md ${isError ? 'bg-rose-500 text-white' : 'bg-emerald-500 text-slate-900'}`;
+        toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-2"></i> ${msg}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
     }
 
-    async function createInstituteDocument(instituteCode) {
-        const instituteName = prompt(`Enter the full name of your institute (Institute Code: ${instituteCode}):`, "My School");
-        if (instituteName && instituteName.trim()) {
-            try {
-                await setDoc(doc(db, "institute_codes", instituteCode), {
-                    instituteName: instituteName.trim(),
-                    code: instituteCode,
-                    createdAt: new Date().toISOString()
-                });
-                alert("✅ Institute name saved! The page will now refresh.");
-                location.reload();
-                return true;
-            } catch (err) {
-                alert("Error saving institute name. You may need admin rights.");
-                return false;
+    async function fetchInstituteName(instituteCode) {
+        if (!instituteCode) return null;
+        try {
+            // Find the institute head (role 'institute_head') with this instituteCode
+            const q = query(collection(db, "users"), where("role", "==", "institute_head"), where("instituteCode", "==", instituteCode));
+            const snap = await getDocs(q);
+            if (!snap.empty) {
+                const headData = snap.docs[0].data();
+                return headData.instituteName || null;
             }
-        }
-        return false;
+        } catch (err) { console.error(err); }
+        return null;
     }
 
     async function fetchTotalStudents() {
         if (!teacherInstituteCode) return 0;
         try {
-            const q = query(collection(db, "users"), where("role", "==", "student"), where("institute_Code", "==", teacherInstituteCode));
+            const q = query(collection(db, "users"), where("role", "==", "student"), where("instituteCode", "==", teacherInstituteCode));
             const snap = await getDocs(q);
             return snap.size;
         } catch(e) { return 0; }
@@ -357,7 +445,7 @@
     async function fetchActiveClasses() {
         if (!teacherInstituteCode) return 0;
         try {
-            const q = query(collection(db, "classes"), where("institute_Code", "==", teacherInstituteCode), where("status", "==", "active"));
+            const q = query(collection(db, "classes"), where("instituteCode", "==", teacherInstituteCode), where("status", "==", "active"));
             const snap = await getDocs(q);
             return snap.size;
         } catch (e) { return 0; }
@@ -366,7 +454,7 @@
     async function fetchAssignmentsDue() {
         if (!teacherInstituteCode) return 0;
         try {
-            const q = query(collection(db, "assignments"), where("institute_Code", "==", teacherInstituteCode), where("status", "!=", "completed"));
+            const q = query(collection(db, "assignments"), where("instituteCode", "==", teacherInstituteCode), where("status", "!=", "completed"));
             const snap = await getDocs(q);
             return snap.size;
         } catch (e) { return 0; }
@@ -375,7 +463,7 @@
     async function fetchAverageAttendance() {
         if (!teacherInstituteCode) return 0;
         try {
-            const studentsQuery = query(collection(db, "users"), where("role", "==", "student"), where("institute_Code", "==", teacherInstituteCode));
+            const studentsQuery = query(collection(db, "users"), where("role", "==", "student"), where("instituteCode", "==", teacherInstituteCode));
             const studentsSnap = await getDocs(studentsQuery);
             if (studentsSnap.empty) return 0;
             const studentIds = studentsSnap.docs.map(d => d.id);
@@ -384,7 +472,7 @@
             const startDate = thirtyDaysAgo.toISOString().split('T')[0];
             let totalPresent = 0, totalRecords = 0;
             for (const studentId of studentIds) {
-                const q = query(collection(db, "attendance"), where("studentId", "==", studentId), where("date", ">=", startDate));
+                const q = query(collection(db, "attendance"), where("studentId", "==", studentId), where("date", ">=", startDate), where("instituteCode", "==", teacherInstituteCode));
                 const snap = await getDocs(q);
                 snap.forEach(doc => { totalRecords++; if (doc.data().status === 'present') totalPresent++; });
             }
@@ -396,28 +484,30 @@
         teacherUid = user.uid;
         const userDoc = await getDoc(doc(db, "users", user.uid));
         if (userDoc.exists() && (userDoc.data().role === 'staff' || userDoc.data().role === 'teacher')) {
-            const data = userDoc.data();
-            teacherFullName = data.fullName || "Teacher";
-            teacherInstituteCode = data.institute_Code || data.instituteCode;
+            teacherData = userDoc.data();
+            teacherFullName = teacherData.fullName || "Teacher";
+            teacherInstituteCode = teacherData.instituteCode;
             
+            // Update UI elements
             document.getElementById('teacherName').innerText = teacherFullName;
             document.getElementById('headerTeacherName').innerText = teacherFullName.split(' ')[0];
-            document.getElementById('teacherInitial').innerText = teacherFullName.charAt(0).toUpperCase();
-            document.getElementById('headerInitial').innerText = teacherFullName.charAt(0).toUpperCase();
             document.getElementById('mobileTeacherName').innerText = teacherFullName;
-            document.getElementById('mobileTeacherInitial').innerText = teacherFullName.charAt(0).toUpperCase();
             document.getElementById('welcomeMsg').innerHTML = `Welcome back, ${teacherFullName.split(' ')[0]}! 👋`;
             
+            // Avatar
+            if (teacherData.photoURL) updateAvatarUI(teacherData.photoURL);
+            else updateAvatarUI(null);
+            
+            // Institute badge
+            const badgeSpan = document.getElementById('instituteBadgeText');
+            const badgeContainer = document.getElementById('instituteBadgeContainer');
             if (!teacherInstituteCode) {
-                document.getElementById('welcomeSubtext').innerHTML = "⚠️ Institute not linked. Contact admin.";
-                document.getElementById('instituteBadgeText').innerHTML = "Institute not assigned";
+                badgeSpan.innerHTML = "Institute not assigned";
+                document.getElementById('welcomeSubtext').innerHTML = "⚠️ Your account is not linked to any institute. Contact admin.";
                 return;
             }
             
-            let instituteName = await fetchInstituteName(teacherInstituteCode, teacherUid);
-            const badgeSpan = document.getElementById('instituteBadgeText');
-            const badgeContainer = document.getElementById('instituteBadgeContainer');
-            
+            let instituteName = await fetchInstituteName(teacherInstituteCode);
             if (instituteName) {
                 badgeSpan.innerHTML = instituteName;
                 const oldBtn = document.getElementById('fixInstituteBtn');
@@ -428,8 +518,8 @@
                     const fixBtn = document.createElement('span');
                     fixBtn.id = 'fixInstituteBtn';
                     fixBtn.className = 'fix-button';
-                    fixBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Name';
-                    fixBtn.onclick = async () => await createInstituteDocument(teacherInstituteCode);
+                    fixBtn.innerHTML = '<i class="fas fa-info-circle"></i> Missing Name';
+                    fixBtn.onclick = () => showToast("Institute name not found. Contact institute head.", true);
                     badgeContainer.appendChild(fixBtn);
                 }
             }

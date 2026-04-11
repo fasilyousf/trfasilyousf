@@ -9,12 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            font-family: 'Outfit', sans-serif;
-        }
-        body {
-            background: #f0f4f8;
-        }
+        * { font-family: 'Outfit', sans-serif; }
+        body { background: #f0f4f8; }
         input:focus {
             box-shadow: 0 0 0 2px #f5b81b;
             border-color: #f5b81b;
@@ -49,18 +45,16 @@
 </head>
 <body class="antialiased">
 
-    <!-- Header Mini (branding) -->
     <div class="bg-[#0b1120] text-white py-4 px-6 shadow-lg">
         <div class="max-w-6xl mx-auto flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition duration-300 overflow-hidden">
-                <img src="../assets/img/slogo.png" alt="FyOrbit Logo" class="w-full h-full object-cover">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden bg-[#0A0F1E]">
+                <span class="text-xl font-black text-[#00E5FF]">Fy</span>
             </div>
             <div class="text-xl font-black tracking-tight"><a href="../index.html">Fy<span class="text-[#f5b81b]">Orbit</span></a></div>
             <div class="ml-auto text-sm font-medium opacity-80">Digital Management Ecosystem</div>
         </div>
     </div>
 
-    <!-- Login Form Container -->
     <div class="max-w-md mx-auto px-4 py-16 md:py-20">
         <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
             <div class="bg-gradient-to-r from-[#0b1120] to-[#1a2538] px-6 py-8 text-center">
@@ -73,12 +67,12 @@
                 <div class="space-y-5">
                     <div>
                         <label class="block text-sm font-bold text-gray-700 required-star">Email Address</label>
-                        <input type="email" id="loginEmail" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#f5b81b] outline-none" placeholder="hello@example.com">
+                        <input type="email" id="loginEmail" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3" placeholder="hello@example.com">
                         <div id="emailError" class="error-text text-red-500 hidden"></div>
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 required-star">Password</label>
-                        <input type="password" id="loginPassword" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#f5b81b]" placeholder="Enter your password">
+                        <input type="password" id="loginPassword" class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-3" placeholder="Enter your password">
                         <div id="passwordError" class="error-text text-red-500 hidden"></div>
                     </div>
                     <div class="flex justify-between items-center text-sm">
@@ -102,7 +96,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
     <script type="importmap">
         {
             "imports": {
@@ -115,7 +108,7 @@
 
     <script type="module">
         import { initializeApp } from "firebase/app";
-        import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+        import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
         import { getFirestore, doc, getDoc } from "firebase/firestore";
 
         const firebaseConfig = {
@@ -124,8 +117,7 @@
             projectId: "trfasilyousf1",
             storageBucket: "trfasilyousf1.firebasestorage.app",
             messagingSenderId: "158147210589",
-            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4",
-            measurementId: "G-JJ5GE7HS02"
+            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -142,6 +134,7 @@
         const btnLoader = document.getElementById('btnLoader');
         const rememberCheckbox = document.getElementById('rememberMe');
 
+        // Load remembered email
         if (localStorage.getItem('rememberedEmail')) {
             emailInput.value = localStorage.getItem('rememberedEmail');
             rememberCheckbox.checked = true;
@@ -204,27 +197,50 @@
             const password = passwordInput.value.trim();
             setLoading(true);
             try {
+                // 1. Sign in with Firebase Auth
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
+
+                // 2. Fetch user document from Firestore
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+
+                if (!userDoc.exists()) {
+                    // No user data – force logout
+                    await signOut(auth);
+                    alert("Account data not found. Please contact support.");
+                    setLoading(false);
+                    return;
+                }
+
+                const userData = userDoc.data();
+                const role = userData.role; // 'student', 'staff', 'institute_head'
+                const status = userData.status;
+
+                // 3. Check if account is active
+                if (status !== 'active') {
+                    await signOut(auth);
+                    alert("Your account has been disabled. Please contact your institute.");
+                    setLoading(false);
+                    return;
+                }
+
+                // 4. Save "remember me"
                 if (rememberCheckbox.checked) {
                     localStorage.setItem('rememberedEmail', email);
                 } else {
                     localStorage.removeItem('rememberedEmail');
                 }
-                const userDocRef = doc(db, "users", user.uid);
-                const userDoc = await getDoc(userDocRef);
-                let role = 'student';
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    role = userData.role || 'student';
-                }
-                if (role === 'admin' || role === 'institute_head') {
+
+                // 5. Redirect based on role
+                if (role === 'institute_head') {
                     window.location.href = "../admin/dashboard.html";
-                } 
-                else if (role === 'staff' || role === 'teacher') {
+                } else if (role === 'staff') {
                     window.location.href = "../teacher/dashboard.html";
-                } 
-                else {
+                } else if (role === 'student') {
+                    window.location.href = "../student/dashboard.html";
+                } else {
+                    // Fallback (should not happen)
                     window.location.href = "../student/dashboard.html";
                 }
             } catch (error) {

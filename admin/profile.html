@@ -243,7 +243,7 @@
                 <div class="flex items-center gap-4">
                     <button id="mobileMenuButton" class="lg:hidden bg-slate-800 p-3 rounded-xl text-[#f1c40f] text-xl"><i class="fas fa-bars"></i></button>
                     <div>
-                        <div class="flex items-center gap-2 text-[#f1c40f] text-sm font-bold mb-1"><i class="fas fa-shield-alt"></i> <span>ADMIN DASHBOARD</span></div>
+                        <div class="flex items-center gap-2 text-[#f1c40f] text-sm font-bold mb-1"><i class="fas fa-shield-alt"></i> <span>INSTITUTE HEAD DASHBOARD</span></div>
                         <h2 class="text-xl md:text-3xl font-black text-white tracking-tight">My Profile</h2>
                         <p class="text-slate-400 text-xs md:text-sm font-medium">Manage credentials, institute & personal details</p>
                     </div>
@@ -282,8 +282,8 @@
                     </div>
                     <input type="file" id="photoUploadInput" accept="image/jpeg,image/png,image/webp">
                     <div class="mt-6">
-                        <div class="bg-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-black uppercase inline-flex items-center gap-2"><i class="fas fa-shield-alt"></i> Super Administrator</div>
-                        <p class="text-slate-400 text-sm mt-3">Role: <strong class="text-white">Admin</strong></p>
+                        <div class="bg-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-black uppercase inline-flex items-center gap-2"><i class="fas fa-shield-alt"></i> Institute Head</div>
+                        <p class="text-slate-400 text-sm mt-3">Role: <strong class="text-white">institute_head</strong></p>
                         <p class="text-slate-500 text-[11px] mt-2"><i class="fas fa-cloud-upload-alt mr-1 text-[#f1c40f]"></i> Click avatar or camera to update photo</p>
                     </div>
                 </div>
@@ -417,7 +417,7 @@
             if (!user) return;
             const userDocRef = doc(db, "users", user.uid);
             const docSnap = await getDoc(userDocRef);
-            // FIX: corrected role check (undefined variable removed)
+            // Allow both 'admin' (legacy) and 'institute_head' (correct)
             if (docSnap.exists() && (docSnap.data().role === 'admin' || docSnap.data().role === 'institute_head')) {
                 currentAdminData = docSnap.data();
                 currentAdminUser = user;
@@ -556,6 +556,7 @@
 
         window.logout = async () => { await signOut(auth); window.location.href = "../index.html"; };
 
+        // ✅ FIXED: Correct role check (no undefined 'role' variable)
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));

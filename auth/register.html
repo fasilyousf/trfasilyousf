@@ -90,7 +90,7 @@
                             <div><label class="text-sm font-bold required-star">Parent Mobile</label><input type="tel" id="parentMobile" class="w-full border rounded-xl px-4 py-2.5 mt-1"><div id="parentMobileError" class="error-text hidden"></div></div>
                             <div><label class="text-sm font-bold required-star">Date of Birth</label><input type="date" id="dob" class="w-full border rounded-xl px-4 py-2.5 mt-1"><div id="dobError" class="error-text hidden"></div></div>
                             <div class="md:col-span-2"><label class="text-sm font-bold required-star">Institute Code</label>
-                                <div class="flex gap-2"><input type="text" id="studentInstituteCode" class="flex-1 border rounded-xl px-4 py-2.5" placeholder="e.g. FASIL1112"><button type="button" id="verifyStudentCode" class="bg-gray-200 px-4 rounded-xl text-sm font-bold hover:bg-[#f5b81b] transition">Verify</button></div>
+                                <div class="flex gap-2"><input type="text" id="studentInstituteCode" class="flex-1 border rounded-xl px-4 py-2.5" placeholder="e.g. FASIL123"><button type="button" id="verifyStudentCode" class="bg-gray-200 px-4 rounded-xl text-sm font-bold hover:bg-[#f5b81b] transition">Verify</button></div>
                                 <div id="studentCodeError" class="error-text hidden"></div>
                                 <div id="studentCodeMsg" class="text-xs mt-2"></div>
                             </div>
@@ -106,7 +106,7 @@
                             <div><label class="text-sm font-bold required-star">Joining Date</label><input type="date" id="joiningDate" class="w-full border rounded-xl px-4 py-2.5"><div id="joiningDateError" class="error-text hidden"></div></div>
                             <div class="md:col-span-2"><label class="text-sm font-bold">Subjects Handled</label><input type="text" id="subjects" class="w-full border rounded-xl px-4 py-2.5"></div>
                             <div class="md:col-span-2"><label class="text-sm font-bold required-star">Institute Code</label>
-                                <div class="flex gap-2"><input type="text" id="staffInstituteCode" class="flex-1 border rounded-xl px-4 py-2.5" placeholder="Institute code (e.g., FASIL1112)"><button type="button" id="verifyStaffCode" class="bg-gray-200 px-4 rounded-xl text-sm font-bold hover:bg-[#f5b81b] transition">Verify</button></div>
+                                <div class="flex gap-2"><input type="text" id="staffInstituteCode" class="flex-1 border rounded-xl px-4 py-2.5" placeholder="Institute code (e.g., FASIL123)"><button type="button" id="verifyStaffCode" class="bg-gray-200 px-4 rounded-xl text-sm font-bold hover:bg-[#f5b81b] transition">Verify</button></div>
                                 <div id="staffCodeError" class="error-text hidden"></div>
                                 <div id="staffCodeMsg" class="text-xs mt-2"></div>
                             </div>
@@ -117,7 +117,7 @@
                         <h3 class="text-lg font-black text-gray-800 flex items-center gap-2"><i class="fas fa-building text-[#f5b81b]"></i> Institute Profile</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
                             <div class="md:col-span-2"><label class="text-sm font-bold required-star">Institute Name</label><input type="text" id="instName" class="w-full border rounded-xl px-4 py-2.5"><div id="instNameError" class="error-text hidden"></div></div>
-                            <div><label class="text-sm font-bold required-star">Institute Code (To give to students/staff)</label><input type="text" id="regNumber" class="w-full border rounded-xl px-4 py-2.5" placeholder="e.g. FASIL1112"><div id="regNumberError" class="error-text hidden"></div></div>
+                            <div><label class="text-sm font-bold required-star">Institute Code (To give to students/staff)</label><input type="text" id="regNumber" class="w-full border rounded-xl px-4 py-2.5" placeholder="e.g. FASIL123"><div id="regNumberError" class="error-text hidden"></div></div>
                             <div><label class="text-sm font-bold required-star">Institute Type</label><select id="instType" class="w-full border rounded-xl px-4 py-2.5"><option>School</option><option>College</option><option>Coaching Centre</option><option>Library</option><option>Computer Hub</option></select></div>
                             <div class="md:col-span-2"><label class="text-sm font-bold required-star">Address</label><textarea id="address" rows="2" class="w-full border rounded-xl px-4 py-2.5"></textarea><div id="addressError" class="error-text hidden"></div></div>
                             <div><label class="text-sm font-bold">GST Number</label><input type="text" id="gst" class="w-full border rounded-xl px-4 py-2.5"></div>
@@ -153,323 +153,282 @@
         }
     </script>
 
-    <script type="module">
-        import { initializeApp } from "firebase/app";
-        import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-        import { getFirestore, doc, setDoc, collection, query, where, getDocs } from "firebase/firestore";
+<script type="module">
+  import { initializeApp } from "firebase/app";
+  import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
-        // Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
-            authDomain: "trfasilyousf1.firebaseapp.com",
-            projectId: "trfasilyousf1",
-            storageBucket: "trfasilyousf1.firebasestorage.app",
-            messagingSenderId: "158147210589",
-            appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
-        };
+  const firebaseConfig = {
+    apiKey: "AIzaSyCny3ldh6tjeGLVQPgDQEHfDSFP--c6Hj4",
+    authDomain: "trfasilyousf1.firebaseapp.com",
+    projectId: "trfasilyousf1",
+    storageBucket: "trfasilyousf1.firebasestorage.app",
+    messagingSenderId: "158147210589",
+    appId: "1:158147210589:web:1cfed2fc691fa4a13a0cb4"
+  };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        
-        if(typeof emailjs !== 'undefined') {
-            emailjs.init("BZ2E5BMbDJgulIhEo");
-        }
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-        // ------------------------------------------------------------------
-        // STRICT VERIFICATION FUNCTION: Searches 'users' collection ONLY
-        // ------------------------------------------------------------------
-        async function verifyInstituteCode(code) {
-            const trimmedCode = code.trim();
-            if (!trimmedCode) {
-                return { valid: false, message: "Please enter a code." };
-            }
-            
-            try {
-                // Search the 'users' collection for an Institute Head with this exact code
-                const q = query(collection(db, "users"), 
-                    where("instituteCode", "==", trimmedCode),
-                    where("role", "==", "institute_head")
-                );
-                
-                const snapshot = await getDocs(q);
-                
-                if (!snapshot.empty) {
-                    // Found! Get the institute name
-                    const instData = snapshot.docs[0].data();
-                    const name = instData.instituteName || "Institute";
-                    return { valid: true, message: `✓ Verified: ${name}` };
-                }
-                
-                // If not found in the database, it is strictly INVALID. No fallbacks.
-                return { valid: false, message: "❌ Invalid institute code. Please check with your head." };
-                
-            } catch (error) {
-                console.error("Firestore verification error:", error);
-                // If Firebase fails (e.g., network error or permission denied), it fails securely.
-                return { valid: false, message: "❌ Verification failed. Please check your connection or code." };
-            }
-        }
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init("BZ2E5BMbDJgulIhEo");
+  }
 
-        // DOM Setup
-        const roleCards = document.querySelectorAll('.role-card');
-        const selectedRoleInput = document.getElementById('selectedRole');
-        const studentDiv = document.getElementById('studentFields');
-        const staffDiv = document.getElementById('staffFields');
-        const instituteDiv = document.getElementById('instituteHeadFields');
-        const registerBtn = document.getElementById('registerBtn');
-        const btnText = document.getElementById('btnText');
-        const btnIcon = document.getElementById('btnIcon');
-        const btnLoader = document.getElementById('btnLoader');
+  // ------------------------------------------------------------------
+  // VERIFICATION: reads directly from 'instituteVerification' collection (public read)
+  // ------------------------------------------------------------------
+  async function verifyInstituteCode(code) {
+    const trimmedCode = code.trim().toUpperCase();
+    if (!trimmedCode) return { valid: false, message: "Please enter a code." };
 
-        function setActiveRole(role) {
-            selectedRoleInput.value = role;
-            studentDiv.classList.add('hidden');
-            staffDiv.classList.add('hidden');
-            instituteDiv.classList.add('hidden');
-            if (role === 'student') studentDiv.classList.remove('hidden');
-            if (role === 'staff') staffDiv.classList.remove('hidden');
-            if (role === 'institute_head') instituteDiv.classList.remove('hidden');
-            roleCards.forEach(card => {
-                if (card.dataset.role === role) card.classList.add('active');
-                else card.classList.remove('active');
-            });
-        }
+    try {
+      const docRef = doc(db, "instituteVerification", trimmedCode);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const instData = docSnap.data();
+        return { valid: true, message: `✓ Verified: ${instData.instituteName}` };
+      }
+      return { valid: false, message: "❌ Invalid institute code. Please check with your head." };
+    } catch (error) {
+      console.error("Verification error:", error);
+      return { valid: false, message: "❌ Verification failed. Try again later." };
+    }
+  }
 
-        roleCards.forEach(card => card.addEventListener('click', () => setActiveRole(card.dataset.role)));
-        setActiveRole('student');
+  // DOM elements
+  const roleCards = document.querySelectorAll('.role-card');
+  const selectedRoleInput = document.getElementById('selectedRole');
+  const studentDiv = document.getElementById('studentFields');
+  const staffDiv = document.getElementById('staffFields');
+  const instituteDiv = document.getElementById('instituteHeadFields');
+  const registerBtn = document.getElementById('registerBtn');
+  const btnText = document.getElementById('btnText');
+  const btnIcon = document.getElementById('btnIcon');
+  const btnLoader = document.getElementById('btnLoader');
 
-        const studentCodeInput = document.getElementById('studentInstituteCode');
-        const staffCodeInput = document.getElementById('staffInstituteCode');
-        const studentMsgDiv = document.getElementById('studentCodeMsg');
-        const staffMsgDiv = document.getElementById('staffCodeMsg');
+  function setActiveRole(role) {
+    selectedRoleInput.value = role;
+    studentDiv.classList.add('hidden');
+    staffDiv.classList.add('hidden');
+    instituteDiv.classList.add('hidden');
+    if (role === 'student') studentDiv.classList.remove('hidden');
+    if (role === 'staff') staffDiv.classList.remove('hidden');
+    if (role === 'institute_head') instituteDiv.classList.remove('hidden');
+    roleCards.forEach(card => {
+      if (card.dataset.role === role) card.classList.add('active');
+      else card.classList.remove('active');
+    });
+  }
 
-        // Verification Handlers
-        async function handleStudentVerify() {
-            studentMsgDiv.innerHTML = `<span class="text-gray-500">Checking code...</span>`;
-            const result = await verifyInstituteCode(studentCodeInput.value);
-            studentMsgDiv.innerHTML = `<span class="${result.valid ? 'verification-success' : 'verification-error'}">${result.message}</span>`;
-            studentMsgDiv.dataset.valid = result.valid ? "true" : "false";
-        }
-        
-        async function handleStaffVerify() {
-            staffMsgDiv.innerHTML = `<span class="text-gray-500">Checking code...</span>`;
-            const result = await verifyInstituteCode(staffCodeInput.value);
-            staffMsgDiv.innerHTML = `<span class="${result.valid ? 'verification-success' : 'verification-error'}">${result.message}</span>`;
-            staffMsgDiv.dataset.valid = result.valid ? "true" : "false";
-        }
-        
-        document.getElementById('verifyStudentCode')?.addEventListener('click', handleStudentVerify);
-        document.getElementById('verifyStaffCode')?.addEventListener('click', handleStaffVerify);
+  roleCards.forEach(card => card.addEventListener('click', () => setActiveRole(card.dataset.role)));
+  setActiveRole('student');
 
-        function showError(inputId, errorId, message) {
-            const errorDiv = document.getElementById(errorId);
-            if (errorDiv) { errorDiv.innerText = message; errorDiv.classList.remove('hidden'); }
-            const inputField = document.getElementById(inputId);
-            if (inputField && message) inputField.classList.add('border-red-500');
-            else if (inputField) inputField.classList.remove('border-red-500');
-        }
-        
-        function validateEmail(email) { return /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(email); }
-        function validateMobile(mob) { return /^[0-9]{10}$/.test(mob); }
-        function validatePassword(pwd) { return pwd.length >= 8; }
+  const studentCodeInput = document.getElementById('studentInstituteCode');
+  const staffCodeInput = document.getElementById('staffInstituteCode');
+  const studentMsgDiv = document.getElementById('studentCodeMsg');
+  const staffMsgDiv = document.getElementById('staffCodeMsg');
 
-        async function validateForm() {
-            let isValid = true;
-            const role = selectedRoleInput.value;
-            
-            document.querySelectorAll('.error-text').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('input, select, textarea').forEach(el => el.classList.remove('border-red-500'));
+  async function handleStudentVerify() {
+    studentMsgDiv.innerHTML = `<span class="text-gray-500">Checking...</span>`;
+    const result = await verifyInstituteCode(studentCodeInput.value);
+    studentMsgDiv.innerHTML = `<span class="${result.valid ? 'verification-success' : 'verification-error'}">${result.message}</span>`;
+    studentMsgDiv.dataset.valid = result.valid;
+  }
+  async function handleStaffVerify() {
+    staffMsgDiv.innerHTML = `<span class="text-gray-500">Checking...</span>`;
+    const result = await verifyInstituteCode(staffCodeInput.value);
+    staffMsgDiv.innerHTML = `<span class="${result.valid ? 'verification-success' : 'verification-error'}">${result.message}</span>`;
+    staffMsgDiv.dataset.valid = result.valid;
+  }
 
-            // Basic Validation
-            const fullName = document.getElementById('fullName').value.trim();
-            if (!fullName) { showError('fullName', 'fullNameError', 'Full name required'); isValid = false; }
-            
-            const email = document.getElementById('email').value.trim();
-            if (!email || !validateEmail(email)) { showError('email', 'emailError', 'Valid email required'); isValid = false; }
-            
-            const mobile = document.getElementById('mobile').value.trim();
-            if (!mobile || !validateMobile(mobile)) { showError('mobile', 'mobileError', '10-digit mobile number'); isValid = false; }
-            
-            const pwd = document.getElementById('password').value;
-            if (!validatePassword(pwd)) { showError('password', 'passwordError', 'Minimum 8 characters'); isValid = false; }
-            
-            const confirm = document.getElementById('confirmPassword').value;
-            if (pwd !== confirm) { showError('confirmPassword', 'confirmError', 'Passwords do not match'); isValid = false; }
-            
-            if (!document.getElementById('terms').checked) { document.getElementById('termsError').classList.remove('hidden'); isValid = false; }
+  document.getElementById('verifyStudentCode')?.addEventListener('click', handleStudentVerify);
+  document.getElementById('verifyStaffCode')?.addEventListener('click', handleStaffVerify);
 
-            // Student Validation
-            if (role === 'student') {
-                if (!document.getElementById('rollNo').value.trim()) { showError('rollNo', 'rollNoError', 'Roll number required'); isValid = false; }
-                if (!document.getElementById('classGrade').value.trim()) { showError('classGrade', 'classGradeError', 'Class required'); isValid = false; }
-                if (!document.getElementById('parentName').value.trim()) { showError('parentName', 'parentNameError', 'Parent name required'); isValid = false; }
-                
-                const parentMobile = document.getElementById('parentMobile').value.trim();
-                if (!parentMobile || !validateMobile(parentMobile)) { showError('parentMobile', 'parentMobileError', 'Valid parent mobile required'); isValid = false; }
-                
-                if (!document.getElementById('dob').value) { showError('dob', 'dobError', 'Date of birth required'); isValid = false; }
-                
-                const instCode = studentCodeInput.value.trim();
-                if (!instCode) { 
-                    showError('studentInstituteCode', 'studentCodeError', 'Institute code required'); 
-                    isValid = false; 
-                } else {
-                    const result = await verifyInstituteCode(instCode);
-                    if (!result.valid) { 
-                        studentMsgDiv.innerHTML = `<span class="verification-error">${result.message}</span>`; 
-                        showError('studentInstituteCode', null, 'Invalid Code'); 
-                        isValid = false; 
-                    } else { 
-                        studentMsgDiv.innerHTML = `<span class="verification-success">${result.message}</span>`; 
-                        studentMsgDiv.dataset.valid = "true"; 
-                    }
-                }
-            }
-            // Staff Validation
-            else if (role === 'staff') {
-                if (!document.getElementById('empId').value.trim()) { showError('empId', 'empIdError', 'Employee ID required'); isValid = false; }
-                if (!document.getElementById('department').value) { showError('department', 'departmentError', 'Select department'); isValid = false; }
-                if (!document.getElementById('designation').value.trim()) { showError('designation', 'designationError', 'Designation required'); isValid = false; }
-                if (!document.getElementById('joiningDate').value) { showError('joiningDate', 'joiningDateError', 'Joining date required'); isValid = false; }
-                
-                const staffCode = staffCodeInput.value.trim();
-                if (!staffCode) { 
-                    showError('staffInstituteCode', 'staffCodeError', 'Institute code required'); 
-                    isValid = false; 
-                } else {
-                    const result = await verifyInstituteCode(staffCode);
-                    if (!result.valid) { 
-                        staffMsgDiv.innerHTML = `<span class="verification-error">${result.message}</span>`; 
-                        showError('staffInstituteCode', null, 'Invalid Code');
-                        isValid = false; 
-                    } else { 
-                        staffMsgDiv.innerHTML = `<span class="verification-success">${result.message}</span>`; 
-                        staffMsgDiv.dataset.valid = "true"; 
-                    }
-                }
-            }
-            // Institute Head Validation
-            else if (role === 'institute_head') {
-                if (!document.getElementById('instName').value.trim()) { showError('instName', 'instNameError', 'Institute name required'); isValid = false; }
-                if (!document.getElementById('regNumber').value.trim()) { showError('regNumber', 'regNumberError', 'Code/Registration required'); isValid = false; }
-                if (!document.getElementById('address').value.trim()) { showError('address', 'addressError', 'Address required'); isValid = false; }
-                if (!document.getElementById('headDesignation').value.trim()) { showError('headDesignation', 'headDesignationError', 'Your designation required'); isValid = false; }
-            }
-            return isValid;
-        }
+  function showError(inputId, errorId, message) {
+    const errorDiv = document.getElementById(errorId);
+    if (errorDiv) { errorDiv.innerText = message; errorDiv.classList.remove('hidden'); }
+    const inputField = document.getElementById(inputId);
+    if (inputField && message) inputField.classList.add('border-red-500');
+    else if (inputField) inputField.classList.remove('border-red-500');
+  }
+  function validateEmail(email) { return /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(email); }
+  function validateMobile(mob) { return /^[0-9]{10}$/.test(mob); }
+  function validatePassword(pwd) { return pwd.length >= 8; }
 
-        function setLoading(isLoading) {
-            if (isLoading) {
-                registerBtn.disabled = true;
-                btnText.innerText = "Creating Account...";
-                btnIcon.classList.add('hidden');
-                btnLoader.classList.remove('hidden');
-            } else {
-                registerBtn.disabled = false;
-                btnText.innerText = "Create Account";
-                btnIcon.classList.remove('hidden');
-                btnLoader.classList.add('hidden');
-            }
-        }
+  async function validateForm() {
+    let isValid = true;
+    const role = selectedRoleInput.value;
+    document.querySelectorAll('.error-text').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('input, select, textarea').forEach(el => el.classList.remove('border-red-500'));
 
-        function buildUserData(uid, role) {
-            const base = {
-                uid,
-                fullName: document.getElementById('fullName').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                mobile: document.getElementById('mobile').value.trim(),
-                role: role,
-                createdAt: new Date().toISOString(),
-                status: 'active'
-            };
-            if (role === 'student') {
-                base.rollNumber = document.getElementById('rollNo').value.trim();
-                base.classGrade = document.getElementById('classGrade').value.trim();
-                base.section = document.getElementById('section').value.trim();
-                base.parentName = document.getElementById('parentName').value.trim();
-                base.parentMobile = document.getElementById('parentMobile').value.trim();
-                base.dob = document.getElementById('dob').value;
-                base.instituteCode = document.getElementById('studentInstituteCode').value.trim();
-            } else if (role === 'staff') {
-                base.employeeId = document.getElementById('empId').value.trim();
-                base.department = document.getElementById('department').value;
-                base.designation = document.getElementById('designation').value.trim();
-                base.joiningDate = document.getElementById('joiningDate').value;
-                base.subjects = document.getElementById('subjects').value.trim();
-                base.instituteCode = document.getElementById('staffInstituteCode').value.trim();
-            } else if (role === 'institute_head') {
-                base.instituteName = document.getElementById('instName').value.trim();
-                base.instituteCode = document.getElementById('regNumber').value.trim(); // Saving this as the code!
-                base.instituteType = document.getElementById('instType').value;
-                base.address = document.getElementById('address').value.trim();
-                base.gst = document.getElementById('gst').value.trim();
-                base.headDesignation = document.getElementById('headDesignation').value.trim();
-                base.verificationDoc = document.getElementById('docUpload').files.length > 0 ? document.getElementById('docUpload').files[0].name : 'pending';
-            }
-            return base;
-        }
+    const fullName = document.getElementById('fullName').value.trim();
+    if (!fullName) { showError('fullName', 'fullNameError', 'Full name required'); isValid = false; }
+    const email = document.getElementById('email').value.trim();
+    if (!email || !validateEmail(email)) { showError('email', 'emailError', 'Valid email required'); isValid = false; }
+    const mobile = document.getElementById('mobile').value.trim();
+    if (!mobile || !validateMobile(mobile)) { showError('mobile', 'mobileError', '10-digit mobile'); isValid = false; }
+    const pwd = document.getElementById('password').value;
+    if (!validatePassword(pwd)) { showError('password', 'passwordError', 'Min 8 characters'); isValid = false; }
+    const confirm = document.getElementById('confirmPassword').value;
+    if (pwd !== confirm) { showError('confirmPassword', 'confirmError', 'Passwords do not match'); isValid = false; }
+    if (!document.getElementById('terms').checked) { document.getElementById('termsError').classList.remove('hidden'); isValid = false; }
 
-        async function sendWelcomeEmail(name, email, role) {
-            try {
-                if(typeof emailjs !== 'undefined') {
-                    await emailjs.send("service_qlu55cj", "template_8zpsoqv", { user_name: name, user_email: email, user_role: role });
-                }
-            } catch (err) { console.error("EmailJS error:", err); }
-        }
+    if (role === 'student') {
+      if (!document.getElementById('rollNo').value.trim()) { showError('rollNo', 'rollNoError', 'Roll number required'); isValid = false; }
+      if (!document.getElementById('classGrade').value.trim()) { showError('classGrade', 'classGradeError', 'Class required'); isValid = false; }
+      if (!document.getElementById('parentName').value.trim()) { showError('parentName', 'parentNameError', 'Parent name required'); isValid = false; }
+      const parentMobile = document.getElementById('parentMobile').value.trim();
+      if (!parentMobile || !validateMobile(parentMobile)) { showError('parentMobile', 'parentMobileError', 'Valid parent mobile'); isValid = false; }
+      if (!document.getElementById('dob').value) { showError('dob', 'dobError', 'DOB required'); isValid = false; }
+      const code = studentCodeInput.value.trim();
+      if (!code) { showError('studentInstituteCode', 'studentCodeError', 'Institute code required'); isValid = false; }
+      else {
+        const result = await verifyInstituteCode(code);
+        if (!result.valid) { studentMsgDiv.innerHTML = `<span class="verification-error">${result.message}</span>`; isValid = false; }
+        else { studentMsgDiv.innerHTML = `<span class="verification-success">${result.message}</span>`; }
+      }
+    } else if (role === 'staff') {
+      if (!document.getElementById('empId').value.trim()) { showError('empId', 'empIdError', 'Employee ID required'); isValid = false; }
+      if (!document.getElementById('department').value) { showError('department', 'departmentError', 'Select department'); isValid = false; }
+      if (!document.getElementById('designation').value.trim()) { showError('designation', 'designationError', 'Designation required'); isValid = false; }
+      if (!document.getElementById('joiningDate').value) { showError('joiningDate', 'joiningDateError', 'Joining date required'); isValid = false; }
+      const code = staffCodeInput.value.trim();
+      if (!code) { showError('staffInstituteCode', 'staffCodeError', 'Institute code required'); isValid = false; }
+      else {
+        const result = await verifyInstituteCode(code);
+        if (!result.valid) { staffMsgDiv.innerHTML = `<span class="verification-error">${result.message}</span>`; isValid = false; }
+        else { staffMsgDiv.innerHTML = `<span class="verification-success">${result.message}</span>`; }
+      }
+    } else if (role === 'institute_head') {
+      if (!document.getElementById('instName').value.trim()) { showError('instName', 'instNameError', 'Institute name required'); isValid = false; }
+      if (!document.getElementById('regNumber').value.trim()) { showError('regNumber', 'regNumberError', 'Institute code required'); isValid = false; }
+      if (!document.getElementById('address').value.trim()) { showError('address', 'addressError', 'Address required'); isValid = false; }
+      if (!document.getElementById('headDesignation').value.trim()) { showError('headDesignation', 'headDesignationError', 'Designation required'); isValid = false; }
+      const newCode = document.getElementById('regNumber').value.trim().toUpperCase();
+      const verifRef = doc(db, "instituteVerification", newCode);
+      const verifSnap = await getDoc(verifRef);
+      if (verifSnap.exists()) {
+        showError('regNumber', 'regNumberError', 'This institute code is already taken');
+        isValid = false;
+      }
+    }
+    return isValid;
+  }
 
-        // Form Submit Handler
-        registerBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            
-            // Validate all fields and verification
-            if (!await validateForm()) {
-                // Scroll to top so user sees the errors
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                return;
-            }
+  function setLoading(isLoading) {
+    if (isLoading) {
+      registerBtn.disabled = true;
+      btnText.innerText = "Creating Account...";
+      btnIcon.classList.add('hidden');
+      btnLoader.classList.remove('hidden');
+    } else {
+      registerBtn.disabled = false;
+      btnText.innerText = "Create Account";
+      btnIcon.classList.remove('hidden');
+      btnLoader.classList.add('hidden');
+    }
+  }
 
-            const role = selectedRoleInput.value;
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const fullName = document.getElementById('fullName').value.trim();
+  function buildUserData(uid, role, instituteCode) {
+    const base = {
+      uid,
+      fullName: document.getElementById('fullName').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      mobile: document.getElementById('mobile').value.trim(),
+      role: role,
+      instituteCode: instituteCode,
+      status: 'active',
+      createdAt: serverTimestamp()
+    };
+    if (role === 'student') {
+      base.rollNumber = document.getElementById('rollNo').value.trim();
+      base.classGrade = document.getElementById('classGrade').value.trim();
+      base.section = document.getElementById('section').value.trim();
+      base.parentName = document.getElementById('parentName').value.trim();
+      base.parentMobile = document.getElementById('parentMobile').value.trim();
+      base.dob = document.getElementById('dob').value;
+    } else if (role === 'staff') {
+      base.employeeId = document.getElementById('empId').value.trim();
+      base.department = document.getElementById('department').value;
+      base.designation = document.getElementById('designation').value.trim();
+      base.joiningDate = document.getElementById('joiningDate').value;
+      base.subjects = document.getElementById('subjects').value.trim();
+    } else if (role === 'institute_head') {
+      base.instituteName = document.getElementById('instName').value.trim();
+      base.instituteType = document.getElementById('instType').value;
+      base.address = document.getElementById('address').value.trim();
+      base.gst = document.getElementById('gst').value.trim();
+      base.headDesignation = document.getElementById('headDesignation').value.trim();
+      base.verificationDoc = document.getElementById('docUpload').files.length > 0 ? document.getElementById('docUpload').files[0].name : 'pending';
+    }
+    return base;
+  }
 
-            setLoading(true);
+  async function sendWelcomeEmail(name, email, role) {
+    try {
+      if (typeof emailjs !== 'undefined') {
+        await emailjs.send("service_qlu55cj", "template_8zpsoqv", { user_name: name, user_email: email, user_role: role });
+      }
+    } catch (err) { console.error("EmailJS error:", err); }
+  }
 
-            try {
-                // 1. Create User in Firebase Auth
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-                
-                // 2. Build and save profile to Firestore 'users' collection
-                const userData = buildUserData(user.uid, role);
-                await setDoc(doc(db, "users", user.uid), userData);
-                
-                // 3. Send Email
-                await sendWelcomeEmail(fullName, email, role);
-                
-                // 4. Success & Redirect
-                alert(`✅ Registration successful! Welcome to FyOrbit, ${fullName}.`);
-                window.location.href = "login.html";
-                
-            } catch (error) {
-                console.error("Registration error:", error);
-                let errorMsg = "Registration failed. Please try again.";
-                
-                if (error.code === 'auth/email-already-in-use') {
-                    errorMsg = "This email address is already registered. Please login.";
-                    showError('email', 'emailError', 'Email already in use');
-                } else if (error.code === 'auth/weak-password') {
-                    errorMsg = "Your password is too weak. Please use at least 8 characters.";
-                    showError('password', 'passwordError', 'Password too weak');
-                } else {
-                    errorMsg = error.message;
-                }
-                
-                alert(errorMsg);
-                setLoading(false);
-            }
+  registerBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (!await validateForm()) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    const role = selectedRoleInput.value;
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const fullName = document.getElementById('fullName').value.trim();
+
+    let instituteCode = "";
+    if (role === 'student') instituteCode = studentCodeInput.value.trim().toUpperCase();
+    else if (role === 'staff') instituteCode = staffCodeInput.value.trim().toUpperCase();
+    else if (role === 'institute_head') instituteCode = document.getElementById('regNumber').value.trim().toUpperCase();
+
+    setLoading(true);
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const userData = buildUserData(user.uid, role, instituteCode);
+      await setDoc(doc(db, "users", user.uid), userData);
+
+      if (role === 'institute_head') {
+        await setDoc(doc(db, "instituteVerification", instituteCode), {
+          instituteCode: instituteCode,
+          instituteName: userData.instituteName,
+          ownerUid: user.uid,
+          isActive: true,
+          createdAt: serverTimestamp()
         });
-    </script>
+        console.log("✅ Verification doc created for", instituteCode);
+      }
+
+      await sendWelcomeEmail(fullName, email, role);
+      alert(`✅ Registration successful! Welcome to FyOrbit, ${fullName}.`);
+      window.location.href = "login.html";
+
+    } catch (error) {
+      console.error(error);
+      let errorMsg = "Registration failed. Please try again.";
+      if (error.code === 'auth/email-already-in-use') {
+        errorMsg = "Email already registered. Please login.";
+        showError('email', 'emailError', 'Email in use');
+      } else if (error.code === 'auth/weak-password') {
+        errorMsg = "Password too weak. Use at least 8 characters.";
+        showError('password', 'passwordError', 'Weak password');
+      } else {
+        errorMsg = error.message;
+      }
+      alert(errorMsg);
+      setLoading(false);
+    }
+  });
+</script>
 </body>
 </html>

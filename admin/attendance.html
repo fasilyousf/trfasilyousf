@@ -257,6 +257,7 @@
         let isSunday = false;
         let currentAdminUser = null;
         let currentAdminData = null;
+        let currentInstituteCode = null;
 
         function formatToDMY(isoDate) { const [y,m,d] = isoDate.split('-'); return `${d}/${m}/${y}`; }
         function getDayName(dateStr) { const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; return days[new Date(dateStr).getDay()]; }
@@ -348,8 +349,9 @@
         }
 
         async function loadHolidayStatus() {
+            if (!currentInstituteCode) return;
             try {
-                const holidayRef = doc(db, "holidays", selectedDate);
+                const holidayRef = doc(db, "holidays", `${currentInstituteCode}_${selectedDate}`);
                 const snap = await getDoc(holidayRef);
                 if (snap.exists() && snap.data().isHoliday === true) { 
                     isHoliday = true; 
@@ -364,27 +366,34 @@
             } catch (err) { console.error(err); isHoliday = false; }
         }
 
-        async function initPage() {
+        async function loadStudents() {
+            if (!currentInstituteCode) return;
             try {
-                const snap = await getDocs(collection(db, "users"));
+                const q = query(collection(db, "users"), where("role", "==", "student"), where("instituteCode", "==", currentInstituteCode));
+                const snap = await getDocs(q);
                 allStudents = [];
-                snap.forEach(d => { if(d.data().role === 'student') allStudents.push({ uid: d.id, ...d.data() }); });
+                snap.forEach(d => { allStudents.push({ uid: d.id, ...d.data() }); });
                 document.getElementById('totalCount').innerText = allStudents.length;
-                await loadAttendance();
-                await loadHolidayStatus();
-                renderUI();
-                setupAvatarUpload();
-            } catch(err) { console.error(err); showToast("Failed to load data", true); }
+            } catch(err) { console.error(err); showToast("Failed to load students", true); }
         }
 
         async function loadAttendance() {
+            if (!currentInstituteCode) return;
             try {
-                const q = query(collection(db, "attendance"), where("date", "==", selectedDate));
+                const q = query(collection(db, "attendance"), where("date", "==", selectedDate), where("instituteCode", "==", currentInstituteCode));
                 const snap = await getDocs(q);
                 const statusMap = {};
                 snap.forEach(d => { statusMap[d.data().studentId] = d.data().status; });
                 allStudents.forEach(s => { currentAttendance[s.uid] = statusMap[s.uid] || "absent"; });
             } catch(err) { console.error(err); }
+        }
+
+        async function initPage() {
+            await loadStudents();
+            await loadAttendance();
+            await loadHolidayStatus();
+            renderUI();
+            setupAvatarUpload();
         }
 
         function renderUI() {
@@ -464,16 +473,17 @@
         }
         
         async function toggleHoliday() {
+            if (!currentInstituteCode) return;
             if (isSunday) { showToast("Cannot set holiday on Sunday (Weekly Off already active)", true); return; }
-            const holidayRef = doc(db, "holidays", selectedDate);
+            const holidayRef = doc(db, "holidays", `${currentInstituteCode}_${selectedDate}`);
             if (isHoliday) { 
-                await setDoc(holidayRef, { isHoliday: false, date: selectedDate }, { merge: true }); 
+                await setDoc(holidayRef, { isHoliday: false, date: selectedDate, instituteCode: currentInstituteCode }, { merge: true }); 
                 showToast(`Holiday removed for ${formatToDMY(selectedDate)}`); 
             } else { 
                 let reason = prompt("Enter reason for holiday:", "Institute Off"); 
                 if (reason === null) return; 
                 reason = reason.trim() || "Institute Off"; 
-                await setDoc(holidayRef, { isHoliday: true, date: selectedDate, reason: reason, setBy: "admin", timestamp: new Date().toISOString() }, { merge: true }); 
+                await setDoc(holidayRef, { isHoliday: true, date: selectedDate, reason: reason, instituteCode: currentInstituteCode, setBy: currentAdminUser?.uid, timestamp: new Date().toISOString() }, { merge: true }); 
                 showToast(`✅ Marked as Holiday: ${reason}`); 
             }
             await loadHolidayStatus(); await loadAttendance(); renderUI();
@@ -498,15 +508,16 @@
         }
         
         async function exportMonthlyCSV() {
+            if (!currentInstituteCode) return;
             showToast("Fetching monthly data...");
             const thirtyDaysAgo = new Date(); thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
             const startStr = thirtyDaysAgo.toISOString().split('T')[0];
-            const q = query(collection(db, "attendance"), where("date", ">=", startStr));
+            const q = query(collection(db, "attendance"), where("date", ">=", startStr), where("instituteCode", "==", currentInstituteCode));
             const snap = await getDocs(q);
-            const holidayQuery = query(collection(db, "holidays"), where("date", ">=", startStr));
+            const holidayQuery = query(collection(db, "holidays"), where("date", ">=", startStr), where("instituteCode", "==", currentInstituteCode));
             const holidaySnap = await getDocs(holidayQuery);
             const holidayMap = {};
-            holidaySnap.forEach(d => { if (d.data().isHoliday) holidayMap[d.id] = d.data().reason || "Holiday"; });
+            holidaySnap.forEach(d => { if (d.data().isHoliday) holidayMap[d.data().date] = d.data().reason || "Holiday"; });
             let rows = [["Date","Day","Student Name","Status","Recorded At","Holiday Flag"]];
             for (const docSnap of snap.docs) {
                 const data = docSnap.data();
@@ -523,14 +534,23 @@
 
         // Event Listeners
         document.getElementById('saveAllBtn').onclick = async () => {
+            if (!currentInstituteCode) return;
             if (isSunday || isHoliday) { showToast("Cannot sync attendance: Holiday or Sunday", true); return; }
             const btn = document.getElementById('saveAllBtn');
             const originalText = btn.innerText; btn.innerText = "Syncing...";
             try {
                 const batch = writeBatch(db);
                 for (const s of allStudents) {
-                    const docRef = doc(db, "attendance", `${s.uid}_${selectedDate}`);
-                    batch.set(docRef, { studentId: s.uid, studentName: s.fullName, date: selectedDate, status: currentAttendance[s.uid], timestamp: new Date().toISOString(), updatedBy: auth.currentUser?.uid }, { merge: true });
+                    const docRef = doc(db, "attendance", `${currentInstituteCode}_${s.uid}_${selectedDate}`);
+                    batch.set(docRef, { 
+                        studentId: s.uid, 
+                        studentName: s.fullName, 
+                        date: selectedDate, 
+                        status: currentAttendance[s.uid], 
+                        instituteCode: currentInstituteCode,
+                        timestamp: new Date().toISOString(), 
+                        updatedBy: auth.currentUser?.uid 
+                    }, { merge: true });
                 }
                 await batch.commit();
                 showToast("All records synced to cloud");
@@ -561,13 +581,14 @@
             document.getElementById('mobileSidebarOverlay').classList.add('hidden'); 
         };
         
-        // ✅ FIXED: Allow both 'admin' and 'institute_head' roles
+        // Authentication – only institute_head allowed
         onAuthStateChanged(auth, async (user) => {
             if (user) { 
                 const userDoc = await getDoc(doc(db, "users", user.uid)); 
-                if (userDoc.exists() && (userDoc.data().role === 'admin' || role === 'institute_head' || userDoc.data().role === 'institute_head')) {
+                if (userDoc.exists() && userDoc.data().role === 'institute_head') {
                     currentAdminUser = user;
                     currentAdminData = userDoc.data();
+                    currentInstituteCode = currentAdminData.instituteCode;
                     const fullName = currentAdminData.fullName || "Administrator";
                     const email = user.email || currentAdminData.email;
                     document.getElementById('adminName').innerText = "Welcome, " + fullName;
